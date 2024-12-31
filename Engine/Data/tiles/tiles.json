@@ -1,0 +1,17 @@
+[
+  {
+    "TileID": 1,
+    "TileName": "Plains",
+    "Walkable": true
+  },
+  {
+    "TileID": 2,
+    "TileName": "Mountains",
+    "Walkable": false
+  },
+  {
+    "TileID": 3,
+    "TileName": "Waters",
+    "Walkable": false
+  }
+]

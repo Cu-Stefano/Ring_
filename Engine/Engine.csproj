@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Factories\PolymorphicJsonConverter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Data\Items\Items.json" />
+    <None Remove="Data\maps\maps.json" />
+    <None Remove="Data\tiles\tiles.json" />
+    <None Remove="Images\Locations\farm.png" />
+    <None Remove="Images\Locations\farm1.png" />
+    <None Remove="Images\Locations\farm2.png" />
+    <None Remove="Images\Locations\field.png" />
+    <None Remove="Images\Locations\field1.png" />
+    <None Remove="Images\Locations\forest.png" />
+    <None Remove="Images\Locations\forest1.png" />
+    <None Remove="Images\Locations\garden.png" />
+    <None Remove="Images\Locations\garden1.png" />
+    <None Remove="Images\Locations\gate1.png" />
+    <None Remove="Images\Locations\home.png" />
+    <None Remove="Images\Locations\home1.png" />
+    <None Remove="Images\Locations\hut2.png" />
+    <None Remove="Images\Locations\shop1.png" />
+    <None Remove="Images\Locations\square1.png" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Include="Data\Items\Items.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\maps\maps.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\tiles\tiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Locations\farm2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Locations\field1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Locations\forest1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Locations\garden1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Locations\gate1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Locations\home1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Locations\hut2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Locations\shop1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Images\Locations\square1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>

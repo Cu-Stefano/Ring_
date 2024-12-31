@@ -1,0 +1,44 @@
+[
+  {
+    "ItemTypeId": 100,
+    "Name": "BronzeSword",
+    "Price": 100,
+    "MinDamage": 5,
+    "MaxDamage": 10,
+    "Durability": 50,
+    "Critical": 10,
+    "Type": "Weapon"
+  },
+  {
+    "ItemTypeId": 101,
+    "Name": "IronSword",
+    "Price": 200,
+    "MinDamage": 8,
+    "MaxDamage": 16,
+    "Durability": 40,
+    "Critical": 10,
+    "Type": "Weapon"
+  },
+  {
+    "ItemTypeId": 110,
+    "Name": "BronzeAxe",
+    "Price": 130,
+    "MinDamage": 12,
+    "MaxDamage": 15,
+    "Durability": 30,
+    "Critical": 20,
+    "Type": "Weapon"
+  },
+  {
+    "ItemTypeId": 200,
+    "Name": "WoodShield",
+    "Price": 50,
+    "Type": "GameItem"
+  },
+  {
+    "ItemTypeId": 300,
+    "Name": "BanditBandana",
+    "Price": 5,
+    "Type": "GameItem"
+  }
+]
