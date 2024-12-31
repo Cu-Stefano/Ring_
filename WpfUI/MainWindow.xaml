@@ -13,7 +13,7 @@
 
         <!-- White Button Style -->
         <Style TargetType="Button" x:Key="WhiteButtonStyle">
-            <Setter Property="Foreground" Value="#FF232A4E"/>
+            <Setter Property="Foreground" Value="#FF232A4E"/> 
             <Setter Property="Background" Value="#FFF3E9E9"/>
             <Setter Property="FontFamily" Value="Microsoft YaHei UI"/>
             <Setter Property="FontWeight" Value="Bold"/>
