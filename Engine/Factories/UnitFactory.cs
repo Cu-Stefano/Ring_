@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace Engine.Factories
 {
-    internal static class UnitFactory
+    public static class UnitFactory
     {
-        private static readonly List<Unit> _units = new List<Unit>();
+        public static readonly List<Unit> units = new List<Unit>();
 
         static UnitFactory()
         {
             // Example units
-            _units.Add(new Unit(
-                name: "warrior",
+            units.Add(new Unit(
+                name: "Ike",
                 type: UnitType.Allay,
-                classType: new ClassType { ClassName = "warrior" },
+                classType: new ClassType { ClassName = "Lord" },
                 level: 1,
                 move: 5,
                 stats: new Stats
@@ -29,9 +29,9 @@ namespace Engine.Factories
                 equipedWeapon: ItemFactory.CreateGameItem(100) as Weapon
             ));
 
-            _units.Add(new Unit(
-                name: "mage",
-                type: UnitType.Allay,
+            units.Add(new Unit(
+                name: "sora",
+                type: UnitType.Enemy,
                 classType: new ClassType { ClassName = "mage" },
                 level: 1,
                 move: 4,
@@ -51,7 +51,7 @@ namespace Engine.Factories
 
         internal static Unit GetUnitByName(string name)
         {
-            return _units.FirstOrDefault(unit => unit.Name == name) ?? throw new Exception("That unit doesn't exist");
+            return units.FirstOrDefault(unit => unit.Name == name) ?? throw new Exception("That unit doesn't exist");
         }
     }
 }

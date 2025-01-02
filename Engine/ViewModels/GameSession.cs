@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Xml.Linq;
 using Engine.Exceptions;
 using Engine.Factories;
+using Engine.FEMap;
 using Engine.Models;
 // ReSharper disable All
 
@@ -13,14 +14,11 @@ namespace Engine.ViewModels
     {
         public WorldMap CurrentWorldMap { get; set; }//SOSCRPG map not mine
         private Location _currentLocation = null!;
+        private Tile _currenTile = null!;
 
-        public Unit CurrentUnit { get; set; }
+        private Unit _currentUnit;
         public List<Unit> AllayList{ get; set; }
-        
-
-
-
-
+     
         public Location CurrentLocation
         {
             get { return _currentLocation; }
@@ -33,6 +31,26 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(IsThereLocationLeft));
                 OnPropertyChanged(nameof(IsThereLocationRight));
                 GivePlayerQuestsAtLocation();
+            }
+        }
+
+        public Unit CurrentUnit
+        {
+            get { return _currentUnit; }
+            set
+            {
+                _currentUnit = value;
+                OnPropertyChanged(nameof(CurrentUnit));
+            }
+        }
+
+        public Tile CurrentTile
+        {
+            get { return _currenTile; }
+            set
+            {
+                _currenTile = value;
+                OnPropertyChanged(nameof(CurrentTile));
             }
         }
 
@@ -70,10 +88,13 @@ namespace Engine.ViewModels
 
         public GameSession()
         {
-            CurrentUnit = UnitFactory.GetUnitByName("warrior");
+            CurrentUnit = UnitFactory.GetUnitByName("Ike");
 
             CurrentWorldMap = WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorldMap.LocationAt(0, 0)!;
+
+            
+
             CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem(100));
             CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem(101));
             CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem(200));
@@ -129,4 +150,6 @@ namespace Engine.ViewModels
             }
         }
     }
+
 }
+

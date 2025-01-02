@@ -13,7 +13,7 @@
 
         <!-- White Button Style -->
         <Style TargetType="Button" x:Key="WhiteButtonStyle">
-            <Setter Property="Foreground" Value="#FF232A4E"/> 
+            <Setter Property="Foreground" Value="#FF232A4E"/>
             <Setter Property="Background" Value="#FFF3E9E9"/>
             <Setter Property="FontFamily" Value="Microsoft YaHei UI"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -50,30 +50,6 @@
             <Setter Property="Padding" Value="25,5,5,5"/>
             <Setter Property="Foreground" Value="#FFF3E9E9"/>
             <Setter Property="FontWeight" Value="DemiBold"/>
-        </Style>
-
-        <Style TargetType="Button">
-            <Setter Property="Foreground" Value="#FF232A4E"/>
-            <Setter Property="BorderBrush" Value="#FFF3E9E9"/>
-            <Setter Property="Background" Value="#FFF3E9E9"/>
-            <Setter Property="FontFamily" Value="Microsoft YaHei UI"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="0,0,0,0"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                CornerRadius="10"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
@@ -133,13 +109,13 @@
                 <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource BluLabelStyle}" Content="LEVEL :" Margin="48,-5,0,0"
                        VerticalAlignment="Top" FontSize="12" />
                 <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Level, FallbackValue=21}" Margin="120,-3,0,0"
+                       Content="{Binding CurrentUnit.Level, FallbackValue=10}" Margin="120,-3,0,0"
                        VerticalAlignment="Top" FontSize="10" Height="20" Width="40" Padding="5,5,5,5" />
 
-                <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource BluLabelStyle}" Content="MOVE :" Margin="46,18,0,0"
+                <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource BluLabelStyle}" Content="MOVE :" Margin="48,18,0,0"
                        VerticalAlignment="Top" FontSize="12" />
                 <Label Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Move, FallbackValue=6}" Margin="120,20,0,0" Grid.Row="0"
+                       Content="{Binding CurrentUnit.Move, FallbackValue=10}" Margin="120,20,0,0" Grid.Row="0"
                        Grid.Column="1"
                        VerticalAlignment="Top" FontSize="10" Padding="5,5,5,5" />
 
@@ -147,69 +123,69 @@
                 <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource BluLabelStyle}" Content="STRENGTH :"
                        FontSize="11" Margin="0,23,0,0" Grid.RowSpan="2" VerticalAlignment="Top" />
                 <Label Grid.Row="2" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Statistics.Strength, FallbackValue=6}" Margin="95,23,0,0"
+                       Content="{Binding CurrentUnit.Statistics.Strength, FallbackValue=10}" Margin="95,23,0,0"
                        VerticalAlignment="Top" FontSize="12" Grid.RowSpan="2" Grid.Column="0" />
 
                 <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource BluLabelStyle}" Content="MAGIC :"
                        FontSize="11" Margin="0,23,0,0" Grid.RowSpan="2" VerticalAlignment="Top" />
                 <Label Grid.Row="3" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Statistics.Magic, FallbackValue=6}" Margin="95,23,0,0"
+                       Content="{Binding CurrentUnit.Statistics.Magic, FallbackValue=10}" Margin="95,23,0,0"
                        VerticalAlignment="Top" FontSize="12" Grid.RowSpan="2" Grid.Column="0" />
 
                 <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource BluLabelStyle}" Content="SKILL :"
                        FontSize="11" Margin="0,23,0,0" Grid.RowSpan="2" VerticalAlignment="Top" />
                 <Label Grid.Row="4" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Statistics.Skill, FallbackValue=6}" Margin="95,23,0,0"
+                       Content="{Binding CurrentUnit.Statistics.Skill, FallbackValue=10}" Margin="95,23,0,0"
                        VerticalAlignment="Top" FontSize="12" Grid.RowSpan="2" Grid.Column="0" />
 
                 <Label Grid.Row="5" Grid.Column="0" Style="{StaticResource BluLabelStyle}" Content="SPEED :"
                        FontSize="11" Margin="0,23,0,0" Grid.RowSpan="2" VerticalAlignment="Top" />
                 <Label Grid.Row="5" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Statistics.Speed, FallbackValue=6}" Margin="95,23,0,0"
+                       Content="{Binding CurrentUnit.Statistics.Speed, FallbackValue=10}" Margin="95,23,0,0"
                        VerticalAlignment="Top" FontSize="12" Grid.RowSpan="2" Grid.Column="0" />
 
                 <Label Grid.Row="6" Grid.Column="0" Style="{StaticResource BluLabelStyle}" Content="LUCK :"
                        FontSize="11" Margin="0,23,0,0" Grid.RowSpan="2" VerticalAlignment="Top" />
                 <Label Grid.Row="6" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Statistics.Luck, FallbackValue=6}" Margin="95,23,0,0"
+                       Content="{Binding CurrentUnit.Statistics.Luck, FallbackValue=10}" Margin="95,23,0,0"
                        VerticalAlignment="Top" FontSize="12" Grid.RowSpan="2" Grid.Column="0" />
 
                 <Label Grid.Row="7" Grid.Column="0" Style="{StaticResource BluLabelStyle}" Content="DEFENSE :"
                        FontSize="11" Margin="0,23,0,0" Grid.RowSpan="2" VerticalAlignment="Top" />
                 <Label Grid.Row="7" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Statistics.Defense, FallbackValue=6}" Margin="95,23,0,0"
+                       Content="{Binding CurrentUnit.Statistics.Defense, FallbackValue=10}" Margin="95,23,0,0"
                        VerticalAlignment="Top" FontSize="12" Grid.RowSpan="2" Grid.Column="0" />
 
 
                 <Label Grid.Row="8" Style="{StaticResource BluLabelStyle}" Content="Attack :" FontSize="11"
                        Margin="176,7,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Column="0" />
                 <Label Grid.Row="8" Grid.Column="1" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Attack, FallbackValue=80}" Margin="81,6,0,0"
+                       Content="{Binding CurrentUnit.Attack, FallbackValue=10}" Margin="81,6,0,0"
                        RenderTransformOrigin="2.217,-3.903" VerticalAlignment="Top" FontSize="12" Padding="5,5,5,5" />
 
                 <Label Grid.Row="10" Style="{StaticResource BluLabelStyle}" Content="Hit :" FontSize="11"
                        Margin="176,0,0,0" Grid.ColumnSpan="2" Grid.Column="0" />
                 <Label Grid.Row="10" Grid.Column="1" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Hit, FallbackValue=60}" Margin="81,0,0,0"
+                       Content="{Binding CurrentUnit.Hit, FallbackValue=10}" Margin="81,0,0,0"
                        RenderTransformOrigin="2.083,0.497" FontSize="12" Padding="5,5,5,5" />
 
                 <Label Grid.Row="9" Grid.Column="0" Style="{StaticResource BluLabelStyle}" Content="Dodge :"
                        FontSize="11" Margin="176,0,0,0" Grid.ColumnSpan="2" />
                 <Label Grid.Row="9" Grid.Column="1" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Dodge, FallbackValue=60}" Margin="81,0,0,0" FontSize="12"
+                       Content="{Binding CurrentUnit.Dodge, FallbackValue=10}" Margin="81,0,0,0" FontSize="12"
                        Padding="5,5,5,5" />
 
                 <Label Grid.Row="11" Grid.Column="0" Style="{StaticResource BluLabelStyle}" Content="Critic :"
                        FontSize="11" Margin="176,6,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" />
                 <Label Grid.Row="11" Grid.Column="1" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Critic, FallbackValue=60}" Margin="81,5,0,0"
+                       Content="{Binding CurrentUnit.Critic, FallbackValue=10}" Margin="81,5,0,0"
                        VerticalAlignment="Top" FontSize="12" Padding="5,5,5,5" />
 
 
                 <Label Grid.Row="11" Grid.Column="0" Style="{StaticResource BluLabelStyle}" Content="RESISTANCE :"
                        Margin="0,226,0,0" Grid.RowSpan="2" VerticalAlignment="Top" />
                 <Label Grid.Row="11" Grid.Column="1" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
-                       Content="{Binding CurrentUnit.Statistics.Resistance, FallbackValue=60}" Margin="2,235,0,0"
+                       Content="{Binding CurrentUnit.Statistics.Resistance, FallbackValue=10}" Margin="2,235,0,0"
                        Grid.RowSpan="2" VerticalAlignment="Top" />
             </Grid>
         </Border>
@@ -229,11 +205,11 @@
             <!--Tile Map screen-->
             <Border Grid.Row="0" Grid.Column="0" 
                     BorderBrush="#FFF7F7F7"
-                    Margin="15,15,15,15"
+                    Margin="10,15,520,15"
                     Background="#FFF7F7F7"
-                    BorderThickness="2" CornerRadius="20,20,20,20" Grid.RowSpan="2">
+                    BorderThickness="2" CornerRadius="20,20,20,20" Grid.RowSpan="2" Grid.ColumnSpan="2">
 
-                <local:MapBuilder Loaded="MapBuilder_Loaded" Margin="25,10,25,10"/>
+                <ContentControl x:Name="MapBuilderPlaceholder" Margin="10,10,0,10" HorizontalAlignment="Left" Width="1028" />
             </Border>
 
             <Border Grid.Row="0" Grid.Column="1"
@@ -252,7 +228,7 @@
                     <TextBlock Grid.Row="0"
                                Padding="10"
                                HorizontalAlignment="Center"
-                               Text="{Binding CurrentLocation.Name}"/>
+                               Text="{Binding CurrentTile.TileName}"/>
 
                     <Image Grid.Row="1"
                            HorizontalAlignment="Center"
@@ -264,7 +240,7 @@
                     <TextBlock Grid.Row="2"
                                Padding="10"
                                HorizontalAlignment="Center"
-                               Text="{Binding CurrentLocation.Description}"/>
+                               Text="{Binding CurrentTile.Walkable}"/>
                 </Grid>
 
             </Border>

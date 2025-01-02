@@ -1,24 +1,29 @@
 ﻿using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Engine.Models;
+using Engine.Factories;
 using Engine.FEMap;
 using System.Windows;
 using Engine.ViewModels;
 using System.ComponentModel;
+using System;
 
 namespace WpfUI
 {
-    public partial class MapBuilder : INotifyPropertyChanged
+    public partial class MapBuilder : UserControl, INotifyPropertyChanged
     {
         private int LevelIndex { get; set; }
         public string currentLevel { get; set; }
+        public GameSession GameSession { get; set; }
 
-        public MapBuilder()
+        public MapBuilder(GameSession gameSession)
         {
             InitializeComponent();
             DataContext = this;
+            GameSession = gameSession;
             LevelIndex = 1;
             var map = MapFactory.CreateMap(LevelIndex);
             currentLevel = map.mapName;
@@ -62,22 +67,71 @@ namespace WpfUI
                 {
                     var tile = tileMatrix[row][col];
 
-                    // Crea un rettangolo per rappresentare la Tile
-                    var rectangle = new Rectangle
+                    // Crea un pulsante per rappresentare la Tile
+                     var button = new Button
                     {
-                        Width = 44.5, // Dimensioni della cella
-                        Height = 27,
-                        Fill = GetTileBrush(tile), // Colore basato sul tipo
+                        Width = 48.5, // Dimensioni della cella
+                        Height = 31.5,
+                        BorderThickness = new Thickness(1),
+                        Background = GetTileBrush(tile), // Colore basato sul tipo
+                        Tag = tile // Associa il Tile al pulsante
                     };
 
-                    // Posiziona il rettangolo nella griglia
-                    Grid.SetRow(rectangle, row);
-                    Grid.SetColumn(rectangle, col);
+                    // Crea un triangolo per rappresentare l'unità
+                    if (tile.TileID == 0)
+                    {
+                        var unit = UnitFactory.units[new Random().Next(UnitFactory.units.Count)];
+                        var triangle = new Polygon
+                        {
+                            Points = new PointCollection(new List<Point>
+                            {
+                                new Point(20, 0),
+                                new Point(30, 20),
+                                new Point(0, 20)
+                            }),
+                            Fill = GetUnitColor(unit),
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center
+                        };
 
-                    // Aggiungi il rettangolo alla griglia
-                    MapGrid.Children.Add(rectangle);
+                        // Aggiungi il triangolo al contenuto del pulsante
+                        var grid = new Grid();
+                        grid.Children.Add(triangle);
+                        button.Content = grid;
+
+                        tile.UnitOn = unit;
+                    }
+
+                    // Aggiungi il gestore dell'evento Click
+                    button.Click += TileButton_Click;
+
+                    // Posiziona il pulsante nella griglia
+                    Grid.SetRow(button, row);
+                    Grid.SetColumn(button, col);
+
+                    // Aggiungi il pulsante alla griglia
+                    MapGrid.Children.Add(button);
                 }
             }
+        }
+
+        private void TileButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button { Tag:Tile tile})
+            {
+                if (tile.UnitOn != null)
+                {
+                    GameSession.CurrentUnit = tile.UnitOn;
+                }
+                GameSession.CurrentTile = tile;
+            }
+        }
+
+        private static Brush GetUnitColor(Unit unit)
+        {
+            if (unit.Type == UnitType.Allay)
+                return Brushes.White;
+            return Brushes.Orange;
         }
 
         // Metodo per determinare il colore della Tile in base al tipo
@@ -88,7 +142,7 @@ namespace WpfUI
                 "Plains" => Brushes.PaleGreen,
                 "Mountains" => Brushes.DarkGray,
                 "Waters" => Brushes.LightBlue,
-                _ => Brushes.White, // Default per tipi sconosciuti
+                _ => Brushes.PaleGreen, // Default per tipi sconosciuti
             };
         }
 

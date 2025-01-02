@@ -7,6 +7,7 @@
     "MaxDamage": 10,
     "Durability": 50,
     "Critical": 10,
+    "WeaponType": "Sword",
     "Type": "Weapon"
   },
   {
@@ -17,6 +18,7 @@
     "MaxDamage": 16,
     "Durability": 40,
     "Critical": 10,
+    "WeaponType": "Sword",
     "Type": "Weapon"
   },
   {
@@ -27,6 +29,7 @@
     "MaxDamage": 15,
     "Durability": 30,
     "Critical": 20,
+    "WeaponType": "Axe",
     "Type": "Weapon"
   },
   {

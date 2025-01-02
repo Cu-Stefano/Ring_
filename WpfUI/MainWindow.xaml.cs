@@ -16,6 +16,9 @@ namespace WpfUI
             InitializeComponent();
             _gameSession = new GameSession();
             DataContext = _gameSession;
+
+            var mapBuilder = new MapBuilder(_gameSession);
+            MapBuilderPlaceholder.Content = mapBuilder;
         }
 
         private void OnClick_MoveUp(object sender, RoutedEventArgs e)
