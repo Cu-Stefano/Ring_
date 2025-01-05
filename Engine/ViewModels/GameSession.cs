@@ -15,6 +15,7 @@ namespace Engine.ViewModels
         public WorldMap CurrentWorldMap { get; set; }//SOSCRPG map not mine
         private Location _currentLocation = null!;
         private Tile _currenTile = null!;
+        private string _classWeapons;
 
         private Unit _currentUnit;
         public List<Unit> AllayList{ get; set; }
@@ -44,6 +45,7 @@ namespace Engine.ViewModels
             }
         }
 
+
         public Tile CurrentTile
         {
             get { return _currenTile; }
@@ -51,6 +53,16 @@ namespace Engine.ViewModels
             {
                 _currenTile = value;
                 OnPropertyChanged(nameof(CurrentTile));
+            }
+        }
+
+        public string ClassWeapons
+        {
+            get { return _classWeapons; }
+            set
+            {
+                _classWeapons = value;
+                OnPropertyChanged(nameof(ClassWeapons));
             }
         }
 
@@ -89,15 +101,16 @@ namespace Engine.ViewModels
         public GameSession()
         {
             CurrentUnit = UnitFactory.GetUnitByName("Ike");
+            ClassWeapons = string.Join("\n", CurrentUnit.Class.UsableWeapons);
 
             CurrentWorldMap = WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorldMap.LocationAt(0, 0)!;
 
             
 
-            CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem(100));
-            CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem(101));
-            CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem(200));
+            CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("BronzeSword"));
+            CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("IronSword"));
+            CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("WoodShield"));
             CurrentUnit.EquipedWeapon = CurrentUnit.Inventory[0] as Weapon;
 
         }

@@ -29,9 +29,9 @@
             _standardGameItems = JsonSerializer.Deserialize<List<GameItem>>(File.ReadAllText(ItemsFilePath), options) ?? throw new InvalidOperationException();
         }
 
-        public static GameItem CreateGameItem(int itemTypeId)
+        public static GameItem CreateGameItem(string itemName)
         {
-            GameItem standardItem = _standardGameItems.FirstOrDefault(item => item.ItemTypeId == itemTypeId);
+            GameItem standardItem = _standardGameItems.FirstOrDefault(item => item.Name == itemName);
 
             if (standardItem != null)
             {

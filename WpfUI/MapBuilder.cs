@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -60,6 +61,10 @@ namespace WpfUI
                 MapGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
+            // Crea una copia della lista delle unità alleate
+            var allayList = UnitFactory.units.Where(u => u.Type == UnitType.Allay).ToList();
+            var enemyList = UnitFactory.units.Where(u => u.Type == UnitType.Enemy).ToList();
+
             // Aggiungi le Tile alla griglia
             for (int row = 0; row < tileMatrix.Count; row++)
             {
@@ -68,7 +73,7 @@ namespace WpfUI
                     var tile = tileMatrix[row][col];
 
                     // Crea un pulsante per rappresentare la Tile
-                     var button = new Button
+                    var button = new Button
                     {
                         Width = 48.5, // Dimensioni della cella
                         Height = 31.5,
@@ -78,9 +83,23 @@ namespace WpfUI
                     };
 
                     // Crea un triangolo per rappresentare l'unità
-                    if (tile.TileID == 0)
+                    if (tile.TileID <= 0 && allayList.Any() ||
+                        tile.TileID < 0 && enemyList.Any())
                     {
-                        var unit = UnitFactory.units[new Random().Next(UnitFactory.units.Count)];
+                        var randomIndex = new Random().Next(allayList.Count);
+
+                        Unit unit;
+                        if (tile.TileID == 0)
+                        {
+                            unit = allayList[randomIndex];
+                            allayList.RemoveAt(randomIndex); 
+                        }
+                        else
+                        {
+                            unit = enemyList[randomIndex];
+                            enemyList.RemoveAt(randomIndex);
+                        }
+
                         var triangle = new Polygon
                         {
                             Points = new PointCollection(new List<Point>
@@ -117,11 +136,12 @@ namespace WpfUI
 
         private void TileButton_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button { Tag:Tile tile})
+            if (sender is Button { Tag: Tile tile })
             {
                 if (tile.UnitOn != null)
                 {
                     GameSession.CurrentUnit = tile.UnitOn;
+                    GameSession.ClassWeapons = string.Join("\n", GameSession.CurrentUnit.Class.UsableWeapons);
                 }
                 GameSession.CurrentTile = tile;
             }
@@ -130,7 +150,11 @@ namespace WpfUI
         private static Brush GetUnitColor(Unit unit)
         {
             if (unit.Type == UnitType.Allay)
-                return Brushes.White;
+            {
+                Random random = new Random();
+                byte variation = (byte)random.Next(0, 10); // Small variation
+                return new SolidColorBrush(Color.FromRgb((byte)(255 - variation), (byte)(255 - variation), (byte)(255 - variation)));
+            }
             return Brushes.Orange;
         }
 
@@ -190,3 +214,4 @@ namespace WpfUI
         }
     }
 }
+

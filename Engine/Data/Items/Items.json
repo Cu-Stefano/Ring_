@@ -33,6 +33,17 @@
     "Type": "Weapon"
   },
   {
+    "ItemTypeId": 140,
+    "Name": "FireTome",
+    "Price": 300,
+    "MinDamage": 12,
+    "MaxDamage": 15,
+    "Durability": 30,
+    "Critical": 5,
+    "WeaponType": "Tome",
+    "Type": "Weapon"
+  },
+  {
     "ItemTypeId": 200,
     "Name": "WoodShield",
     "Price": 50,

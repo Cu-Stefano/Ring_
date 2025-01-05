@@ -5,6 +5,11 @@
     "Walkable": true
   },
   {
+    "TileID": -1,
+    "TileName": "Plains",
+    "Walkable": true
+  },
+  {
     "TileID": 0,
     "TileName": "Plains",
     "Walkable": true
