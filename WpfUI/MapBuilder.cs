@@ -17,7 +17,11 @@ namespace WpfUI
         public string CurrentLevelName { get; set; }
         public List<List<Button>> ActualMap { get; set; }
         public Tile? CurrentSelectedTile { get; set; }
-        public Unit? MovingUnit { get => CurrentSelectedTile?.UnitOn; set { } }
+        public Unit? MovingUnit
+        {
+            get => CurrentSelectedTile?.UnitOn; 
+            set => CurrentSelectedTile!.UnitOn = value;
+        }
 
         public GameSession GameSession { get; set; }
 
@@ -27,18 +31,17 @@ namespace WpfUI
         {
             InitializeComponent();
             DataContext = this;
-
             GameSession = gameSession;
+            MapCosmetics = new MapCosmetics(this);//methods to change the appearance of the map
+
             LevelIndex = 1;
 
             var map = MapFactory.CreateMap(LevelIndex);
             CurrentLevelName = map.mapName;
             var levelMap = map.levelMap;
 
-            MouseDown += Window_MouseDown;
             InitializeMap(levelMap);
-
-            MapCosmetics = new MapCosmetics(this);//methods to change the appearance of the map
+            
             BuildMap(levelMap);
         }
 
@@ -72,7 +75,6 @@ namespace WpfUI
         // Metodo per costruire la griglia
         private void BuildMap(List<List<Tile>> tileMatrix)
         {
-            // Imposta le righe e colonne della griglia
             ClearMapLyaout();
 
             for (int i = 0; i < tileMatrix.Count; i++)
@@ -85,18 +87,17 @@ namespace WpfUI
                 MapGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
-            // Crea una copia della lista delle unità in campo
+            // Crea una copia della lista di tutte le unità allay e nemiche che ho
             var allayList = UnitFactory.units.Where(u => u.Type == UnitType.Allay).ToList();
             var enemyList = UnitFactory.units.Where(u => u.Type == UnitType.Enemy).ToList();
 
-            // Aggiungi le Tile alla griglia
             for (int row = 0; row < tileMatrix.Count; row++)
             {
                 for (int col = 0; col < tileMatrix[row].Count; col++)
                 {
                     var tile = tileMatrix[row][col];
 
-                    // Crea un pulsante per rappresentare la Tile
+                    // Crea un pulsante per poter interagire col tile
                     var button = new Button
                     {
                         Width = 48.5, // Dimensioni della cella
@@ -109,10 +110,11 @@ namespace WpfUI
                     if (tile.TileID <= 0 && allayList.Any() ||
                         tile.TileID < 0 && enemyList.Any())
                     {
-                        // Scegli un'unità casuale dalla lista
+                        // Scegli un'unità casuale dalla lista da mettere dove deve andare in base a tileMatrix
                         var allayRandomIndex = new Random().Next(allayList.Count);
                         var enemyRandomIndex = new Random().Next(enemyList.Count);
 
+                        //inizializzo l'unità
                         Unit unit;
                         if (tile.TileID == 0)
                         {
@@ -124,23 +126,22 @@ namespace WpfUI
                             unit = enemyList[enemyRandomIndex];
                             enemyList.RemoveAt(enemyRandomIndex);
                         }
+                        var triangle = MapCosmetics.Triangle(unit);
 
-                        var triangle = WpfUI.MapCosmetics.Triangle(unit);
-
-                        // Aggiungi il triangolo al contenuto del pulsante
+                        // aggiungo l'unità al tile
                         button.Content = triangle;
                         tile.UnitOn = unit;
                     }
 
-                    // Aggiungi i gestori d'evento over, click al pulsante
+                    // Aggiungi i gestori d'eventi
                     button.MouseEnter += TileButton_Over;
                     button.Click += Move_unit;
                     button.MouseDoubleClick += UnitSelected;
+                    MouseDown += Window_MouseDown;
 
                     Grid.SetRow(button, row);
                     Grid.SetColumn(button, col);
-
-                    ActualMap[row][col] = button;//aggiungo prima il button alla mia matrice per poterla poi accedere facilmente e modificarla
+                    ActualMap[row][col] = button;//aggiungo prima il button alla mia matrice per poterla poi accedere facilmente e modificarla in futuro
 
                     MapGrid.Children.Add(ActualMap[row][col]);//aggiungo il button all'effettiva MapGrid di Xaml
                 }
@@ -183,7 +184,7 @@ namespace WpfUI
 
         private void Move_unit(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is Tile tile)
+            if (sender is Button { Tag: Tile { UnitOn: null, Walkable: true } tile } button)
             {
                 if (CurrentSelectedTile is { UnitOn: not null } && CurrentSelectedTile != tile)
                 {
@@ -191,14 +192,16 @@ namespace WpfUI
 
                     // Deseleziona la Tile dell'unità che si vuole spostare
                     var currentSelectedTileButton = MapCosmetics.GetButtonBasedOnTile(CurrentSelectedTile)!;
-                    MapCosmetics.TileDeSelected(currentSelectedTileButton!);
+                    MapCosmetics.TileDeSelected(currentSelectedTileButton);
 
                     button.Content = currentSelectedTileButton.Content;//copio il tipo/colore dell'unità
                     GameSession.CurrentTile = tile;
                     GameSession.CurrentUnit = tile.UnitOn;
 
                     currentSelectedTileButton.Content = null;
+                    MovingUnit = null;
                     CurrentSelectedTile = null;
+
 
                     GameSession.ClassWeapons = string.Join("\n", GameSession.CurrentUnit!.Class.UsableWeapons);
                 }
