@@ -13,14 +13,14 @@ namespace Engine.ViewModels
     public class GameSession : BaseNotification
     {
         public WorldMap CurrentWorldMap { get; set; }//SOSCRPG map not mine
-        private Location _currentLocation = null!;
-        private Tile _currenTile = null!;
+        private Location? _currentLocation = null!;
+        private Tile? _currenTile = null!;
         private string _classWeapons;
 
-        private Unit _currentUnit;
+        private Unit? _currentUnit;
         public List<Unit> AllayList{ get; set; }
      
-        public Location CurrentLocation
+        public Location? CurrentLocation
         {
             get { return _currentLocation; }
             set
@@ -35,7 +35,7 @@ namespace Engine.ViewModels
             }
         }
 
-        public Unit CurrentUnit
+        public Unit? CurrentUnit
         {
             get { return _currentUnit; }
             set
@@ -46,7 +46,7 @@ namespace Engine.ViewModels
         }
 
 
-        public Tile CurrentTile
+        public Tile? CurrentTile
         {
             get { return _currenTile; }
             set
@@ -100,18 +100,18 @@ namespace Engine.ViewModels
 
         public GameSession()
         {
-            CurrentUnit = UnitFactory.GetUnitByName("Ike");
-            ClassWeapons = string.Join("\n", CurrentUnit.Class.UsableWeapons);
+            //CurrentUnit = UnitFactory.GetUnitByName("Ike");
+            //ClassWeapons = string.Join("\n", CurrentUnit.Class.UsableWeapons);
 
             CurrentWorldMap = WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorldMap.LocationAt(0, 0)!;
 
-            
 
-            CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("BronzeSword"));
-            CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("IronSword"));
-            CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("WoodShield"));
-            CurrentUnit.EquipedWeapon = CurrentUnit.Inventory[0] as Weapon;
+
+            //CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("BronzeSword"));
+            //CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("IronSword"));
+            //CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("WoodShield"));
+            //CurrentUnit.EquipedWeapon = CurrentUnit.Inventory[0] as Weapon;
 
         }
 

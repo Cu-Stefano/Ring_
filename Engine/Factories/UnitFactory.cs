@@ -1,5 +1,4 @@
 using Engine.Models;
-using System.Collections.Generic;
 
 namespace Engine.Factories
 {
@@ -29,9 +28,8 @@ namespace Engine.Factories
                 equipedWeapon: ItemFactory.CreateGameItem("IronSword") as Weapon
             ));
 
-            // Example units
             units.Add(new Unit(
-                name: "riko",
+                name: "Riko",
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Lord"),
                 level: 2,
@@ -50,7 +48,7 @@ namespace Engine.Factories
             ));
 
             units.Add(new Unit(
-                name: "sora",
+                name: "Sora",
                 type: UnitType.Enemy,
                 classType: ClassTypeFactory.GetClassTypeByName("Mage"),
                 level: 1,
@@ -67,9 +65,9 @@ namespace Engine.Factories
                 },
                 equipedWeapon: ItemFactory.CreateGameItem("FireTome") as Weapon
             ));
-            
+
             units.Add(new Unit(
-                name: "aros",
+                name: "Aros",
                 type: UnitType.Enemy,
                 classType: ClassTypeFactory.GetClassTypeByName("Sage"),
                 level: 1,
@@ -85,6 +83,159 @@ namespace Engine.Factories
                     Resistance = 8
                 },
                 equipedWeapon: ItemFactory.CreateGameItem("FireTome") as Weapon
+            ));
+
+            // New units
+            units.Add(new Unit(
+                name: "Lyn",
+                type: UnitType.Allay,
+                classType: ClassTypeFactory.GetClassTypeByName("Swordmaster"),
+                level: 3,
+                move: 6,
+                stats: new Stats
+                {
+                    Strength = 15,
+                    Magic = 3,
+                    Skill = 10,
+                    Speed = 8,
+                    Luck = 7,
+                    Defense = 5,
+                    Resistance = 4
+                },
+                equipedWeapon: ItemFactory.CreateGameItem("BronzeSword") as Weapon
+            ));
+
+            units.Add(new Unit(
+                name: "Hector",
+                type: UnitType.Enemy,
+                classType: ClassTypeFactory.GetClassTypeByName("Warrior"),
+                level: 4,
+                move: 5,
+                stats: new Stats
+                {
+                    Strength = 18,
+                    Magic = 1,
+                    Skill = 8,
+                    Speed = 5,
+                    Luck = 6,
+                    Defense = 12,
+                    Resistance = 3
+                },
+                equipedWeapon: ItemFactory.CreateGameItem("BronzeAxe") as Weapon
+            ));
+
+            units.Add(new Unit(
+                name: "Erk",
+                type: UnitType.Allay,
+                classType: ClassTypeFactory.GetClassTypeByName("Mage"),
+                level: 2,
+                move: 5,
+                stats: new Stats
+                {
+                    Strength = 1,
+                    Magic = 12,
+                    Skill = 7,
+                    Speed = 6,
+                    Luck = 5,
+                    Defense = 3,
+                    Resistance = 10
+                },
+                equipedWeapon: ItemFactory.CreateGameItem("FireTome") as Weapon
+            ));
+
+            units.Add(new Unit(
+                name: "Oswin",
+                type: UnitType.Allay,
+                classType: ClassTypeFactory.GetClassTypeByName("General"),
+                level: 5,
+                move: 4,
+                stats: new Stats
+                {
+                    Strength = 20,
+                    Magic = 0,
+                    Skill = 9,
+                    Speed = 3,
+                    Luck = 4,
+                    Defense = 15,
+                    Resistance = 5
+                },
+                equipedWeapon: ItemFactory.CreateGameItem("IronShield") as Weapon
+            ));
+
+            units.Add(new Unit(
+                name: "Florina",
+                type: UnitType.Enemy,
+                classType: ClassTypeFactory.GetClassTypeByName("PegasusK"),
+                level: 3,
+                move: 7,
+                stats: new Stats
+                {
+                    Strength = 12,
+                    Magic = 2,
+                    Skill = 8,
+                    Speed = 10,
+                    Luck = 6,
+                    Defense = 4,
+                    Resistance = 7
+                },
+                equipedWeapon: ItemFactory.CreateGameItem("IronSword") as Weapon
+            ));
+
+            units.Add(new Unit(
+                name: "Raven",
+                type: UnitType.Allay,
+                classType: ClassTypeFactory.GetClassTypeByName("Hero"),
+                level: 4,
+                move: 6,
+                stats: new Stats
+                {
+                    Strength = 17,
+                    Magic = 1,
+                    Skill = 11,
+                    Speed = 9,
+                    Luck = 5,
+                    Defense = 8,
+                    Resistance = 4
+                },
+                equipedWeapon: ItemFactory.CreateGameItem("SilverSword") as Weapon
+            ));
+
+            units.Add(new Unit(
+                name: "Dart",
+                type: UnitType.Enemy,
+                classType: ClassTypeFactory.GetClassTypeByName("Berserker"),
+                level: 5,
+                move: 5,
+                stats: new Stats
+                {
+                    Strength = 20,
+                    Magic = 0,
+                    Skill = 10,
+                    Speed = 7,
+                    Luck = 4,
+                    Defense = 6,
+                    Resistance = 3
+                },
+                equipedWeapon: ItemFactory.CreateGameItem("SteelAxe") as Weapon
+            ));
+
+            units.Add(new Unit(
+                name: "Pent",
+                type: UnitType.Allay,
+                classType: ClassTypeFactory.GetClassTypeByName("Sage"),
+                level: 6,
+                move: 5,
+                stats: new Stats
+                {
+                    Strength = 2,
+                    Magic = 18,
+                    Skill = 12,
+                    Speed = 8,
+                    Luck = 7,
+                    Defense = 5,
+                    Resistance = 15
+                },
+                equipedWeapon: ItemFactory.CreateGameItem("ThunderTome") as Weapon
             ));
         }
 

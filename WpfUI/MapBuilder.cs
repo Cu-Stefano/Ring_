@@ -1,7 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Engine.Models;
@@ -10,27 +7,54 @@ using Engine.FEMap;
 using System.Windows;
 using Engine.ViewModels;
 using System.ComponentModel;
-using System;
+using System.Windows.Input;
 
 namespace WpfUI
 {
-    public partial class MapBuilder : UserControl, INotifyPropertyChanged
+    public partial class MapBuilder : INotifyPropertyChanged
     {
         private int LevelIndex { get; set; }
-        public string currentLevel { get; set; }
+        public string CurrentLevelName { get; set; }
+        public List<List<Button>> ActualMap { get; set; }
+        public Tile? CurrentSelectedTile { get; set; }
+        public Unit? MovingUnit { get => CurrentSelectedTile?.UnitOn; set { } }
+
         public GameSession GameSession { get; set; }
+
+        public MapCosmetics MapCosmetics { get; }
 
         public MapBuilder(GameSession gameSession)
         {
             InitializeComponent();
             DataContext = this;
+
             GameSession = gameSession;
             LevelIndex = 1;
-            var map = MapFactory.CreateMap(LevelIndex);
-            currentLevel = map.mapName;
-            var prova = map.levelMap;
 
-            BuildMap(prova);
+            var map = MapFactory.CreateMap(LevelIndex);
+            CurrentLevelName = map.mapName;
+            var levelMap = map.levelMap;
+
+            MouseDown += Window_MouseDown;
+            InitializeMap(levelMap);
+
+            MapCosmetics = new MapCosmetics(this);//methods to change the appearance of the map
+            BuildMap(levelMap);
+        }
+
+        private void InitializeMap(List<List<Tile>> levelTileMap)
+        {
+            ActualMap = new List<List<Button>>();
+
+            foreach (var t in levelTileMap)
+            {
+                var row = new List<Button>();
+                for (int j = 0; j < t.Count; j++)
+                {
+                    row.Add(null);
+                }
+                ActualMap.Add(row);
+            }
         }
 
         private void ClearMap(object sender, RoutedEventArgs e)
@@ -61,7 +85,7 @@ namespace WpfUI
                 MapGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
-            // Crea una copia della lista delle unità alleate
+            // Crea una copia della lista delle unità in campo
             var allayList = UnitFactory.units.Where(u => u.Type == UnitType.Allay).ToList();
             var enemyList = UnitFactory.units.Where(u => u.Type == UnitType.Enemy).ToList();
 
@@ -78,97 +102,130 @@ namespace WpfUI
                         Width = 48.5, // Dimensioni della cella
                         Height = 31.5,
                         BorderThickness = new Thickness(1),
-                        Background = GetTileBrush(tile), // Colore basato sul tipo
+                        Background = MapCosmetics.GetTileBrush(tile), // Colore basato sul tipo
                         Tag = tile // Associa il Tile al pulsante
                     };
 
-                    // Crea un triangolo per rappresentare l'unità
                     if (tile.TileID <= 0 && allayList.Any() ||
                         tile.TileID < 0 && enemyList.Any())
                     {
-                        var randomIndex = new Random().Next(allayList.Count);
+                        // Scegli un'unità casuale dalla lista
+                        var allayRandomIndex = new Random().Next(allayList.Count);
+                        var enemyRandomIndex = new Random().Next(enemyList.Count);
 
                         Unit unit;
                         if (tile.TileID == 0)
                         {
-                            unit = allayList[randomIndex];
-                            allayList.RemoveAt(randomIndex); 
+                            unit = allayList[allayRandomIndex];
+                            allayList.RemoveAt(allayRandomIndex); 
                         }
                         else
                         {
-                            unit = enemyList[randomIndex];
-                            enemyList.RemoveAt(randomIndex);
+                            unit = enemyList[enemyRandomIndex];
+                            enemyList.RemoveAt(enemyRandomIndex);
                         }
 
-                        var triangle = new Polygon
-                        {
-                            Points = new PointCollection(new List<Point>
-                            {
-                                new Point(20, 0),
-                                new Point(30, 20),
-                                new Point(0, 20)
-                            }),
-                            Fill = GetUnitColor(unit),
-                            HorizontalAlignment = HorizontalAlignment.Center,
-                            VerticalAlignment = VerticalAlignment.Center
-                        };
+                        var triangle = WpfUI.MapCosmetics.Triangle(unit);
 
                         // Aggiungi il triangolo al contenuto del pulsante
-                        var grid = new Grid();
-                        grid.Children.Add(triangle);
-                        button.Content = grid;
-
+                        button.Content = triangle;
                         tile.UnitOn = unit;
                     }
 
-                    // Aggiungi il gestore dell'evento Click
-                    button.Click += TileButton_Click;
+                    // Aggiungi i gestori d'evento over, click al pulsante
+                    button.MouseEnter += TileButton_Over;
+                    button.Click += Move_unit;
+                    button.MouseDoubleClick += UnitSelected;
 
-                    // Posiziona il pulsante nella griglia
                     Grid.SetRow(button, row);
                     Grid.SetColumn(button, col);
 
-                    // Aggiungi il pulsante alla griglia
-                    MapGrid.Children.Add(button);
+                    ActualMap[row][col] = button;//aggiungo prima il button alla mia matrice per poterla poi accedere facilmente e modificarla
+
+                    MapGrid.Children.Add(ActualMap[row][col]);//aggiungo il button all'effettiva MapGrid di Xaml
                 }
             }
         }
 
-        private void TileButton_Click(object sender, RoutedEventArgs e)
+        
+        private void TileButton_Over(object sender, RoutedEventArgs e)
         {
-            if (sender is Button { Tag: Tile tile })
+            if (CurrentSelectedTile != null)
             {
-                if (tile.UnitOn != null)
-                {
-                    GameSession.CurrentUnit = tile.UnitOn;
-                    GameSession.ClassWeapons = string.Join("\n", GameSession.CurrentUnit.Class.UsableWeapons);
-                }
+                GameSession.CurrentTile = CurrentSelectedTile;
+                GameSession.CurrentUnit = MovingUnit!;
+                GameSession.ClassWeapons = string.Join("\n", GameSession.CurrentUnit.Class.UsableWeapons);
+            }
+            else if (sender is Button { Tag: Tile tile })
+            {
+                GameSession.CurrentUnit = tile.UnitOn;
+                GameSession.ClassWeapons = tile.UnitOn != null ? string.Join("\n", GameSession.CurrentUnit!.Class.UsableWeapons) : "";
                 GameSession.CurrentTile = tile;
             }
         }
 
-        private static Brush GetUnitColor(Unit unit)
+        private void UnitSelected(object sender, RoutedEventArgs e)
         {
-            if (unit.Type == UnitType.Allay)
+            if (sender is Button { Tag: Tile { UnitOn: not null } tile } button)
             {
-                Random random = new Random();
-                byte variation = (byte)random.Next(0, 10); // Small variation
-                return new SolidColorBrush(Color.FromRgb((byte)(255 - variation), (byte)(255 - variation), (byte)(255 - variation)));
+                if (CurrentSelectedTile != null)
+                {
+                    var selectedButton = MapCosmetics.GetButtonBasedOnTile(CurrentSelectedTile);
+                    MapCosmetics.TileDeSelected(selectedButton!);
+                    CurrentSelectedTile = null;
+                }
+
+                MapCosmetics.TileSelected(button);
+                CurrentSelectedTile = tile;
+                MovingUnit = tile.UnitOn;
             }
-            return Brushes.Orange;
         }
 
-        // Metodo per determinare il colore della Tile in base al tipo
-        private Brush GetTileBrush(Tile tile)
+        private void Move_unit(object sender, RoutedEventArgs e)
         {
-            return tile.TileName switch
+            if (sender is Button button && button.Tag is Tile tile)
             {
-                "Plains" => Brushes.PaleGreen,
-                "Mountains" => Brushes.DarkGray,
-                "Waters" => Brushes.LightBlue,
-                _ => Brushes.PaleGreen, // Default per tipi sconosciuti
-            };
+                if (CurrentSelectedTile is { UnitOn: not null } && CurrentSelectedTile != tile)
+                {
+                    tile.UnitOn = MovingUnit;//sposto l'unità
+
+                    // Deseleziona la Tile dell'unità che si vuole spostare
+                    var currentSelectedTileButton = MapCosmetics.GetButtonBasedOnTile(CurrentSelectedTile)!;
+                    MapCosmetics.TileDeSelected(currentSelectedTileButton!);
+
+                    button.Content = currentSelectedTileButton.Content;//copio il tipo/colore dell'unità
+                    GameSession.CurrentTile = tile;
+                    GameSession.CurrentUnit = tile.UnitOn;
+
+                    currentSelectedTileButton.Content = null;
+                    CurrentSelectedTile = null;
+
+                    GameSession.ClassWeapons = string.Join("\n", GameSession.CurrentUnit!.Class.UsableWeapons);
+                }
+            }
         }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // Verifica se l'elemento cliccato è un pulsante con un'unità selezionata
+            if (e.OriginalSource is not Button { Tag: Tile })
+            {
+                // Deseleziona l'unità corrente e ripristina il bordo del pulsante
+                if (CurrentSelectedTile != null)
+                {
+                    var currentSelectedTileButton = MapCosmetics.GetButtonBasedOnTile(CurrentSelectedTile);
+
+                    MapCosmetics.TileDeSelected(currentSelectedTileButton!);
+
+                    CurrentSelectedTile = null;
+                    GameSession.CurrentTile = null;
+                    GameSession.CurrentUnit = null;
+                    GameSession.ClassWeapons = string.Empty;
+                }
+            }
+        }
+
+
 
         private void Previus_Level(object sender, RoutedEventArgs e)
         {
@@ -178,8 +235,8 @@ namespace WpfUI
                 LevelIndex -= 1;
 
                 var map = MapFactory.CreateMap(tmp - 1);
-                currentLevel = map.mapName;
-                OnPropertyChanged(nameof(currentLevel));
+                CurrentLevelName = map.mapName;
+                OnPropertyChanged(nameof(CurrentLevelName));
                 BuildMap(map.levelMap);
 
                 // Aggiorna visivamente il controllo
@@ -197,8 +254,8 @@ namespace WpfUI
                 LevelIndex += 1;
 
                 var map = MapFactory.CreateMap(tmp + 1);
-                currentLevel = map.mapName;
-                OnPropertyChanged(nameof(currentLevel));
+                CurrentLevelName = map.mapName;
+                OnPropertyChanged(nameof(CurrentLevelName));
                 BuildMap(map.levelMap);
 
                 // Aggiorna visivamente il controllo

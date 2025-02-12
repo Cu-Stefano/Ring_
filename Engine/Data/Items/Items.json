@@ -54,5 +54,44 @@
     "Name": "BanditBandana",
     "Price": 5,
     "Type": "GameItem"
+  },
+  {
+    "ItemTypeId": 102,
+    "Name": "SilverSword",
+    "Price": 500,
+    "MinDamage": 15,
+    "MaxDamage": 25,
+    "Durability": 35,
+    "Critical": 15,
+    "WeaponType": "Sword",
+    "Type": "Weapon"
+  },
+  {
+    "ItemTypeId": 111,
+    "Name": "SteelAxe",
+    "Price": 250,
+    "MinDamage": 18,
+    "MaxDamage": 22,
+    "Durability": 25,
+    "Critical": 25,
+    "WeaponType": "Axe",
+    "Type": "Weapon"
+  },
+  {
+    "ItemTypeId": 141,
+    "Name": "ThunderTome",
+    "Price": 350,
+    "MinDamage": 14,
+    "MaxDamage": 18,
+    "Durability": 25,
+    "Critical": 10,
+    "WeaponType": "Tome",
+    "Type": "Weapon"
+  },
+  {
+    "ItemTypeId": 201,
+    "Name": "IronShield",
+    "Price": 100,
+    "Type": "GameItem"
   }
 ]

@@ -14,6 +14,13 @@ namespace WpfUI
         public MainWindow()
         {
             InitializeComponent();
+            //FullScreen on start
+            {
+                this.WindowState = WindowState.Maximized;
+                this.WindowStyle = WindowStyle.None;
+                this.ResizeMode = ResizeMode.NoResize;
+            }
+            
             _gameSession = new GameSession();
             DataContext = _gameSession;
 
