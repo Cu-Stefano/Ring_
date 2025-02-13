@@ -8,6 +8,7 @@ using System.Windows;
 using Engine.ViewModels;
 using System.ComponentModel;
 using System.Windows.Input;
+using WpfUI.TurnLogic;
 
 namespace WpfUI
 {
@@ -35,7 +36,7 @@ namespace WpfUI
             DataContext = this;
             GameSession = gameSession;
             MapCosmetics = new MapCosmetics(this);//methods to change the appearance of the map
-            MapLogic = new MapLogic(this);
+            
 
             LevelIndex = 1;
 
@@ -46,7 +47,10 @@ namespace WpfUI
             InitializeMap(levelMap);
             
             BuildMap(levelMap);
-           
+            MapLogic = new MapLogic(this);
+            // Aggiungi i gestori d'eventi
+            MouseDown += Window_MouseDown;
+
         }
 
         private void InitializeMap(List<List<Tile>> levelTileMap)
@@ -137,10 +141,6 @@ namespace WpfUI
                         tile.UnitOn = unit;
                     }
 
-                    // Aggiungi i gestori d'eventi
-                    MouseDown += Window_MouseDown;
-                    MapLogic.AddEventHandlers(button);
-
                     Grid.SetRow(button, row);
                     Grid.SetColumn(button, col);
                     ActualMap[row][col] = button;//aggiungo prima il button alla mia matrice per poterla poi accedere facilmente e modificarla in futuro
@@ -180,7 +180,10 @@ namespace WpfUI
                 var map = MapFactory.CreateMap(tmp - 1);
                 CurrentLevelName = map.mapName;
                 OnPropertyChanged(nameof(CurrentLevelName));
+                CurrentSelectedTile = null;
+                ClearGamesessionGui();
                 BuildMap(map.levelMap);
+                MapLogic.SetState(new AllayTurn(MapLogic));
 
                 // Aggiorna visivamente il controllo
                 MapGrid.InvalidateVisual();
@@ -199,12 +202,40 @@ namespace WpfUI
                 var map = MapFactory.CreateMap(tmp + 1);
                 CurrentLevelName = map.mapName;
                 OnPropertyChanged(nameof(CurrentLevelName));
+                CurrentSelectedTile = null;
+                ClearGamesessionGui();
+                
                 BuildMap(map.levelMap);
+                MapLogic.SetState(new AllayTurn(MapLogic));
 
                 // Aggiorna visivamente il controllo
                 MapGrid.InvalidateVisual();
                 MapGrid.UpdateLayout();
             }
+        }
+
+        private void ChangeTurn(object sender, RoutedEventArgs e)
+        {
+            switch (MapLogic.CurrentTurnState)
+            {
+                case AllayTurn:
+                    MapLogic.SetState(new EnemyTurn(MapLogic));
+                    break;
+                case EnemyTurn:
+                    MapLogic.SetState(new AllayTurn(MapLogic));
+                    break;
+            }
+        }
+
+        public void ClearGamesessionGui()
+        {
+            if (CurrentSelectedTile != null)
+            {
+                var currentSelectedTileButton = MapCosmetics.GetButtonBasedOnTile(CurrentSelectedTile);
+                MapCosmetics.TileDeSelected(currentSelectedTileButton!);
+                CurrentSelectedTile = null;
+            }
+           
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
