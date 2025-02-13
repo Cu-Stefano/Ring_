@@ -14,9 +14,9 @@ namespace Engine.ViewModels
     {
         public WorldMap CurrentWorldMap { get; set; }//SOSCRPG map not mine
         private Location? _currentLocation = null!;
+
         private Tile? _currenTile = null!;
         private string _classWeapons;
-
         private Unit? _currentUnit;
         public List<Unit> AllayList{ get; set; }
      
@@ -44,7 +44,6 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(CurrentUnit));
             }
         }
-
 
         public Tile? CurrentTile
         {
@@ -104,7 +103,8 @@ namespace Engine.ViewModels
             //ClassWeapons = string.Join("\n", CurrentUnit.Class.UsableWeapons);
 
             CurrentWorldMap = WorldFactory.CreateWorld();
-            CurrentLocation = CurrentWorldMap.LocationAt(0, 0)!;
+
+            CurrentLocation = CurrentWorldMap.LocationAt(0, 0)!;//soscsrpg world
 
 
 

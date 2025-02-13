@@ -27,12 +27,15 @@ namespace WpfUI
 
         public MapCosmetics MapCosmetics { get; }
 
+        public MapLogic MapLogic { get; }
+
         public MapBuilder(GameSession gameSession)
         {
             InitializeComponent();
             DataContext = this;
             GameSession = gameSession;
             MapCosmetics = new MapCosmetics(this);//methods to change the appearance of the map
+            MapLogic = new MapLogic(this);
 
             LevelIndex = 1;
 
@@ -43,6 +46,7 @@ namespace WpfUI
             InitializeMap(levelMap);
             
             BuildMap(levelMap);
+           
         }
 
         private void InitializeMap(List<List<Tile>> levelTileMap)
@@ -134,10 +138,8 @@ namespace WpfUI
                     }
 
                     // Aggiungi i gestori d'eventi
-                    button.MouseEnter += TileButton_Over;
-                    button.Click += Move_unit;
-                    button.MouseDoubleClick += UnitSelected;
                     MouseDown += Window_MouseDown;
+                    MapLogic.AddEventHandlers(button);
 
                     Grid.SetRow(button, row);
                     Grid.SetColumn(button, col);
@@ -148,67 +150,7 @@ namespace WpfUI
             }
         }
 
-        
-        private void TileButton_Over(object sender, RoutedEventArgs e)
-        {
-            if (CurrentSelectedTile != null)
-            {
-                GameSession.CurrentTile = CurrentSelectedTile;
-                GameSession.CurrentUnit = MovingUnit!;
-                GameSession.ClassWeapons = string.Join("\n", GameSession.CurrentUnit.Class.UsableWeapons);
-            }
-            else if (sender is Button { Tag: Tile tile })
-            {
-                GameSession.CurrentUnit = tile.UnitOn;
-                GameSession.ClassWeapons = tile.UnitOn != null ? string.Join("\n", GameSession.CurrentUnit!.Class.UsableWeapons) : "";
-                GameSession.CurrentTile = tile;
-            }
-        }
-
-        private void UnitSelected(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button { Tag: Tile { UnitOn: not null } tile } button)
-            {
-                if (CurrentSelectedTile != null)
-                {
-                    var selectedButton = MapCosmetics.GetButtonBasedOnTile(CurrentSelectedTile);
-                    MapCosmetics.TileDeSelected(selectedButton!);
-                    CurrentSelectedTile = null;
-                }
-
-                MapCosmetics.TileSelected(button);
-                CurrentSelectedTile = tile;
-                MovingUnit = tile.UnitOn;
-            }
-        }
-
-        private void Move_unit(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button { Tag: Tile { UnitOn: null, Walkable: true } tile } button)
-            {
-                if (CurrentSelectedTile is { UnitOn: not null } && CurrentSelectedTile != tile)
-                {
-                    tile.UnitOn = MovingUnit;//sposto l'unità
-
-                    // Deseleziona la Tile dell'unità che si vuole spostare
-                    var currentSelectedTileButton = MapCosmetics.GetButtonBasedOnTile(CurrentSelectedTile)!;
-                    MapCosmetics.TileDeSelected(currentSelectedTileButton);
-
-                    button.Content = currentSelectedTileButton.Content;//copio il tipo/colore dell'unità
-                    GameSession.CurrentTile = tile;
-                    GameSession.CurrentUnit = tile.UnitOn;
-
-                    currentSelectedTileButton.Content = null;
-                    MovingUnit = null;
-                    CurrentSelectedTile = null;
-
-
-                    GameSession.ClassWeapons = string.Join("\n", GameSession.CurrentUnit!.Class.UsableWeapons);
-                }
-            }
-        }
-
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        public void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             // Verifica se l'elemento cliccato è un pulsante con un'unità selezionata
             if (e.OriginalSource is not Button { Tag: Tile })
@@ -227,8 +169,6 @@ namespace WpfUI
                 }
             }
         }
-
-
 
         private void Previus_Level(object sender, RoutedEventArgs e)
         {
