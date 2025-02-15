@@ -14,7 +14,7 @@ public class AllayTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 
     public override void OnEnter()
     {
-        //SetState(new TileToBeSelected(TurnMapLogic));
+        SetState(new TileToBeSelected(TurnMapLogic));
     }
 
     public override void OnExit()
@@ -27,7 +27,7 @@ public class AllayTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
         ////tolgo i gestori d'evento del vechhio stato
         //foreach (var button in TurnMapLogic.MapBuilder.ActualMap.SelectMany(row => row))
         //{
-        //    button.Click -= Move;
+        //    button.Click -= Move_Unit;
         //    button.MouseDoubleClick -= CurrentActionState.CalculateTrail;
         //}
         //TurnMapLogic.MapBuilder.ClearGamesessionGui();
@@ -82,25 +82,7 @@ public class AllayTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 
     public override void Move_unit(object sender, RoutedEventArgs e)
     {
-        //CurrentActionState.Move(sender, e);
-        if (sender is Button { Tag: Tile { UnitOn: null, Walkable: true } tile } button)
-        {
-            if (TurnMapLogic.MapBuilder.CurrentSelectedTile is { UnitOn: not null } && TurnMapLogic.MapBuilder.CurrentSelectedTile != tile)
-            {
-                tile.UnitOn = TurnMapLogic.MapBuilder.MovingUnit;//sposto l'unità
-
-                // Deseleziona la Tile dell'unità che si vuole spostare
-                var currentSelectedTileButton = TurnMapLogic.MapBuilder.MapCosmetics.GetButtonBasedOnTile(TurnMapLogic.MapBuilder.CurrentSelectedTile)!;
-
-                button.Content = currentSelectedTileButton.Content;//copio il tipo/colore dell'unità
-                TurnMapLogic.MapBuilder.GameSession.CurrentTile = tile;
-                TurnMapLogic.MapBuilder.GameSession.CurrentUnit = tile.UnitOn;
-
-                ClearCurrentSelectedButton(currentSelectedTileButton);
-
-                TurnMapLogic.MapBuilder.GameSession.ClassWeapons = string.Join("\n", TurnMapLogic.MapBuilder.GameSession.CurrentUnit!.Class.UsableWeapons);
-            }
-        }
+        CurrentActionState.Move_Unit(sender, e);
     }
 
     public void ClearCurrentSelectedButton(Button currentSelectedTileButton)

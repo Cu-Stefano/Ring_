@@ -22,7 +22,7 @@ public class TileToBeSelected(MapLogic turnMapLogic) : ActionState(turnMapLogic)
         
     }
 
-    public override void Move(object sender, RoutedEventArgs e)
+    public override void Move_Unit(object sender, RoutedEventArgs e)
     {
 
     }

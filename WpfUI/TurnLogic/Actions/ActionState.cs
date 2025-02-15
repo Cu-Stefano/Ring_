@@ -7,5 +7,5 @@ public abstract class ActionState(MapLogic turnMapLogic){
     public abstract void OnEnter();
     public abstract void OnExit();
     public abstract void CalculateTrail(object sender, RoutedEventArgs e);
-    public abstract void Move(object sender, RoutedEventArgs e);
+    public abstract void Move_Unit(object sender, RoutedEventArgs e);
 }

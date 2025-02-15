@@ -20,7 +20,7 @@ public class Attack(MapLogic turnMapLogic) : ActionState(turnMapLogic)
         throw new NotImplementedException();
     }
 
-    public override void Move(object sender, RoutedEventArgs e)
+    public override void Move_Unit(object sender, RoutedEventArgs e)
     {
         throw new NotImplementedException();
     }
