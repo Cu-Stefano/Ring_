@@ -5,7 +5,7 @@
 
     public static class ItemFactory
     {
-        private static readonly List<GameItem> _standardGameItems;
+        internal static readonly List<GameItem> StandardGameItems;
         public static List<ItemType> StandardTypeItems { get; }
         private const string ItemsFilePath = "./Data/Items/Items.json";
 
@@ -18,7 +18,7 @@
                 new ItemType("Drop")
             ];
 
-            _standardGameItems = new List<GameItem>();
+            StandardGameItems = new List<GameItem>();
 
             // Impostiamo le opzioni di serializzazione
             var options = new JsonSerializerOptions
@@ -26,19 +26,14 @@
                 Converters = { new GameItemConverter() }
             };
 
-            _standardGameItems = JsonSerializer.Deserialize<List<GameItem>>(File.ReadAllText(ItemsFilePath), options) ?? throw new InvalidOperationException();
+            StandardGameItems = JsonSerializer.Deserialize<List<GameItem>>(File.ReadAllText(ItemsFilePath), options) ?? throw new InvalidOperationException();
         }
 
         public static GameItem CreateGameItem(string itemName)
         {
-            GameItem standardItem = _standardGameItems.FirstOrDefault(item => item.Name == itemName);
+            GameItem standardItem = StandardGameItems.FirstOrDefault(item => item.Name == itemName) ?? throw new Exception("The Item Doesn't exist:" + itemName );
 
-            if (standardItem != null)
-            {
-                return standardItem.Clone();
-            }
-
-            throw new Exception($"{_standardGameItems.ToArray()}ItemId doesn't exist");
+            return standardItem.Clone() == null ? standardItem.Clone(): throw new Exception("failed to clone:" + itemName);
         }
     }
 }

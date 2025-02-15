@@ -1,7 +1,6 @@
 ﻿using Engine.Factories;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-// ReSharper disable All
 namespace Engine.Models
 {
 
@@ -12,7 +11,6 @@ namespace Engine.Models
         private ClassType _class;
         
         private int _level;
-        private int _move;
 
         private Stats _stats;
         private int _attack;
@@ -21,6 +19,8 @@ namespace Engine.Models
         private int _critic;
 
         private Weapon _equipedWeapon;
+        public List<GameItem?> Inventory { get; set; }
+        public List<QuestStatus> Quests { get; set; }
 
 
         public string Name
@@ -70,18 +70,6 @@ namespace Engine.Models
             {
                 _level = value;
                 OnPropertyChanged(nameof(Level));
-            }
-        }
-        public int Move
-        {
-            get
-            {
-                return _move;
-            }
-            set
-            {
-                _move = value;
-                OnPropertyChanged(nameof(Move));
             }
         }
 
@@ -160,25 +148,26 @@ namespace Engine.Models
             }
         }
 
-        public ObservableCollection<GameItem> Inventory { get; set; }
-        public ObservableCollection<QuestStatus> Quests { get; set; }
-
-        public Unit(string name, UnitType type, ClassType classType, int level, int move, Stats stats, Weapon? equipedWeapon)
+        public Unit(string name, UnitType type, ClassType classType, int level, Stats stats, Weapon? equipedWeapon)
         {
             Name = name;
             Type = type;
             Class = classType;
             Level = level;
-            Move = move;
             Statistics = stats;
             Attack = Get_Attack(Statistics.Strength,Statistics.Magic, equipedWeapon);
             Hit = Get_Hit(Statistics.Skill, Statistics.Luck, equipedWeapon);
             Dodge = 100;
             Critic = 0;
-            EquipedWeapon = equipedWeapon;
 
-            Inventory = new ObservableCollection<GameItem>();
-            Quests = new ObservableCollection<QuestStatus>();
+            Inventory = new List<GameItem?>();
+            Quests = new List<QuestStatus>();
+
+            if (equipedWeapon != null)
+            {
+                Inventory.Add(equipedWeapon);
+                EquipedWeapon = (Weapon)Inventory.First(item => item == equipedWeapon);
+            }
         }
 
         private int Get_Attack(int str, int mag, Weapon? equipedWeapon)
@@ -187,7 +176,7 @@ namespace Engine.Models
             {
                 return str;
             }
-            return str > mag ? str + equipedWeapon.MinDamage : equipedWeapon.MinDamage + mag;
+            return str > mag ? str + equipedWeapon.MaxDamage : equipedWeapon.MaxDamage + mag;
         }
 
         private int Get_Hit(int skill, int luck, Weapon? equipedWeapon)

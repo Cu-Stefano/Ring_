@@ -1,20 +1,31 @@
-﻿using System.Threading.Tasks;
+﻿using Engine.FEMap;
+using Engine.Models;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace WpfUI.TurnLogic;
 
 public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 {
-    public override async void OnEnter()
+    public override void OnEnter()
     {
-        foreach (var button in TurnMapLogic.MapBuilder.ActualMap.SelectMany(row => row))
-        {
-            button.Click -= TurnMapLogic.Move_unit;
-            button.MouseDoubleClick -= TurnMapLogic.UnitSelected;
-        }
+        // No specific logic for entering EnemyTurn
     }
     public override void OnExit()
     {
         // No specific logic for exiting EnemyTurn
+    }
+
+    public override void TileButton_Over(object sender, RoutedEventArgs e)
+    {
+    }
+
+    public override void UnitSelected(object sender, RoutedEventArgs e)
+    {
+    }
+
+    public override void Move_unit(object sender, RoutedEventArgs e)
+    {
     }
 }

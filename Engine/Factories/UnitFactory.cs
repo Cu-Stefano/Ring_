@@ -14,7 +14,6 @@ namespace Engine.Factories
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Lord"),
                 level: 1,
-                move: 5,
                 stats: new Stats
                 {
                     Strength = 10,
@@ -25,7 +24,7 @@ namespace Engine.Factories
                     Defense = 8,
                     Resistance = 2
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("IronSword") as Weapon
+                equipedWeapon: WeaponFactory.CreateWeapon("IronSword")
             ));
 
             units.Add(new Unit(
@@ -33,7 +32,6 @@ namespace Engine.Factories
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Lord"),
                 level: 2,
-                move: 5,
                 stats: new Stats
                 {
                     Strength = 13,
@@ -44,7 +42,7 @@ namespace Engine.Factories
                     Defense = 6,
                     Resistance = 2
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("IronSword") as Weapon
+                equipedWeapon: WeaponFactory.CreateWeapon("IronSword")
             ));
 
             units.Add(new Unit(
@@ -52,7 +50,6 @@ namespace Engine.Factories
                 type: UnitType.Enemy,
                 classType: ClassTypeFactory.GetClassTypeByName("Mage"),
                 level: 1,
-                move: 4,
                 stats: new Stats
                 {
                     Strength = 2,
@@ -63,7 +60,7 @@ namespace Engine.Factories
                     Defense = 2,
                     Resistance = 8
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("FireTome") as Weapon
+                equipedWeapon: WeaponFactory.CreateWeapon("FireTome")
             ));
 
             units.Add(new Unit(
@@ -71,7 +68,6 @@ namespace Engine.Factories
                 type: UnitType.Enemy,
                 classType: ClassTypeFactory.GetClassTypeByName("Sage"),
                 level: 1,
-                move: 4,
                 stats: new Stats
                 {
                     Strength = 2,
@@ -82,7 +78,7 @@ namespace Engine.Factories
                     Defense = 2,
                     Resistance = 8
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("FireTome") as Weapon
+                equipedWeapon: WeaponFactory.CreateWeapon("FireTome")
             ));
 
             // New units
@@ -91,7 +87,6 @@ namespace Engine.Factories
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Swordmaster"),
                 level: 3,
-                move: 6,
                 stats: new Stats
                 {
                     Strength = 15,
@@ -102,7 +97,7 @@ namespace Engine.Factories
                     Defense = 5,
                     Resistance = 4
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("BronzeSword") as Weapon
+                equipedWeapon: WeaponFactory.CreateWeapon("BronzeSword")
             ));
 
             units.Add(new Unit(
@@ -110,7 +105,6 @@ namespace Engine.Factories
                 type: UnitType.Enemy,
                 classType: ClassTypeFactory.GetClassTypeByName("Warrior"),
                 level: 4,
-                move: 5,
                 stats: new Stats
                 {
                     Strength = 18,
@@ -121,7 +115,7 @@ namespace Engine.Factories
                     Defense = 12,
                     Resistance = 3
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("BronzeAxe") as Weapon
+                equipedWeapon: WeaponFactory.CreateWeapon("BronzeAxe")
             ));
 
             units.Add(new Unit(
@@ -129,7 +123,6 @@ namespace Engine.Factories
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Mage"),
                 level: 2,
-                move: 5,
                 stats: new Stats
                 {
                     Strength = 1,
@@ -140,7 +133,7 @@ namespace Engine.Factories
                     Defense = 3,
                     Resistance = 10
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("FireTome") as Weapon
+                equipedWeapon: WeaponFactory.CreateWeapon("FireTome")
             ));
 
             units.Add(new Unit(
@@ -148,7 +141,6 @@ namespace Engine.Factories
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("General"),
                 level: 5,
-                move: 4,
                 stats: new Stats
                 {
                     Strength = 20,
@@ -159,7 +151,7 @@ namespace Engine.Factories
                     Defense = 15,
                     Resistance = 5
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("IronShield") as Weapon
+                equipedWeapon: null
             ));
 
             units.Add(new Unit(
@@ -167,7 +159,6 @@ namespace Engine.Factories
                 type: UnitType.Enemy,
                 classType: ClassTypeFactory.GetClassTypeByName("PegasusK"),
                 level: 3,
-                move: 7,
                 stats: new Stats
                 {
                     Strength = 12,
@@ -178,7 +169,7 @@ namespace Engine.Factories
                     Defense = 4,
                     Resistance = 7
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("IronSword") as Weapon
+                equipedWeapon: WeaponFactory.CreateWeapon("IronSword")
             ));
 
             units.Add(new Unit(
@@ -186,7 +177,6 @@ namespace Engine.Factories
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Hero"),
                 level: 4,
-                move: 6,
                 stats: new Stats
                 {
                     Strength = 17,
@@ -197,7 +187,7 @@ namespace Engine.Factories
                     Defense = 8,
                     Resistance = 4
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("SilverSword") as Weapon
+                equipedWeapon: WeaponFactory.CreateWeapon("SilverSword")
             ));
 
             units.Add(new Unit(
@@ -205,7 +195,6 @@ namespace Engine.Factories
                 type: UnitType.Enemy,
                 classType: ClassTypeFactory.GetClassTypeByName("Berserker"),
                 level: 5,
-                move: 5,
                 stats: new Stats
                 {
                     Strength = 20,
@@ -216,7 +205,7 @@ namespace Engine.Factories
                     Defense = 6,
                     Resistance = 3
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("SteelAxe") as Weapon
+                equipedWeapon: WeaponFactory.CreateWeapon("SteelAxe")
             ));
 
             units.Add(new Unit(
@@ -224,7 +213,6 @@ namespace Engine.Factories
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Sage"),
                 level: 6,
-                move: 5,
                 stats: new Stats
                 {
                     Strength = 2,
@@ -235,7 +223,7 @@ namespace Engine.Factories
                     Defense = 5,
                     Resistance = 15
                 },
-                equipedWeapon: ItemFactory.CreateGameItem("ThunderTome") as Weapon
+                equipedWeapon: WeaponFactory.CreateWeapon("ThunderTome")
             ));
         }
 

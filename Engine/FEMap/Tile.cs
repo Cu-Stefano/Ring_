@@ -17,7 +17,7 @@ public class Tile
     public Tile(int tileID, string tileName, bool walkable, Unit? unitOn)
     {
         TileID = tileID;
-        TileName = tileName;
+        TileName = tileName;    
         Walkable = walkable;
         UnitOn = unitOn;
     }

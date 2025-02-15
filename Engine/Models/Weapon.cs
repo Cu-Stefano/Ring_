@@ -4,7 +4,7 @@ namespace Engine.Models;
 
 public class Weapon : GameItem
 {
-    public int MinDamage { get; set; }
+    public int Range { get; set; }
     public int MaxDamage { get; set; }
     public int Durability { get; set; }
     public int Critical { get; set; }
@@ -12,10 +12,10 @@ public class Weapon : GameItem
 
     [JsonConstructor]
     public Weapon(){}
-    public Weapon(int itemTypeId, string name, int price, int mindamage, int maxdamage, int durability, int critical, string weaponType)
+    public Weapon(int itemTypeId, string name, int price, int range, int maxdamage, int durability, int critical, string weaponType)
         : base(itemTypeId, name, price)
     {
-        MinDamage = mindamage;
+        Range = range;
         MaxDamage = maxdamage;
         Durability = durability;
         Critical = critical;
@@ -24,6 +24,6 @@ public class Weapon : GameItem
 
     public new GameItem Clone()
     {
-        return new Weapon(ItemTypeId, Name, Price, MinDamage, MaxDamage, Durability, Critical, WeaponType);
+        return new Weapon(ItemTypeId, Name, Price, Range, MaxDamage, Durability, Critical, WeaponType);
     }
 }
