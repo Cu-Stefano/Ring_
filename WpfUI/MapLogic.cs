@@ -13,7 +13,7 @@ namespace WpfUI;
 public class MapLogic : INotifyPropertyChanged
 {
     public readonly MapBuilder MapBuilder;
-    public TurnState CurrentTurnState;
+    public TurnState CurrentTurnState { get; set;}
 
     public string TurnName => CurrentTurnState.GetType().Name;
 

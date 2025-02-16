@@ -9,6 +9,7 @@ using Engine.ViewModels;
 using System.ComponentModel;
 using System.Windows.Input;
 using WpfUI.TurnLogic;
+using WpfUI.TurnLogic.Actions;
 
 namespace WpfUI
 {
@@ -48,7 +49,7 @@ namespace WpfUI
             
             BuildMap(levelMap);
             MapLogic = new MapLogic(this);
-            // Aggiungi i gestori d'eventi
+
             MouseDown += Window_MouseDown;
 
         }
@@ -150,26 +151,6 @@ namespace WpfUI
             }
         }
 
-        public void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            // Verifica se l'elemento cliccato è un pulsante con un'unità selezionata
-            if (e.OriginalSource is not Button { Tag: Tile })
-            {
-                // Deseleziona l'unità corrente e ripristina il bordo del pulsante
-                if (CurrentSelectedTile != null)
-                {
-                    var currentSelectedTileButton = MapCosmetics.GetButtonBasedOnTile(CurrentSelectedTile);
-
-                    MapCosmetics.TileDeSelected(currentSelectedTileButton!);
-
-                    CurrentSelectedTile = null;
-                    GameSession.CurrentTile = null;
-                    GameSession.CurrentUnit = null;
-                    GameSession.ClassWeapons = string.Empty;
-                }
-            }
-        }
-
         private void Previus_Level(object sender, RoutedEventArgs e)
         {
             if (LevelIndex - 1 > 0)
@@ -225,6 +206,11 @@ namespace WpfUI
                     MapLogic.SetState(new AllayTurn(MapLogic));
                     break;
             }
+        }
+
+        public void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MapLogic.CurrentTurnState.Window_MouseDown(sender, e);
         }
 
         public void ClearGamesessionGui()

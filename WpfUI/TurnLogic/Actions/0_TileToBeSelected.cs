@@ -1,11 +1,12 @@
 ﻿using Engine.FEMap;
 using Engine.Models;
+using Engine.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace WpfUI.TurnLogic.Actions;
 
-public class TileToBeSelected(MapLogic turnMapLogic) : ActionState(turnMapLogic)
+public class TileToBeSelected(TurnState state) : ActionState(state)
 {
     public override void OnEnter()
     {
@@ -22,6 +23,25 @@ public class TileToBeSelected(MapLogic turnMapLogic) : ActionState(turnMapLogic)
         
     }
 
+    public override void UnitSelected(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { Tag: Tile { UnitOn.Type: UnitType.Allay } tile } button)
+        {
+            if (_mapBuilder.CurrentSelectedTile != null)
+            {
+                var selectedButton = _mapCosmetics.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile);
+                _mapCosmetics.TileDeSelected(selectedButton!);
+                _mapBuilder.CurrentSelectedTile = null;
+            }
+            _mapCosmetics.TileSelected(button);
+            _mapBuilder.CurrentSelectedTile = tile;
+            _mapBuilder.MovingUnit = tile.UnitOn;
+
+            //CHANGE STATE TO 1
+            State.SetState(new TileSelected(State));
+        }
+    }
+
     public override void Move_Unit(object sender, RoutedEventArgs e)
     {
 
@@ -29,10 +49,10 @@ public class TileToBeSelected(MapLogic turnMapLogic) : ActionState(turnMapLogic)
 
     public void ClearCurrentSelectedButton(Button currentSelectedTileButton)
     {
-        TurnMapLogic.MapBuilder.MapCosmetics.TileDeSelected(currentSelectedTileButton);
+        _mapCosmetics.TileDeSelected(currentSelectedTileButton);
         currentSelectedTileButton.Content = null;
-        TurnMapLogic.MapBuilder.MovingUnit = null;
-        TurnMapLogic.MapBuilder.CurrentSelectedTile = null;
+        _mapBuilder.MovingUnit = null;
+        _mapBuilder.CurrentSelectedTile = null;
     }
 
    

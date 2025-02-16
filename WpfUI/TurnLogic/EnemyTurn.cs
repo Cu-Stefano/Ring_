@@ -1,8 +1,10 @@
 ﻿using Engine.FEMap;
 using Engine.Models;
+using Engine.ViewModels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WpfUI.TurnLogic.Actions;
 
 namespace WpfUI.TurnLogic;
 
@@ -17,7 +19,7 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
         // No specific logic for exiting EnemyTurn
     }
 
-    public override void TileButton_Over(object sender, RoutedEventArgs e)
+    public override void SetState(ActionState action)
     {
     }
 

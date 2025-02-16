@@ -50,7 +50,6 @@
                     <DropShadowEffect BlurRadius="9" Opacity="0.5" RenderingBias="Quality"/>
                 </Button.Effect>
             </Button>
-
             <Button Style="{StaticResource WhiteButtonStyle}" Content="{Binding MapLogic.TurnName}"
                     Width="256" Margin="100,12,100,12" Height="46">
                 <Button.Effect>

@@ -1,37 +1,36 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Engine.ViewModels;
 
 namespace WpfUI.TurnLogic.Actions;
 
-public class ChooseAttack(MapLogic turnMapLogic) : ActionState(turnMapLogic)
+public class Attack(TurnState state) : ActionState(state)
 {
     public override void OnEnter()
     {
-        throw new NotImplementedException();
     }
 
     public override void OnExit()
     {
-        throw new NotImplementedException();
     }
 
     public override void CalculateTrail(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+    }
+
+    public override void UnitSelected(object sender, RoutedEventArgs e)
+    {
     }
 
     public override void Move_Unit(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
     }
 
     public void ClearCurrentSelectedButton(Button currentSelectedTileButton)
     {
-        TurnMapLogic.MapBuilder.MapCosmetics.TileDeSelected(currentSelectedTileButton);
+        _mapCosmetics.TileDeSelected(currentSelectedTileButton);
         currentSelectedTileButton.Content = null;
-        TurnMapLogic.MapBuilder.MovingUnit = null;
-        TurnMapLogic.MapBuilder.CurrentSelectedTile = null;
+        _mapBuilder.MovingUnit = null;
+        _mapBuilder.CurrentSelectedTile = null;
     }
-
-   
 }

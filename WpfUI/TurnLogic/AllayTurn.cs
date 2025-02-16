@@ -1,20 +1,21 @@
-﻿using Engine.FEMap;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Engine.FEMap;
 using Engine.Models;
 using Engine.ViewModels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using WpfUI.TurnLogic.Actions;
 
 namespace WpfUI.TurnLogic;
 
-public class AllayTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
+public class AllayTurn(MapLogic turnMapLogic): TurnState(turnMapLogic)
 {
-    public ActionState CurrentActionState;
-
     public override void OnEnter()
     {
-        SetState(new TileToBeSelected(TurnMapLogic));
+        SetState(new TileToBeSelected(this));
     }
 
     public override void OnExit()
@@ -22,54 +23,23 @@ public class AllayTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 
     }
 
-    public void SetState(ActionState action)
+    public override void SetState(ActionState action)
     {
         CurrentActionState?.OnExit();
         CurrentActionState = action;
         CurrentActionState.OnEnter();
 
         //aggiungo i gestori d'evento del nuovo stato
-        foreach (var button in TurnMapLogic.MapBuilder.ActualMap.SelectMany(row => row))
+        foreach (var button in _mapBuilder.ActualMap.SelectMany(row => row))
         {
             button.MouseEnter += CurrentActionState.CalculateTrail;
             button.Click += Move_unit;
         }
-
-    }
-
-    public override void TileButton_Over(object sender, RoutedEventArgs e)
-    {
-        if (TurnMapLogic.MapBuilder.CurrentSelectedTile != null)
-        {
-            TurnMapLogic.MapBuilder.GameSession.CurrentTile = TurnMapLogic.MapBuilder.CurrentSelectedTile;
-            TurnMapLogic.MapBuilder.GameSession.CurrentUnit = TurnMapLogic.MapBuilder.MovingUnit!;
-            TurnMapLogic.MapBuilder.GameSession.ClassWeapons = string.Join("\n", TurnMapLogic.MapBuilder.GameSession.CurrentUnit.Class.UsableWeapons);
-        }
-        else if (sender is Button { Tag: Tile tile })
-        {
-            TurnMapLogic.MapBuilder.GameSession.CurrentUnit = tile.UnitOn;
-            TurnMapLogic.MapBuilder.GameSession.ClassWeapons = tile.UnitOn != null ? string.Join("\n", TurnMapLogic.MapBuilder.GameSession.CurrentUnit!.Class.UsableWeapons) : "";
-            TurnMapLogic.MapBuilder.GameSession.CurrentTile = tile;
-        }
-
-        
     }
 
     public override void UnitSelected(object sender, RoutedEventArgs e)
     {
-        if (sender is Button { Tag: Tile { UnitOn.Type: UnitType.Allay } tile } button)
-        {
-            if (TurnMapLogic.MapBuilder.CurrentSelectedTile != null)
-            {
-                var selectedButton = TurnMapLogic.MapBuilder.MapCosmetics.GetButtonBasedOnTile(TurnMapLogic.MapBuilder.CurrentSelectedTile);
-                TurnMapLogic.MapBuilder.MapCosmetics.TileDeSelected(selectedButton!);
-                TurnMapLogic.MapBuilder.CurrentSelectedTile = null;
-            }
-
-            TurnMapLogic.MapBuilder.MapCosmetics.TileSelected(button);
-            TurnMapLogic.MapBuilder.CurrentSelectedTile = tile;
-            TurnMapLogic.MapBuilder.MovingUnit = tile.UnitOn;
-        }
+        CurrentActionState.UnitSelected(sender, e);
     }
 
     public override void Move_unit(object sender, RoutedEventArgs e)
@@ -79,11 +49,24 @@ public class AllayTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 
     public void ClearCurrentSelectedButton(Button currentSelectedTileButton)
     {
-        TurnMapLogic.MapBuilder.MapCosmetics.TileDeSelected(currentSelectedTileButton);
+        _mapCosmetics.TileDeSelected(currentSelectedTileButton);
         currentSelectedTileButton.Content = null;
-        TurnMapLogic.MapBuilder.MovingUnit = null;
-        TurnMapLogic.MapBuilder.CurrentSelectedTile = null;
+        _mapBuilder.MovingUnit = null;
+        _mapBuilder.CurrentSelectedTile = null;
     }
 
+    public event PropertyChangedEventHandler? PropertyChanged;
 
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+        field = value;
+        OnPropertyChanged(propertyName);
+        return true;
+    }
 }
