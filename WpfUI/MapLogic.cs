@@ -25,13 +25,6 @@ public class MapLogic : INotifyPropertyChanged
 
     public void SetState(TurnState newTurnState)
     {
-        //tolgo i gestori d'evento del vechhio stato
-        foreach (var button in MapBuilder.ActualMap.SelectMany(row => row))
-        {
-            button.Click -= Move_unit;
-            button.MouseDoubleClick -= UnitSelected;
-        }
-
         MapBuilder.ClearGamesessionGui();
 
         CurrentTurnState?.OnExit();

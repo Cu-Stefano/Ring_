@@ -24,14 +24,6 @@ public class AllayTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 
     public void SetState(ActionState action)
     {
-        ////tolgo i gestori d'evento del vechhio stato
-        //foreach (var button in TurnMapLogic.MapBuilder.ActualMap.SelectMany(row => row))
-        //{
-        //    button.Click -= Move_Unit;
-        //    button.MouseDoubleClick -= CurrentActionState.CalculateTrail;
-        //}
-        //TurnMapLogic.MapBuilder.ClearGamesessionGui();
-
         CurrentActionState?.OnExit();
         CurrentActionState = action;
         CurrentActionState.OnEnter();
