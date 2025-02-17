@@ -1,10 +1,9 @@
 ﻿using Engine.FEMap;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Shell;
 using WpfUI.PathLogic;
 
 namespace WpfUI.TurnLogic.Actions;
@@ -12,19 +11,17 @@ namespace WpfUI.TurnLogic.Actions;
 public class TileSelected : ActionState
 {
     private Node ONode { get; set; }
-    private Tile Tile { get; } 
+    private Tile Tile { get; }
     private int UnitMovement { get; }
     private int? Range { get; }
-    private List<List<Node>> Matrix { get; set;}
+    private List<List<Node>> Matrix { get; set; }
     private PriorityQueue<Node, int?> PQueue { get; set; }
     private List<Button> Path { get; set; }
     private List<Button> Attack { get; set; }
 
-
     public TileSelected(TurnState state, Button button) : base(state)
     {
         Matrix = NodeMatrix();
-
         ONode = GetButtonCoordinates(button)!;
         ONode.G = 0;
         ONode.Parent = null;
@@ -46,9 +43,9 @@ public class TileSelected : ActionState
             var curr = GetNextNode()!;
             var button = curr.button;
 
-            if (curr == ONode || curr.passable && curr.G < (UnitMovement + Range) && !Path.Exists(b => b.Equals(button)))
+            if ((curr == ONode || curr.passable) && curr.G < (UnitMovement + Range) && !Path.Contains(button))
             {
-                foreach (var currNeighbour in curr.Neighbours.Where(currNeighbour => currNeighbour.G == null))
+                foreach (var currNeighbour in curr.Neighbours.Where(n => n.G == null))
                 {
                     currNeighbour.G = curr.G + 1;
                     currNeighbour.Parent = curr;
@@ -68,14 +65,13 @@ public class TileSelected : ActionState
             }
         }
     }
+
     public override void OnExit()
     {
-        // Reset Matrix, PQueue, Path, and ONode
         Matrix = null;
         PQueue.Clear();
         ONode = null;
 
-        // Reset the colors of the map using GetTileBrush
         foreach (var button in Path)
         {
             var tile = (Tile)button.Tag;
@@ -93,10 +89,9 @@ public class TileSelected : ActionState
 
     public override void CalculateTrail(object sender, RoutedEventArgs e)
     {
-        //se il sender è un tile che non sta dentro il path
-        if (sender is Button bx && !Path.Exists(by=> by.Equals(bx)))
+        if (sender is Button bx && !Path.Contains(bx))
             return;
-        // Clear the old Trail
+
         foreach (var button in Path)
         {
             _mapCosmetics.TileDeSelected(button);
@@ -116,16 +111,15 @@ public class TileSelected : ActionState
 
     public override void Move_Unit(object sender, RoutedEventArgs e)
     {
-        if (sender is Button { Tag: Tile { UnitOn: null, Walkable: true } tile } button && Path.Exists(b => b.Equals(button)))
+        if (sender is Button { Tag: Tile { UnitOn: null, Walkable: true } tile } button && Path.Contains(button))
         {
             if (_mapBuilder.CurrentSelectedTile is { UnitOn: not null } && _mapBuilder.CurrentSelectedTile != tile)
             {
-                tile.UnitOn = _mapBuilder.MovingUnit;//sposto l'unità
+                tile.UnitOn = _mapBuilder.MovingUnit;
 
-                // Deseleziona la Tile dell'unità che si vuole spostare
                 var currentSelectedTileButton = _mapCosmetics.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile)!;
 
-                button.Content = currentSelectedTileButton.Content;//copio il tipo/colore dell'unità
+                button.Content = currentSelectedTileButton.Content;
                 _gameSession.CurrentTile = tile;
                 _gameSession.CurrentUnit = tile.UnitOn;
 
@@ -133,12 +127,10 @@ public class TileSelected : ActionState
 
                 _gameSession.ClassWeapons = string.Join("\n", _gameSession.CurrentUnit!.Class.UsableWeapons);
 
-                //CHANGE STATE BACK TO 0
                 State.SetState(new TileToBeSelected(State));
             }
         }
     }
-
 
     //UTILITY METHODS
     public void ClearCurrentSelectedButton(Button currentSelectedTileButton)
@@ -148,27 +140,28 @@ public class TileSelected : ActionState
         _mapBuilder.MovingUnit = null;
         _mapBuilder.CurrentSelectedTile = null;
     }
+
     public List<List<Node>> NodeMatrix()
     {
         var baseMap = _mapBuilder.ActualMap;
         var result = new List<List<Node>>();
+
         for (int i = 0; i < 15; i++)
         {
             var row = new List<Node>();
             for (int j = 0; j < 20; j++)
             {
-                row.Add(new Node());
-
                 var tile = (Tile)baseMap[i][j].Tag;
-                //costo per passare il tile
                 var cost = tile.TileName == "Bush" ? 2 : 1;
-                //se il tile è passabile
                 var passable = tile is { Walkable: true, UnitOn: null };
 
-                row[j].button = baseMap[i][j];
-                row[j].cost = cost;
-                row[j].passable = passable;
-
+                var node = new Node
+                {
+                    button = baseMap[i][j],
+                    cost = cost,
+                    passable = passable
+                };
+                row.Add(node);
             }
             result.Add(row);
         }
@@ -177,28 +170,23 @@ public class TileSelected : ActionState
         {
             for (int j = 0; j < 20; j++)
             {
-                //i suoi neighbors
-                if (i > 0 && result[i - 1][j].passable)
-                {
-                    result[i][j].Neighbours.Add(result[i - 1][j]);
-                }
-                if (j > 0 && result[i][j - 1].passable)
-                {
-                    result[i][j].Neighbours.Add(result[i][j - 1]);
-                }
-                if (i < baseMap.Count - 1 && result[i + 1][j].passable)
-                {
-                    result[i][j].Neighbours.Add(result[i + 1][j]);
-                }
-                if (j < baseMap[i].Count - 1 && result[i][j + 1].passable)
-                {
-                    result[i][j].Neighbours.Add(result[i][j + 1]);
-                }
+                var node = result[i][j];
+                if (i > 0 && result[i - 1][j].passable) 
+                    node.Neighbours.Add(result[i - 1][j]);
 
+                if (j > 0 && result[i][j - 1].passable) 
+                    node.Neighbours.Add(result[i][j - 1]);
+
+                if (i < baseMap.Count - 1 && result[i + 1][j].passable) 
+                    node.Neighbours.Add(result[i + 1][j]);
+
+                if (j < baseMap[i].Count - 1 && result[i][j + 1].passable) 
+                    node.Neighbours.Add(result[i][j + 1]);
             }
         }
         return result;
     }
+
     public Node? GetButtonCoordinates(Button button)
     {
         for (int i = 0; i < _mapBuilder.ActualMap.Count; i++)
@@ -219,7 +207,6 @@ public class TileSelected : ActionState
 
     public Node? GetNextNode()
     {
-        if (PQueue.Count == 0) return null;
-        return PQueue.Dequeue();
+        return PQueue.Count == 0 ? null : PQueue.Dequeue();
     }
 }

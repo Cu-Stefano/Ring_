@@ -116,6 +116,8 @@ namespace WpfUI
                         Tag = tile // Associa il Tile al pulsante
                     };
 
+                    tile.UnitOn = null;// !se no si bugga quando cambi livello e le unità che ho spostato prima rimangono in memoria!  
+
                     if (tile.TileID <= 0 && allayList.Any() ||
                         tile.TileID < 0 && enemyList.Any())
                     {
