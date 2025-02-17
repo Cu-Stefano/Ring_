@@ -1,4 +1,5 @@
 ﻿using Engine.FEMap;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
@@ -13,9 +14,11 @@ public class TileSelected : ActionState
     private Node ONode { get; set; }
     private Tile Tile { get; } 
     private int UnitMovement { get; }
+    private int? Range { get; }
     private List<List<Node>> Matrix { get; set;}
     private PriorityQueue<Node, int?> PQueue { get; set; }
     private List<Button> Path { get; set; }
+    private List<Button> Attack { get; set; }
 
 
     public TileSelected(TurnState state, Button button) : base(state)
@@ -27,11 +30,13 @@ public class TileSelected : ActionState
         ONode.Parent = null;
         Tile = (Tile)button.Tag;
         UnitMovement = Tile.UnitOn!.Class.Movement;
+        Range = Tile.UnitOn.EquipedWeapon?.Range ?? 0;
         _mapCosmetics.TileSelected(button);
 
         PQueue = new PriorityQueue<Node, int?>();
         AddNodeToQueue(ONode);
         Path = new List<Button>();
+        Attack = new List<Button>();
     }
 
     public override void OnEnter()
@@ -41,7 +46,7 @@ public class TileSelected : ActionState
             var curr = GetNextNode()!;
             var button = curr.button;
 
-            if (curr == ONode || curr.passable && curr.G <= UnitMovement && !Path.Exists(b => b.Equals(button)))
+            if (curr == ONode || curr.passable && curr.G < (UnitMovement + Range) && !Path.Exists(b => b.Equals(button)))
             {
                 foreach (var currNeighbour in curr.Neighbours.Where(currNeighbour => currNeighbour.G == null))
                 {
@@ -50,8 +55,17 @@ public class TileSelected : ActionState
                     PQueue.Enqueue(currNeighbour, currNeighbour.G);
                 }
             }
-            Path.Add(button);
-            _mapCosmetics.GetPathBrush(button);
+
+            if (curr.G > UnitMovement)
+            {
+                _mapCosmetics.GetAttackBrush(button);
+                Attack.Add(button);
+            }
+            else
+            {
+                Path.Add(button);
+                _mapCosmetics.GetPathBrush(button);
+            }
         }
     }
     public override void OnExit()
@@ -68,6 +82,12 @@ public class TileSelected : ActionState
             button.Background = _mapCosmetics.GetTileBrush(tile);
             _mapCosmetics.TileDeSelected(button);
         }
+        foreach (var button in Attack)
+        {
+            var tile = (Tile)button.Tag;
+            button.Background = _mapCosmetics.GetTileBrush(tile);
+        }
+        Attack.Clear();
         Path.Clear();
     }
 
