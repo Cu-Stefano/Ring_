@@ -33,12 +33,11 @@ public class TileToBeSelected(TurnState state) : ActionState(state)
                 _mapCosmetics.TileDeSelected(selectedButton!);
                 _mapBuilder.CurrentSelectedTile = null;
             }
-            _mapCosmetics.TileSelected(button);
             _mapBuilder.CurrentSelectedTile = tile;
             _mapBuilder.MovingUnit = tile.UnitOn;
 
             //CHANGE STATE TO 1
-            State.SetState(new TileSelected(State));
+            State.SetState(new TileSelected(State, (Button)sender));
         }
     }
 

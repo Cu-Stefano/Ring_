@@ -25,6 +25,17 @@ public class AllayTurn(MapLogic turnMapLogic): TurnState(turnMapLogic)
 
     public override void SetState(ActionState action)
     {
+        //rimuovo i gestori d'evento dello stato corrente
+        if (CurrentActionState != null)
+        {
+            
+            foreach (var button in _mapBuilder.ActualMap.SelectMany(row => row))
+            {
+                button.MouseEnter -= CurrentActionState.CalculateTrail;
+                button.Click -= Move_unit;
+            }
+        }
+        
         CurrentActionState?.OnExit();
         CurrentActionState = action;
         CurrentActionState.OnEnter();
