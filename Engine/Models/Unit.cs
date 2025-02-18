@@ -17,6 +17,7 @@ namespace Engine.Models
         private int _defense;
         private int _dodge;
         private int _critic;
+        private bool _canMove;
 
         private Weapon _equipedWeapon;
         public List<GameItem?> Inventory { get; set; }
@@ -135,6 +136,18 @@ namespace Engine.Models
             }
         }
 
+        public bool CanMove
+        {
+            get
+            {
+                return _canMove;
+            }
+            set
+            {
+                _canMove = value;
+                OnPropertyChanged(nameof(CanMove));
+            }
+        }
         public Weapon EquipedWeapon
         {
             get
@@ -159,6 +172,7 @@ namespace Engine.Models
             Hit = Get_Hit(Statistics.Skill, Statistics.Luck, equipedWeapon);
             Dodge = 100;
             Critic = 0;
+            CanMove = true;
 
             Inventory = new List<GameItem?>();
             Quests = new List<QuestStatus>();

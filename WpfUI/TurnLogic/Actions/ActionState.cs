@@ -32,9 +32,9 @@ public abstract class ActionState
             // Deseleziona l'unità corrente e ripristina il bordo del pulsante
             if (_mapBuilder.CurrentSelectedTile != null)
             {
-                var currentSelectedTileButton = _mapCosmetics.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile);
+                var currentSelectedTileButton = _mapBuilder.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile);
 
-                _mapCosmetics.TileDeSelected(currentSelectedTileButton!);
+                _mapCosmetics.SetTileAsDeselected(currentSelectedTileButton!);
 
                 _mapBuilder.CurrentSelectedTile = null;
                 _gameSession.CurrentTile = null;

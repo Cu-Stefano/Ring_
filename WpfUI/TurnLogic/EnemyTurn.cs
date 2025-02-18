@@ -16,7 +16,6 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
     }
     public override void OnExit()
     {
-        // No specific logic for exiting EnemyTurn
     }
 
     public override void SetState(ActionState action)

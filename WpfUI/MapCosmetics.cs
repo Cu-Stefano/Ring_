@@ -11,44 +11,38 @@ namespace WpfUI;
 
 public class MapCosmetics : BaseNotification
 {
-    public MapBuilder _mapBuilder;
 
-    public MapCosmetics(MapBuilder mapBuilder)
-    {
-        _mapBuilder = mapBuilder;
-    }
-
-    public void TileSelected(Button button)
+    public void SetTileAsSelected(Button button)
     {
         button.BorderBrush = Brushes.Red;
         button.BorderThickness = new Thickness(2);
         OnPropertyChanged("button");
     }
 
-    public void TileDeSelected(Button button)
+    public void SetTileAsDeselected(Button button)
     {
         button.BorderBrush = Brushes.Gray;
         button.BorderThickness = new Thickness(1);
         OnPropertyChanged("button");
     }
 
-    public void GetPathBrush(Button button)
+    public void SetGetPathBrush(Button button)
     {
         Random random = new Random();
         button.Background = GetColorVariant(Colors.LightSkyBlue, 15, 100);
         OnPropertyChanged("button");
     }
-    public void GetAttackBrush(Button button)
+    public void SetGetAttackBrush(Button button)
     {
         Random random = new Random();
         button.Background = GetColorVariant(Colors.NavajoWhite, 10);
         OnPropertyChanged("button");
     }
 
-    public void TrailSelector(Button button)
+    public void SetTrailSelector(Button button)
     {
-        button.BorderBrush = Brushes.Black;
-        button.BorderThickness = new Thickness(3);
+        button.BorderBrush = Brushes.CornflowerBlue;
+        button.BorderThickness = new Thickness(2.5);
         OnPropertyChanged("button");
     }
 
@@ -58,16 +52,20 @@ public class MapCosmetics : BaseNotification
 
         if (unit.Type == UnitType.Allay)
         {
-            return GetColorVariant(Colors.CornflowerBlue, 50);
+            if(unit.CanMove)
+                return GetColorVariant(Colors.CornflowerBlue, 50);
+            return GetColorVariant(Colors.DarkGray, 0, 200);
         }
         if (unit.Type == UnitType.Enemy)
         {
-            return GetColorVariant(Colors.Tomato, 50);
+            if (unit.CanMove)
+                return GetColorVariant(Colors.Tomato, 0);
+            return GetColorVariant(Colors.DimGray, 50);
         }
         return Brushes.Black; // Default color for other unit types
     }
 
-    public Brush GetTileBrush(Tile tile)
+    public static Brush GetTileBrush(Tile tile)
     {
         return tile.TileName switch
         {
@@ -90,8 +88,7 @@ public class MapCosmetics : BaseNotification
         return new SolidColorBrush(Color.FromArgb(alpha, r, g, b));
     }
 
-
-    public static Polygon Triangle(Unit unit)
+    public static Polygon GetTriangle(Unit unit)
     {
         var triangle = new Polygon
         {
@@ -108,8 +105,4 @@ public class MapCosmetics : BaseNotification
         return triangle;
     }
 
-    public Button? GetButtonBasedOnTile(Tile tile)
-    {
-        return _mapBuilder.ActualMap.SelectMany(row => row).FirstOrDefault(b => b?.Tag == tile);
-    }
 }

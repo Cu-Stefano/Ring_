@@ -4,15 +4,16 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Engine;
 using Engine.FEMap;
 using Engine.Models;
 using WpfUI.TurnLogic;
 
 namespace WpfUI;
 
-public class MapLogic : INotifyPropertyChanged
+public class MapLogic : BaseNotification
 {
-    public readonly MapBuilder MapBuilder;
+    internal readonly MapBuilder MapBuilder;
     public TurnState CurrentTurnState { get; set;}
 
     public string TurnName => CurrentTurnState.GetType().Name;
@@ -55,21 +56,5 @@ public class MapLogic : INotifyPropertyChanged
     public void Move_unit(object sender, RoutedEventArgs e)
     {
         CurrentTurnState.Move_unit(sender, e);
-    }
-
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
     }
 }

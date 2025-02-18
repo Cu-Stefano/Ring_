@@ -31,12 +31,34 @@ namespace WpfUI
 
         public MapLogic MapLogic { get; }
 
+        private static List<Unit> AllayList
+        {
+            get
+            {
+                var allayList = UnitFactory.units.Where(u => u.Type == UnitType.Allay).ToList();
+                return allayList;
+            }
+        }
+        private static List<Unit> EnemyList
+        {
+            get
+            {
+                var enemyList = UnitFactory.units.Where(u => u.Type == UnitType.Enemy).ToList();
+                return enemyList;
+            }
+        }
+
+        public List<Button> AllayButtonList { get; set; }
+
+        public List<Button> EnemyButtonList { get; set; }
+
+
         public MapBuilder(GameSession gameSession)
         {
             InitializeComponent();
             DataContext = this;
             GameSession = gameSession;
-            MapCosmetics = new MapCosmetics(this);//methods to change the appearance of the map
+            MapCosmetics = new MapCosmetics();//methods to change the appearance of the map
             
 
             LevelIndex = 1;
@@ -56,17 +78,9 @@ namespace WpfUI
 
         private void InitializeMap(List<List<Tile>> levelTileMap)
         {
-            ActualMap = new List<List<Button>>();
-
-            foreach (var t in levelTileMap)
-            {
-                var row = new List<Button>();
-                for (int j = 0; j < t.Count; j++)
-                {
-                    row.Add(null);
-                }
-                ActualMap.Add(row);
-            }
+            ActualMap = levelTileMap
+                .Select(t => Enumerable.Repeat<Button>(null, t.Count).ToList())
+                .ToList();
         }
 
         private void ClearMap(object sender, RoutedEventArgs e)
@@ -97,47 +111,50 @@ namespace WpfUI
             }
 
             // Crea una copia della lista di tutte le unità allay e nemiche che ho
-            var allayList = UnitFactory.units.Where(u => u.Type == UnitType.Allay).ToList();
-            var enemyList = UnitFactory.units.Where(u => u.Type == UnitType.Enemy).ToList();
+            var allayList = AllayList;
+            var enemyList = EnemyList;
+            AllayButtonList = new List<Button>();
+            EnemyButtonList = new List<Button>();
 
             for (int row = 0; row < tileMatrix.Count; row++)
             {
-                for (int col = 0; col < tileMatrix[row].Count; col++)
+                for (int col = 0; col < tileMatrix[0].Count; col++)
                 {
                     var tile = tileMatrix[row][col];
 
                     // Crea un pulsante per poter interagire col tile
                     var button = new Button
                     {
-                        Width = 48.5, // Dimensioni della cella
+                        Width = 48.5, 
                         Height = 31.5,
                         BorderThickness = new Thickness(1),
-                        Background = MapCosmetics.GetTileBrush(tile), // Colore basato sul tipo
-                        Tag = tile // Associa il Tile al pulsante
+                        Background = MapCosmetics.GetTileBrush(tile), 
+                        Tag = tile
                     };
 
-                    tile.UnitOn = null;// !se no si bugga quando cambi livello e le unità che ho spostato prima rimangono in memoria!  
+                    tile.UnitOn = null;// !se no lo fai, si bugga, quando cambi livello e le unità che ho spostato prima rimangono in memoria!  
 
-                    if (tile.TileID <= 0 && allayList.Any() ||
-                        tile.TileID < 0 && enemyList.Any())
+                    if (tile.TileID == 0 && allayList.Any() ||
+                        tile.TileID == -1 && enemyList.Any())
                     {
                         // Scegli un'unità casuale dalla lista da mettere dove deve andare in base a tileMatrix
                         var allayRandomIndex = new Random().Next(allayList.Count);
                         var enemyRandomIndex = new Random().Next(enemyList.Count);
 
-                        //inizializzo l'unità
                         Unit unit;
                         if (tile.TileID == 0)
                         {
                             unit = allayList[allayRandomIndex];
-                            allayList.RemoveAt(allayRandomIndex); 
+                            allayList.RemoveAt(allayRandomIndex);
+                            AllayButtonList.Add(button);
                         }
                         else
                         {
                             unit = enemyList[enemyRandomIndex];
                             enemyList.RemoveAt(enemyRandomIndex);
+                            EnemyButtonList.Add(button);
                         }
-                        var triangle = MapCosmetics.Triangle(unit);
+                        var triangle = MapCosmetics.GetTriangle(unit);
 
                         // aggiungo l'unità al tile
                         button.Content = triangle;
@@ -152,6 +169,8 @@ namespace WpfUI
                 }
             }
         }
+
+        
 
         private void Previus_Level(object sender, RoutedEventArgs e)
         {
@@ -219,11 +238,22 @@ namespace WpfUI
         {
             if (CurrentSelectedTile != null)
             {
-                var currentSelectedTileButton = MapCosmetics.GetButtonBasedOnTile(CurrentSelectedTile);
-                MapCosmetics.TileDeSelected(currentSelectedTileButton!);
+                var currentSelectedTileButton = GetButtonBasedOnTile(CurrentSelectedTile);
+                MapCosmetics.SetTileAsDeselected(currentSelectedTileButton!);
                 CurrentSelectedTile = null;
             }
            
+        }
+
+        public void UnitCantMoveNoMore(Button button)
+        {
+            //unit can't move till next turn
+            button.Content = MapCosmetics.GetTriangle(CurrentSelectedTile.UnitOn);
+            OnPropertyChanged("button");
+        }
+        public Button? GetButtonBasedOnTile(Tile tile)
+        {
+            return ActualMap.SelectMany(row => row).FirstOrDefault(b => b?.Tag == tile);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

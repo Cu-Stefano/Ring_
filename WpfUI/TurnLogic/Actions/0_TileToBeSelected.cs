@@ -25,19 +25,19 @@ public class TileToBeSelected(TurnState state) : ActionState(state)
 
     public override void UnitSelected(object sender, RoutedEventArgs e)
     {
-        if (sender is Button { Tag: Tile { UnitOn.Type: UnitType.Allay } tile } button)
+        if (sender is Button { Tag: Tile { UnitOn: { Type: UnitType.Allay, CanMove: true } } tile } button)
         {
             if (_mapBuilder.CurrentSelectedTile != null)
             {
-                var selectedButton = _mapCosmetics.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile);
-                _mapCosmetics.TileDeSelected(selectedButton!);
+                var selectedButton = _mapBuilder.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile);
+                _mapCosmetics.SetTileAsDeselected(selectedButton!);
                 _mapBuilder.CurrentSelectedTile = null;
             }
             _mapBuilder.CurrentSelectedTile = tile;
             _mapBuilder.MovingUnit = tile.UnitOn;
 
             //CHANGE STATE TO 1
-            State.SetState(new TileSelected(State, (Button)sender));
+            State.SetState(new TileSelected(State, button));
         }
     }
 
@@ -45,14 +45,4 @@ public class TileToBeSelected(TurnState state) : ActionState(state)
     {
 
     }
-
-    public void ClearCurrentSelectedButton(Button currentSelectedTileButton)
-    {
-        _mapCosmetics.TileDeSelected(currentSelectedTileButton);
-        currentSelectedTileButton.Content = null;
-        _mapBuilder.MovingUnit = null;
-        _mapBuilder.CurrentSelectedTile = null;
-    }
-
-   
 }

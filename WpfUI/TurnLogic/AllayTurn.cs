@@ -20,7 +20,12 @@ public class AllayTurn(MapLogic turnMapLogic): TurnState(turnMapLogic)
 
     public override void OnExit()
     {
-
+        foreach (var but in _mapBuilder.AllayButtonList)
+        {
+            var tile = (Tile)but.Tag;
+            tile.UnitOn.CanMove = true;
+            but.Content = MapCosmetics.GetTriangle(tile.UnitOn);
+        }
     }
 
     public override void SetState(ActionState action)
@@ -56,28 +61,5 @@ public class AllayTurn(MapLogic turnMapLogic): TurnState(turnMapLogic)
     public override void Move_unit(object sender, RoutedEventArgs e)
     {
         CurrentActionState.Move_Unit(sender, e);
-    }
-
-    public void ClearCurrentSelectedButton(Button currentSelectedTileButton)
-    {
-        _mapCosmetics.TileDeSelected(currentSelectedTileButton);
-        currentSelectedTileButton.Content = null;
-        _mapBuilder.MovingUnit = null;
-        _mapBuilder.CurrentSelectedTile = null;
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
     }
 }

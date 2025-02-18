@@ -25,12 +25,4 @@ public class Attack(TurnState state) : ActionState(state)
     public override void Move_Unit(object sender, RoutedEventArgs e)
     {
     }
-
-    public void ClearCurrentSelectedButton(Button currentSelectedTileButton)
-    {
-        _mapCosmetics.TileDeSelected(currentSelectedTileButton);
-        currentSelectedTileButton.Content = null;
-        _mapBuilder.MovingUnit = null;
-        _mapBuilder.CurrentSelectedTile = null;
-    }
 }

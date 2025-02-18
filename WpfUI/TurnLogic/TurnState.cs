@@ -9,7 +9,7 @@ namespace WpfUI.TurnLogic
 {
     public abstract class TurnState
     {
-        protected internal MapLogic _turnMapLogic;
+        internal readonly MapLogic _turnMapLogic;
         protected readonly MapBuilder _mapBuilder;
         protected readonly GameSession _gameSession;
         protected readonly MapCosmetics _mapCosmetics;
