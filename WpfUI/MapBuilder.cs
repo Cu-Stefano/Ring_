@@ -5,11 +5,11 @@ using Engine.Models;
 using Engine.Factories;
 using Engine.FEMap;
 using System.Windows;
-using Engine.ViewModels;
 using System.ComponentModel;
 using System.Windows.Input;
 using WpfUI.TurnLogic;
 using WpfUI.TurnLogic.Actions;
+using WpfUI.ViewModels;
 
 namespace WpfUI
 {

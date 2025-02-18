@@ -1,10 +1,10 @@
 ﻿using Engine.FEMap;
-using Engine.ViewModels;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using WpfUI.ViewModels;
 
 namespace WpfUI.TurnLogic.Actions;
 

@@ -1,6 +1,5 @@
 ﻿using Engine.FEMap;
 using Engine.Models;
-using Engine.ViewModels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;

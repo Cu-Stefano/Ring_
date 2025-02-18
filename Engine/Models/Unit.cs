@@ -180,6 +180,13 @@ namespace Engine.Models
             if (equipedWeapon != null)
             {
                 Inventory.Add(equipedWeapon);
+                Inventory.Add(WeaponFactory.CreateWeapon("IronSword"));
+                Inventory.Add(WeaponFactory.CreateWeapon("BronzeAxe"));
+                Inventory.Add(ItemFactory.CreateGameItem("IronShield"));
+                Inventory.Add(WeaponFactory.CreateWeapon("FireTome"));
+                Inventory.Add(WeaponFactory.CreateWeapon("WoodenBow"));
+                Inventory.Add(WeaponFactory.CreateWeapon("Heal"));
+                Inventory.Add(WeaponFactory.CreateWeapon("BronzeLance"));
                 EquipedWeapon = (Weapon)Inventory.First(item => item == equipedWeapon);
             }
         }

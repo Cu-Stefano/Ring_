@@ -12,21 +12,21 @@ namespace Engine.Factories
             // Example units
             ClassTypeList.Add(new ClassType(
                 className: "Lord",
-                usableWeapons: new List<string> { "Sword", "Lance", "Axe" },
-                movement: (int)MovementType.BaseMovement+1,
+                usableWeapons: new List<WeaponType> { WeaponType.Sword, WeaponType.Lance, WeaponType.Axe },
+                movement: (int)MovementType.BaseMovement + 1,
                 promotesTo: null
             ));
 
             ClassTypeList.Add(new ClassType(
                 className: "Sage",
-                movement: (int)MovementType.SlowMovement+1,
-                usableWeapons: new List<string> { "Tome", "Staff" },
+                usableWeapons: new List<WeaponType> { WeaponType.Tome, WeaponType.Staff },
+                movement: (int)MovementType.SlowMovement + 1,
                 promotesTo: null
             ));
 
             ClassTypeList.Add(new ClassType(
                 className: "Mage",
-                usableWeapons: new List<string> { "Tome" },
+                usableWeapons: new List<WeaponType> { WeaponType.Tome },
                 movement: (int)MovementType.SlowMovement,
                 promotesTo: ClassTypeList.Find(c => c.ClassName == "Sage")
             ));
@@ -34,43 +34,43 @@ namespace Engine.Factories
             // New classes
             ClassTypeList.Add(new ClassType(
                 className: "Swordmaster",
-                usableWeapons: new List<string> { "Sword" },
+                usableWeapons: new List<WeaponType> { WeaponType.Sword },
                 movement: (int)MovementType.BaseMovement + 1,
                 promotesTo: null
             ));
 
             ClassTypeList.Add(new ClassType(
                 className: "Warrior",
-                usableWeapons: new List<string> { "Axe", "Bow" },
+                usableWeapons: new List<WeaponType> { WeaponType.Axe, WeaponType.Bow },
                 movement: (int)MovementType.BaseMovement,
                 promotesTo: null
             ));
 
             ClassTypeList.Add(new ClassType(
                 className: "General",
-                usableWeapons: new List<string> { "Lance", "Axe", "Sword" },
-                movement: (int)MovementType.SlowMovement+1,
+                usableWeapons: new List<WeaponType> { WeaponType.Lance, WeaponType.Axe, WeaponType.Sword },
+                movement: (int)MovementType.SlowMovement + 1,
                 promotesTo: null
             ));
 
             ClassTypeList.Add(new ClassType(
                 className: "PegasusK",
-                usableWeapons: new List<string> { "Lance", "Sword" },
+                usableWeapons: new List<WeaponType> { WeaponType.Lance, WeaponType.Sword },
                 movement: (int)MovementType.KnightMovement,
                 promotesTo: null
             ));
 
             ClassTypeList.Add(new ClassType(
                 className: "Hero",
-                usableWeapons: new List<string> { "Sword", "Axe" },
+                usableWeapons: new List<WeaponType> { WeaponType.Sword, WeaponType.Axe },
                 movement: (int)MovementType.BaseMovement,
                 promotesTo: null
             ));
 
             ClassTypeList.Add(new ClassType(
                 className: "Berserker",
-                usableWeapons: new List<string> { "Axe" },
-                movement: (int)MovementType.SlowMovement+1,
+                usableWeapons: new List<WeaponType> { WeaponType.Axe },
+                movement: (int)MovementType.SlowMovement + 1,
                 promotesTo: null
             ));
         }

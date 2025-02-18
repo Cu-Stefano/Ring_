@@ -15,7 +15,6 @@ public class TileSelected : ActionState
     private Tile Tile { get; }
     private int UnitMovement { get; }
     private int? Range { get; }
-    private bool UnitsThatCanMove { get; set; } = true;
     private List<List<Node>> Matrix { get; set; }
     private PriorityQueue<Node, int?> PQueue { get; }
     private List<Button> Path { get;}
@@ -138,11 +137,7 @@ public class TileSelected : ActionState
         ClearCurrentSelectedButton(currentSelectedTileButton);
 
         //if alla units moved change state to enemy turn
-        UnitsThatCanMove = true;
-        foreach (var allay in _mapBuilder.AllayButtonList)
-            UnitsThatCanMove &= !((Tile)allay.Tag).UnitOn!.CanMove; 
-
-        if (UnitsThatCanMove)
+        if (_mapBuilder.AllayButtonList.All(allay => !((Tile)allay.Tag).UnitOn!.CanMove))
             State._turnMapLogic.SetState(new EnemyTurn(State._turnMapLogic));
 
         //CHANGE STATE BACK TO 0

@@ -93,5 +93,38 @@
     "Name": "IronShield",
     "Price": 100,
     "Type": "GameItem"
+  },
+  {
+    "ItemTypeId": 150,
+    "Name": "BronzeLance",
+    "Price": 120,
+    "Range": 1,
+    "MaxDamage": 12,
+    "Durability": 40,
+    "Critical": 10,
+    "WeaponType": "Lance",
+    "Type": "Weapon"
+  },
+  {
+    "ItemTypeId": 160,
+    "Name": "Heal",
+    "Price": 200,
+    "Range": 1,
+    "MaxDamage": 0,
+    "Durability": 30,
+    "Critical": 0,
+    "WeaponType": "Staff",
+    "Type": "Weapon"
+  },
+  {
+    "ItemTypeId": 170,
+    "Name": "WoodenBow",
+    "Price": 150,
+    "Range": 2,
+    "MaxDamage": 14,
+    "Durability": 35,
+    "Critical": 15,
+    "WeaponType": "Bow",
+    "Type": "Weapon"
   }
 ]

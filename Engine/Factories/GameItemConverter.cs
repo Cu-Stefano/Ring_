@@ -27,10 +27,12 @@ public class GameItemConverter : JsonConverter<GameItem>
         {
             var actualType = ResolveType(itemType.ToString());
 
-            //resetto le options
-            var noCustomConvertersOptions = new JsonSerializerOptions();
+            // Imposta le opzioni di serializzazione con il convertitore WeaponTypeConverter
+            var customOptions = new JsonSerializerOptions();
+            customOptions.Converters.Add(new WeaponTypeConverter());
+
             var deserializedObject =
-                JsonSerializer.Deserialize(element.GetRawText(), actualType, noCustomConvertersOptions);
+                JsonSerializer.Deserialize(element.GetRawText(), actualType, customOptions);
 
             return deserializedObject as GameItem
                    ?? throw new InvalidOperationException("Errore nella deserializzazione del tipo specificato.");
@@ -38,7 +40,6 @@ public class GameItemConverter : JsonConverter<GameItem>
 
         throw new JsonException("Tipo di oggetto sconosciuto nel JSON.");
     }
-
 
     public override void Write(Utf8JsonWriter writer, GameItem value, JsonSerializerOptions options)
     {

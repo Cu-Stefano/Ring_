@@ -7,9 +7,9 @@ using Engine.Models;
 
 namespace Engine.Factories
 {
-    internal static class WorldFactory
+    public static class WorldFactory
     {
-        internal static WorldMap CreateWorld()
+        public static WorldMap CreateWorld()
         {
             var newWorld = new WorldMap();
             var libraryPath = Path.GetDirectoryName(typeof(WorldFactory).Assembly.Location);

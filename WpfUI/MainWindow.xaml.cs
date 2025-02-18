@@ -1,6 +1,9 @@
 ﻿using System.Windows;
-using System.Windows.Media.Imaging;
-using Engine.ViewModels;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Media;
+using Engine.Models;
+using WpfUI.ViewModels;
 
 namespace WpfUI
 {
@@ -21,7 +24,7 @@ namespace WpfUI
                 this.ResizeMode = ResizeMode.NoResize;
             }
             
-            _gameSession = new GameSession();
+            _gameSession = new GameSession(this);
             DataContext = _gameSession;
 
             var mapBuilder = new MapBuilder(_gameSession);
@@ -47,7 +50,28 @@ namespace WpfUI
 
         private void MapBuilder_Loaded(object sender, RoutedEventArgs e)
         {
-
         }
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataGrid dataGrid = (DataGrid)sender;
+            var selectedItem = dataGrid.SelectedItem;
+
+            if (selectedItem is Weapon item && _gameSession.CurrentUnit.Class.UsableWeapons.Contains(item.WeaponType) && _gameSession.CurrentUnit.Type == UnitType.Allay)
+            {
+                _gameSession.CurrentUnit!.EquipedWeapon = item;
+            }
+            HighlightSelectedRow();
+        }
+
+        private void HighlightSelectedRow()
+        {
+            _gameSession.HighlightSelectedRow();
+        }
+
+        private void DataGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            _gameSession.dataGrid = (DataGrid)sender;
+        }
+
     }
 }

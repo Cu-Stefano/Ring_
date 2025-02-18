@@ -17,7 +17,7 @@ namespace Engine.Factories
 
         public static Weapon? CreateWeapon(string weaponName)
         {
-            Weapon weapon = Weapons.FirstOrDefault(w => w.Name.Equals(weaponName, StringComparison.OrdinalIgnoreCase)) 
+            Weapon weapon = Weapons.FirstOrDefault(w => w.Name.Equals(weaponName, StringComparison.OrdinalIgnoreCase))
                             ?? throw new Exception("The Weapon Doesn't exist: " + weaponName);
 
             return weapon.Clone() as Weapon ?? throw new Exception("Failed to clone the weapon: " + weaponName);

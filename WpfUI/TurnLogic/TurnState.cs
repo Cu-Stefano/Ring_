@@ -1,9 +1,9 @@
 ﻿using Engine.FEMap;
-using Engine.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WpfUI.TurnLogic.Actions;
+using WpfUI.ViewModels;
 
 namespace WpfUI.TurnLogic
 {

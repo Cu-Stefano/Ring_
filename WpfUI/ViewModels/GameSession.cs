@@ -1,23 +1,39 @@
 ﻿using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Xml.Linq;
+using Engine;
 using Engine.Exceptions;
 using Engine.Factories;
 using Engine.FEMap;
 using Engine.Models;
 // ReSharper disable All
 
-namespace Engine.ViewModels
+namespace WpfUI.ViewModels
 {
     public class GameSession : BaseNotification
     {
         public WorldMap CurrentWorldMap { get; set; }//SOSCRPG map not mine
         private Location? _currentLocation = null!;
-
+        internal DataGrid dataGrid { get; set; }
         private Tile? _currenTile = null!;
         private string _classWeapons;
         private Unit? _currentUnit;
+        private GameItem? _selectedInventoryWeapon;
+        public GameItem? SelectedInventoryWeapon
+        {
+            get => _selectedInventoryWeapon;
+            set
+            {
+                if (_selectedInventoryWeapon != value)
+                {
+                    _selectedInventoryWeapon = value;
+                    OnPropertyChanged(nameof(SelectedInventoryWeapon));
+                }
+            }
+        }
         public List<Unit> AllayList{ get; set; }
      
         public Location? CurrentLocation
@@ -37,11 +53,13 @@ namespace Engine.ViewModels
 
         public Unit? CurrentUnit
         {
-            get { return _currentUnit; }
+            get {return _currentUnit; }
             set
             {
+                HighlightSelectedRow();
                 _currentUnit = value;
                 OnPropertyChanged(nameof(CurrentUnit));
+                HighlightSelectedRow();
             }
         }
 
@@ -97,7 +115,7 @@ namespace Engine.ViewModels
             }
         }
 
-        public GameSession()
+        public GameSession(MainWindow mainWindow)
         {
             //CurrentUnit = UnitFactory.GetUnitByName("Ike");
             //ClassWeapons = string.Join("\n", CurrentUnit.Class.UsableWeapons);
@@ -159,6 +177,31 @@ namespace Engine.ViewModels
                 if (!CurrentUnit.Quests.Any(q => q.PlayerQuest.ID == quest.ID))
                 {
                     CurrentUnit.Quests.Add(new QuestStatus(quest));
+                }
+            }
+        }
+        public void HighlightSelectedRow()
+        {
+            if (dataGrid == null) return;
+
+            // Force the DataGrid to update its layout
+            dataGrid.UpdateLayout();
+
+            foreach (var item in dataGrid.Items)
+            {
+                // Ensure the row is generated
+                DataGridRow row = (DataGridRow)dataGrid.ItemContainerGenerator.ContainerFromItem(item);
+
+                if (row != null)
+                {
+                    if (item == CurrentUnit!.EquipedWeapon)
+                    {
+                        row.Background = new SolidColorBrush(Colors.DodgerBlue);
+                    }
+                    else
+                    {
+                        row.Background = new SolidColorBrush(Colors.Transparent);
+                    }
                 }
             }
         }
