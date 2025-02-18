@@ -52,6 +52,45 @@
             <Setter Property="FontWeight" Value="DemiBold"/>
         </Style>
 
+            <!-- Stile per DataGridCell che rimuove l'effetto di selezione blu -->
+            <Style TargetType="DataGridCell" x:Key="CustomDataGridCellStyle">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="FontWeight" Value="Normal"/>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="#FFD700"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Stile per DataGridRow che rimuove l'effetto di selezione blu -->
+            <Style TargetType="DataGridRow" x:Key="CustomDataGridRowStyle">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="FontWeight" Value="Normal"/>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+        <Style TargetType="DataGridRow" x:Key="EquippedWeaponDataGridRowStyle" BasedOn="{StaticResource CustomDataGridRowStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsEquiped}" Value="True">
+                    <Setter Property="Background" Value="#FFD700"/>
+                    <!-- Colore di sfondo dorato -->
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <!-- Testo in grassetto -->
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
 
     </Window.Resources>
@@ -95,7 +134,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
+                
                 <Label Grid.Column="0" Style="{StaticResource BluLabelStyle}" Content="NAME :" FontSize="15" Padding="5,5,5,5" />
                 <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource BluLabelStyle}" FontWeight="Medium"
                        Content="{Binding CurrentUnit.Name, FallbackValue=''}" Margin="63,0,0,0"
@@ -291,7 +330,10 @@
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Inventory" FontSize="20" Margin="0,0,0,10"/>
 
-                <DataGrid Grid.Row="1" Grid.Column="0" ItemsSource="{Binding CurrentUnit.Inventory}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False" CanUserResizeColumns="False" IsReadOnly="True">
+                <DataGrid Grid.Row="1" Grid.Column="0" RowStyle="{StaticResource EquippedWeaponDataGridRowStyle}" CellStyle="{StaticResource CustomDataGridCellStyle}" ItemsSource="{Binding CurrentUnit.Inventory}" 
+                          AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False" CanUserResizeColumns="False" IsReadOnly="True"
+                          SelectedItem="{Binding SelectedInventoryWeapon, Mode=TwoWay}"
+                          SelectionChanged="DataGrid_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="1.7*"/>
                         <DataGridTextColumn Header="Range" Binding="{Binding Range}" Width="*"/>
@@ -299,6 +341,9 @@
                         <DataGridTextColumn Header="Durab." Binding="{Binding Durability}" Width="0.8*"/>
                     </DataGrid.Columns>
                 </DataGrid>
+
+
+
             </Grid>
         </Border>
 
