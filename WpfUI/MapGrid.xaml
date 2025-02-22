@@ -44,28 +44,33 @@
 
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
+            <!-- Previus_Level -->
             <Button Style="{StaticResource WhiteButtonStyle}" Content="Previus Level"
                     Click="Previus_Level" Width="118" Margin="130,12,87,12">
                 <Button.Effect>
                     <DropShadowEffect BlurRadius="9" Opacity="0.5" RenderingBias="Quality"/>
                 </Button.Effect>
             </Button>
+            <!-- TurnName -->
             <Button Style="{StaticResource WhiteButtonStyle}" Content="{Binding MapLogic.TurnName}"
                     Width="256" Margin="100,12,100,12" Height="46">
                 <Button.Effect>
                     <DropShadowEffect BlurRadius="9" Opacity="0.5" RenderingBias="Quality"/>
                 </Button.Effect>
             </Button>
+            <!-- Next_Level -->
             <Button Style="{StaticResource WhiteButtonStyle}" Content="NextLevel"
                     Click="Next_Level" Width="118" Margin="87,12,130,12">
                 <Button.Effect>
                     <DropShadowEffect BlurRadius="9" Opacity="0.5" RenderingBias="Quality"/>
                 </Button.Effect>
             </Button>
+
         </StackPanel>
 
         <Grid x:Name="MapGrid" Grid.Row="1" />
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="1" Margin="-59,470,0,-75"/>
+
+        <!-- Finish Turn -->
         <Button Style="{StaticResource WhiteButtonStyle}" Content="Finish Turn"
             Click="ChangeTurn" Margin="209,14,655,14" Padding="5,5,5,5">
             <Button.Effect>

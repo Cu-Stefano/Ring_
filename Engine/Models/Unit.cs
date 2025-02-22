@@ -91,7 +91,7 @@ namespace Engine.Models
         {
             get
             {
-                return _attack;
+                return Get_Attack();
             }
             set
             {
@@ -103,7 +103,7 @@ namespace Engine.Models
         {
             get
             {
-                return _defense;
+                return Get_Hit();
             }
             set
             {
@@ -115,19 +115,15 @@ namespace Engine.Models
         {
             get
             {
-                return _dodge;
+                return Statistics.Speed * 2 + Statistics.Luck;
             }
-            set
-            {
-                _dodge = value;
-                OnPropertyChanged(nameof(Dodge));
-            }
+            set{}
         }
         public int Critic
         {
             get
             {
-                return _critic;
+                return Get_Crit();
             }
             set
             {
@@ -168,10 +164,9 @@ namespace Engine.Models
             Class = classType;
             Level = level;
             Statistics = stats;
-            Attack = Get_Attack(Statistics.Strength,Statistics.Magic, equipedWeapon);
-            Hit = Get_Hit(Statistics.Skill, Statistics.Luck, equipedWeapon);
-            Dodge = 100;
-            Critic = 0;
+            Attack = Get_Attack();
+            Hit = Get_Hit();
+            Critic = Get_Crit();
             CanMove = true;
 
             Inventory = new List<GameItem?>();
@@ -191,24 +186,32 @@ namespace Engine.Models
             }
         }
 
-        private int Get_Attack(int str, int mag, Weapon? equipedWeapon)
+        public int Get_Attack()
         {
-            if (equipedWeapon == null)
+            if (_equipedWeapon == null)
             {
-                return str;
+                return _stats.Strength;
             }
-            return str > mag ? str + equipedWeapon.MaxDamage : equipedWeapon.MaxDamage + mag;
+            return _stats.Strength > _stats.Magic ? _stats.Strength + _equipedWeapon.Damage : _equipedWeapon.Damage + _stats.Magic;
         }
 
-        private int Get_Hit(int skill, int luck, Weapon? equipedWeapon)
+        public int Get_Hit()
         {
-            if (equipedWeapon == null)
+            if (_equipedWeapon == null)
             {
-                return skill;
+                return _stats.Skill;
             }
-            return equipedWeapon.Critical + skill*2 + luck;
+            return _equipedWeapon.Hit + _stats.Skill * 2 + _stats.Luck;
         }
 
+        public int Get_Crit()
+        {
+            if (_equipedWeapon == null)
+            {
+                return _stats.Skill;
+            }
+            return _equipedWeapon.Critical + _stats.Skill / 2;
+        }
 
 
 

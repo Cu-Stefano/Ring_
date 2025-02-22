@@ -17,19 +17,19 @@ public class TileToBeSelected(TurnState state) : ActionState(state)
 
     }
 
-    public override void CalculateTrail(object sender, RoutedEventArgs e)
+    public override void Mouse_Over(object sender, RoutedEventArgs e)
     {
-        
     }
 
-    public override void UnitSelected(object sender, RoutedEventArgs e)
+    //SELECT_UNIT
+    public override void Double_Click(object sender, RoutedEventArgs e)
     {
         if (sender is Button { Tag: Tile { UnitOn: { Type: UnitType.Allay, CanMove: true } } tile } button)
         {
             if (_mapBuilder.CurrentSelectedTile != null)
             {
                 var selectedButton = _mapBuilder.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile);
-                _mapCosmetics.SetTileAsDeselected(selectedButton!);
+                _mapCosmetics.SetButtonAsDeselected(selectedButton!);
                 _mapBuilder.CurrentSelectedTile = null;
             }
             _mapBuilder.CurrentSelectedTile = tile;
@@ -40,7 +40,7 @@ public class TileToBeSelected(TurnState state) : ActionState(state)
         }
     }
 
-    public override void Move_Unit(object sender, RoutedEventArgs e)
+    public override void Single_Click(object sender, RoutedEventArgs e)
     {
 
     }

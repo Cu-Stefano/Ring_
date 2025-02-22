@@ -11,7 +11,7 @@ namespace WpfUI.TurnLogic.Actions;
 public abstract class ActionState
 {
     protected internal TurnState State { get; }
-    protected readonly MapBuilder _mapBuilder;
+    public readonly MapBuilder _mapBuilder;
     protected readonly GameSession _gameSession;
     protected readonly MapCosmetics _mapCosmetics;
     protected ActionState(TurnState state)
@@ -26,6 +26,7 @@ public abstract class ActionState
     public abstract void OnExit();
     public void Window_MouseDown(object sender, MouseButtonEventArgs e)
     {
+        if(GetType() == typeof(ChooseAttack) || GetType() == typeof(Attack)) return;//non andare indietro se sto attaccando
         // Verifica se l'elemento cliccato è un pulsante con un'unità selezionata
         if (e.OriginalSource is not Button { Tag: Tile })
         {
@@ -34,7 +35,7 @@ public abstract class ActionState
             {
                 var currentSelectedTileButton = _mapBuilder.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile);
 
-                _mapCosmetics.SetTileAsDeselected(currentSelectedTileButton!);
+                _mapCosmetics.SetButtonAsDeselected(currentSelectedTileButton!);
 
                 _mapBuilder.CurrentSelectedTile = null;
                 _gameSession.CurrentTile = null;
@@ -45,7 +46,7 @@ public abstract class ActionState
         //CHANGE STATE BACK TO 0
         State.SetState(new TileToBeSelected(State));
     }
-    public abstract void CalculateTrail(object sender, RoutedEventArgs e);
-    public abstract void UnitSelected(object sender, RoutedEventArgs e);
-    public abstract void Move_Unit(object sender, RoutedEventArgs e);
+    public abstract void Mouse_Over(object sender, RoutedEventArgs e);
+    public abstract void Double_Click(object sender, RoutedEventArgs e);
+    public abstract void Single_Click(object sender, RoutedEventArgs e);
 }

@@ -239,7 +239,7 @@ namespace WpfUI
             if (CurrentSelectedTile != null)
             {
                 var currentSelectedTileButton = GetButtonBasedOnTile(CurrentSelectedTile);
-                MapCosmetics.SetTileAsDeselected(currentSelectedTileButton!);
+                MapCosmetics.SetButtonAsDeselected(currentSelectedTileButton!);
                 CurrentSelectedTile = null;
             }
            
@@ -248,7 +248,7 @@ namespace WpfUI
         public void UnitCantMoveNoMore(Button button)
         {
             //unit can't move till next turn
-            button.Content = MapCosmetics.GetTriangle(CurrentSelectedTile.UnitOn);
+            button.Content = MapCosmetics.GetTriangle(((Tile)button.Tag).UnitOn);
             OnPropertyChanged("button");
         }
         public Button? GetButtonBasedOnTile(Tile tile)

@@ -16,6 +16,8 @@ namespace Engine.Factories
                 level: 1,
                 stats: new Stats
                 {
+                    HpMax = 25,
+                    Hp = 20,
                     Strength = 10,
                     Magic = 2,
                     Skill = 5,
@@ -34,6 +36,8 @@ namespace Engine.Factories
                 level: 2,
                 stats: new Stats
                 {
+                    HpMax = 30,
+                    Hp = 25,
                     Strength = 13,
                     Magic = 2,
                     Skill = 7,
@@ -52,6 +56,8 @@ namespace Engine.Factories
                 level: 1,
                 stats: new Stats
                 {
+                    HpMax = 20,
+                    Hp = 20,
                     Strength = 2,
                     Magic = 10,
                     Skill = 5,
@@ -70,6 +76,8 @@ namespace Engine.Factories
                 level: 1,
                 stats: new Stats
                 {
+                    HpMax = 22,
+                    Hp = 20,
                     Strength = 2,
                     Magic = 10,
                     Skill = 5,
@@ -89,6 +97,8 @@ namespace Engine.Factories
                 level: 3,
                 stats: new Stats
                 {
+                    HpMax = 28,
+                    Hp = 10,
                     Strength = 15,
                     Magic = 3,
                     Skill = 10,
@@ -107,6 +117,8 @@ namespace Engine.Factories
                 level: 4,
                 stats: new Stats
                 {
+                    HpMax = 35,
+                    Hp = 25,
                     Strength = 18,
                     Magic = 1,
                     Skill = 8,
@@ -125,6 +137,8 @@ namespace Engine.Factories
                 level: 2,
                 stats: new Stats
                 {
+                    HpMax = 24,
+                    Hp = 20,
                     Strength = 1,
                     Magic = 12,
                     Skill = 7,
@@ -143,6 +157,8 @@ namespace Engine.Factories
                 level: 5,
                 stats: new Stats
                 {
+                    HpMax = 40,
+                    Hp = 30,
                     Strength = 20,
                     Magic = 0,
                     Skill = 9,
@@ -161,6 +177,8 @@ namespace Engine.Factories
                 level: 3,
                 stats: new Stats
                 {
+                    HpMax = 26,
+                    Hp = 21,
                     Strength = 12,
                     Magic = 2,
                     Skill = 8,
@@ -179,6 +197,8 @@ namespace Engine.Factories
                 level: 4,
                 stats: new Stats
                 {
+                    HpMax = 32,
+                    Hp = 32,
                     Strength = 17,
                     Magic = 1,
                     Skill = 11,
@@ -197,6 +217,8 @@ namespace Engine.Factories
                 level: 5,
                 stats: new Stats
                 {
+                    HpMax = 38,
+                    Hp = 38,
                     Strength = 20,
                     Magic = 0,
                     Skill = 10,
@@ -215,6 +237,8 @@ namespace Engine.Factories
                 level: 6,
                 stats: new Stats
                 {
+                    HpMax = 30,
+                    Hp = 30,
                     Strength = 2,
                     Magic = 18,
                     Skill = 12,

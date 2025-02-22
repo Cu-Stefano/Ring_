@@ -18,7 +18,8 @@ public enum WeaponType
 public class Weapon : GameItem
 {
     public int Range { get; set; }
-    public int MaxDamage { get; set; }
+    public int Damage { get; set; }
+    public int Hit { get; set; }
     public int Durability { get; set; }
     public int Critical { get; set; }
     public WeaponType WeaponType { get; set; } 
@@ -27,11 +28,12 @@ public class Weapon : GameItem
     [JsonConstructor]
     public Weapon() { }
 
-    public Weapon(int itemTypeId, string name, int price, int range, int maxdamage, int durability, int critical, WeaponType weaponType)
+    public Weapon(int itemTypeId, string name, int price, int range, int damage, int hit, int durability, int critical, WeaponType weaponType)
         : base(itemTypeId, name, price)
     {
         Range = range;
-        MaxDamage = maxdamage;
+        Damage = damage;
+        Hit = hit;
         Durability = durability;
         Critical = critical;
         WeaponType = weaponType;
@@ -39,6 +41,6 @@ public class Weapon : GameItem
 
     public new GameItem Clone()
     { 
-        return new Weapon(ItemTypeId, Name, Price, Range, MaxDamage, Durability, Critical, WeaponType);
+        return new Weapon(ItemTypeId, Name, Price, Range, Damage, Hit, Durability, Critical, WeaponType);
     }
 }

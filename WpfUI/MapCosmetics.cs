@@ -12,14 +12,14 @@ namespace WpfUI;
 public class MapCosmetics : BaseNotification
 {
 
-    public void SetTileAsSelected(Button button)
+    public void SetButtonAsSelected(Button button)
     {
         button.BorderBrush = Brushes.Red;
         button.BorderThickness = new Thickness(2);
         OnPropertyChanged("button");
     }
 
-    public void SetTileAsDeselected(Button button)
+    public void SetButtonAsDeselected(Button button)
     {
         button.BorderBrush = Brushes.Gray;
         button.BorderThickness = new Thickness(1);

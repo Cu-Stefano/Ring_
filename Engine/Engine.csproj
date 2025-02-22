@@ -73,6 +73,7 @@
 
 
   <ItemGroup>
+    <Folder Include="PathElements\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
 

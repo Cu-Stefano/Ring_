@@ -1,23 +1,21 @@
-﻿using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Media;
-using System.Xml.Linq;
 using Engine;
-using Engine.Exceptions;
 using Engine.Factories;
 using Engine.FEMap;
 using Engine.Models;
+using WpfUI.TurnLogic.Actions;
+
 // ReSharper disable All
 
 namespace WpfUI.ViewModels
 {
     public class GameSession : BaseNotification
     {
+        public PreviewAttack PreviewAttack { get; set; }
         public WorldMap CurrentWorldMap { get; set; }//SOSCRPG map not mine
         private Location? _currentLocation = null!;
-        internal DataGrid dataGrid { get; set; }
+        internal DataGrid? dataGrid { get; set; }
         private Tile? _currenTile = null!;
         private string _classWeapons;
         private Unit? _currentUnit;
@@ -115,7 +113,7 @@ namespace WpfUI.ViewModels
             }
         }
 
-        public GameSession(MainWindow mainWindow)
+        public GameSession(MainWindow mainWindow, PreviewAttack previewAttack)
         {
             //CurrentUnit = UnitFactory.GetUnitByName("Ike");
             //ClassWeapons = string.Join("\n", CurrentUnit.Class.UsableWeapons);
@@ -124,7 +122,7 @@ namespace WpfUI.ViewModels
 
             CurrentLocation = CurrentWorldMap.LocationAt(0, 0)!;//soscsrpg world
 
-
+            PreviewAttack = previewAttack;
 
             //CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("BronzeSword"));
             //CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("IronSword"));
@@ -204,6 +202,7 @@ namespace WpfUI.ViewModels
                     }
                 }
             }
+            OnPropertyChanged(nameof(CurrentUnit));
         }
 
     }

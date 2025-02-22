@@ -50,11 +50,11 @@ public class MapLogic : BaseNotification
 
     public void UnitSelected(object sender, RoutedEventArgs e)
     {
-        CurrentTurnState.UnitSelected(sender, e);
+        CurrentTurnState.Doule_Click(sender, e);
     }
 
     public void Move_unit(object sender, RoutedEventArgs e)
     {
-        CurrentTurnState.Move_unit(sender, e);
+        CurrentTurnState.Single_Click(sender, e);
     }
 }

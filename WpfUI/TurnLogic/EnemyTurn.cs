@@ -21,11 +21,11 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
     {
     }
 
-    public override void UnitSelected(object sender, RoutedEventArgs e)
+    public override void Doule_Click(object sender, RoutedEventArgs e)
     {
     }
 
-    public override void Move_unit(object sender, RoutedEventArgs e)
+    public override void Single_Click(object sender, RoutedEventArgs e)
     {
     }
 }

@@ -2,6 +2,8 @@ namespace Engine.Models
 {
     public class Stats
     {
+        public int Hp { get; set; }
+        public int HpMax { get; set; }
         public int Strength { get; set; }
         public int Magic { get; set; }
         public int Skill { get; set; }

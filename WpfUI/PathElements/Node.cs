@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace WpfUI.PathLogic;
+namespace WpfUI.PathElements;
 
 public class Node
 { 

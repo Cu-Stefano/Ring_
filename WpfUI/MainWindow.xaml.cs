@@ -1,8 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Media;
 using Engine.Models;
+using WpfUI.TurnLogic.Actions;
 using WpfUI.ViewModels;
 
 namespace WpfUI
@@ -10,7 +9,7 @@ namespace WpfUI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
 
         private readonly GameSession _gameSession;
@@ -23,12 +22,16 @@ namespace WpfUI
                 this.WindowStyle = WindowStyle.None;
                 this.ResizeMode = ResizeMode.NoResize;
             }
-            
-            _gameSession = new GameSession(this);
+
+            var previewAttack = new PreviewAttack();
+            PreviewAttack.Content = previewAttack;
+
+            _gameSession = new GameSession(this, previewAttack);
             DataContext = _gameSession;
 
             var mapBuilder = new MapBuilder(_gameSession);
             MapBuilderPlaceholder.Content = mapBuilder;
+            
         }
 
         private void OnClick_MoveUp(object sender, RoutedEventArgs e)
@@ -56,9 +59,13 @@ namespace WpfUI
             DataGrid dataGrid = (DataGrid)sender;
             var selectedItem = dataGrid.SelectedItem;
 
-            if (selectedItem is Weapon item && _gameSession.CurrentUnit.Class.UsableWeapons.Contains(item.WeaponType) && _gameSession.CurrentUnit.Type == UnitType.Allay)
+            if (selectedItem is Weapon item 
+                && _gameSession.CurrentUnit!.Class.UsableWeapons.Contains(item.WeaponType) 
+                && _gameSession.CurrentUnit.Type == UnitType.Allay 
+                && _gameSession.CurrentUnit.CanMove)
             {
                 _gameSession.CurrentUnit!.EquipedWeapon = item;
+               _gameSession.PreviewAttack.Start();
             }
             HighlightSelectedRow();
         }
@@ -70,7 +77,14 @@ namespace WpfUI
 
         private void DataGrid_Loaded(object sender, RoutedEventArgs e)
         {
-            _gameSession.dataGrid = (DataGrid)sender;
+            if (_gameSession.dataGrid != null)
+            {
+                HighlightSelectedRow();
+            }
+            else
+            {
+                _gameSession.dataGrid = (DataGrid)sender;
+            }
         }
 
     }

@@ -1,11 +1,5 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Engine.FEMap;
-using Engine.Models;
-using System.Threading.Tasks;
+﻿using Engine.FEMap;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using WpfUI.TurnLogic.Actions;
 
 namespace WpfUI.TurnLogic;
@@ -19,27 +13,31 @@ public class AllayTurn(MapLogic turnMapLogic): TurnState(turnMapLogic)
 
     public override void OnExit()
     {
+        //ripristino la possibilità di movimento delle unità alleate
+        
         foreach (var but in _mapBuilder.AllayButtonList)
         {
             var tile = (Tile)but.Tag;
             tile.UnitOn.CanMove = true;
             but.Content = MapCosmetics.GetTriangle(tile.UnitOn);
         }
+        CurrentActionState.OnExit();
     }
 
     public override void SetState(ActionState action)
     {
+        if (CurrentActionState?.GetType() == action.GetType()) 
+            return;
         //rimuovo i gestori d'evento dello stato corrente
         if (CurrentActionState != null)
         {
-            
             foreach (var button in _mapBuilder.ActualMap.SelectMany(row => row))
             {
-                button.MouseEnter -= CurrentActionState.CalculateTrail;
-                button.Click -= Move_unit;
+                button.MouseEnter -= CurrentActionState.Mouse_Over;
+                button.Click -= Single_Click;
             }
         }
-        
+
         CurrentActionState?.OnExit();
         CurrentActionState = action;
         CurrentActionState.OnEnter();
@@ -47,18 +45,18 @@ public class AllayTurn(MapLogic turnMapLogic): TurnState(turnMapLogic)
         //aggiungo i gestori d'evento del nuovo stato
         foreach (var button in _mapBuilder.ActualMap.SelectMany(row => row))
         {
-            button.MouseEnter += CurrentActionState.CalculateTrail;
-            button.Click += Move_unit;
+            button.MouseEnter += CurrentActionState.Mouse_Over;
+            button.Click += Single_Click;
         }
     }
 
-    public override void UnitSelected(object sender, RoutedEventArgs e)
+    public override void Doule_Click(object sender, RoutedEventArgs e)
     {
-        CurrentActionState.UnitSelected(sender, e);
+        CurrentActionState.Double_Click(sender, e);
     }
 
-    public override void Move_unit(object sender, RoutedEventArgs e)
+    public override void Single_Click(object sender, RoutedEventArgs e)
     {
-        CurrentActionState.Move_Unit(sender, e);
+        CurrentActionState.Single_Click(sender, e);
     }
 }

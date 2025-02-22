@@ -29,6 +29,7 @@ namespace WpfUI.TurnLogic
         public abstract void SetState(ActionState action);
         public void TileButton_Over(object sender, RoutedEventArgs e)
         {
+            if (CurrentActionState is ChooseAttack or Attack) return;
             if (_mapBuilder.CurrentSelectedTile != null)
             {
                 _gameSession.CurrentTile = _mapBuilder.CurrentSelectedTile;
@@ -49,8 +50,8 @@ namespace WpfUI.TurnLogic
                 CurrentActionState.Window_MouseDown(sender, e);
             }
         }
-        public abstract void UnitSelected(object sender, RoutedEventArgs e);
+        public abstract void Doule_Click(object sender, RoutedEventArgs e);
 
-        public abstract void Move_unit(object sender, RoutedEventArgs e);
+        public abstract void Single_Click(object sender, RoutedEventArgs e);
     }
 }
