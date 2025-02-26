@@ -21,11 +21,11 @@ public class TileSelected : ActionState
     private int? Range { get; set; }
     private List<List<Node>> Matrix { get; set; }
     private PriorityQueue<Node, int?> PQueue { get; set; }
-    private List<Button> Path { get;}
-    private List<Button> Attack { get; set; }
-    private List<Button> _nearEnemy = [];
+    private List<Button?> Path { get;}
+    private List<Button?> Attack { get; set; }
+    private List<Button?> _nearEnemy = [];
 
-    public TileSelected(TurnState state, Button button) : base(state)
+    public TileSelected(TurnState state, Button? button) : base(state)
     {
         Matrix = NodeMatrix();
         ONode = GetButtonCoordinates(button)!;
@@ -38,11 +38,11 @@ public class TileSelected : ActionState
 
         PQueue = new PriorityQueue<Node, int?>();
         AddNodeToQueue(ONode);
-        Path = new List<Button>();
-        Attack = new List<Button>();
+        Path = new List<Button?>();
+        Attack = new List<Button?>();
     }
 
-    private void PathAlgorithm(PriorityQueue<Node, int?> queue, int movement, int? range, List<Button> attackList, List<Button> path)
+    private void PathAlgorithm(PriorityQueue<Node, int?> queue, int movement, int? range, List<Button?> attackList, List<Button?> path)
     {
         while (queue.Count > 0)
         {
@@ -171,14 +171,6 @@ public class TileSelected : ActionState
 
         var currentSelectedTileButton = _mapBuilder.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile)!;
 
-        if (_nearEnemy.Contains(button))
-        {
-            var aux = currentSelectedTileButton;
-            ClearCurrentSelectedButton(currentSelectedTileButton);
-            button = aux;
-            State.SetState(new ChooseAttack(State, _nearEnemy, button));
-        }
-
         //l'effetivo spostamento dell'unità
         tile.UnitOn = _mapBuilder.MovingUnit;
         button.Content = MapCosmetics.GetTriangle(tile.UnitOn);
@@ -193,7 +185,7 @@ public class TileSelected : ActionState
 
 
         //controllo se c'è un'unita nemica è nel suo range di attacco
-        var enemyNear = new List<Button>();
+        var enemyNear = new List<Button?>();
         {
             ResetAll();
             ONode = GetButtonCoordinates(button)!;
@@ -247,10 +239,11 @@ public class TileSelected : ActionState
     }
 
     //UTILITY METHODS
-    public void ClearCurrentSelectedButton(Button currentSelectedTileButton)
+    public void ClearCurrentSelectedButton(Button? currentSelectedTileButton)
     {
         _mapCosmetics.SetButtonAsDeselected(currentSelectedTileButton);
         currentSelectedTileButton.Content = null;
+        _mapBuilder.MovingUnit = null;
         _mapBuilder.CurrentSelectedTile = null;
     }
 
@@ -302,7 +295,7 @@ public class TileSelected : ActionState
         return result;
     }
 
-    public Node? GetButtonCoordinates(Button button)
+    public Node? GetButtonCoordinates(Button? button)
     {
         for (int i = 0; i < _mapBuilder.ActualMap.Count; i++)
         {

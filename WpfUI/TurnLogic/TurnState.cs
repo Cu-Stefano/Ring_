@@ -42,6 +42,7 @@ namespace WpfUI.TurnLogic
                 _gameSession.ClassWeapons = tile.UnitOn != null ? string.Join("\n", _gameSession.CurrentUnit!.Class.UsableWeapons) : "";
                 _gameSession.CurrentTile = tile;
             }
+            CurrentActionState?.Mouse_Over(sender, e);
         }
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {

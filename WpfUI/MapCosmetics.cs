@@ -12,34 +12,34 @@ namespace WpfUI;
 public class MapCosmetics : BaseNotification
 {
 
-    public void SetButtonAsSelected(Button button)
+    public void SetButtonAsSelected(Button? button)
     {
         button.BorderBrush = Brushes.Red;
         button.BorderThickness = new Thickness(2);
         OnPropertyChanged("button");
     }
 
-    public void SetButtonAsDeselected(Button button)
+    public void SetButtonAsDeselected(Button? button)
     {
         button.BorderBrush = Brushes.Gray;
         button.BorderThickness = new Thickness(1);
         OnPropertyChanged("button");
     }
 
-    public void SetGetPathBrush(Button button)
+    public void SetGetPathBrush(Button? button)
     {
         Random random = new Random();
         button.Background = GetColorVariant(Colors.LightSkyBlue, 15, 100);
         OnPropertyChanged("button");
     }
-    public void SetGetAttackBrush(Button button)
+    public void SetGetAttackBrush(Button? button)
     {
         Random random = new Random();
         button.Background = GetColorVariant(Colors.NavajoWhite, 10);
         OnPropertyChanged("button");
     }
 
-    public void SetTrailSelector(Button button)
+    public void SetTrailSelector(Button? button)
     {
         button.BorderBrush = Brushes.CornflowerBlue;
         button.BorderThickness = new Thickness(2.5);

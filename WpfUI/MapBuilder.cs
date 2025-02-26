@@ -17,7 +17,7 @@ namespace WpfUI
     {
         private int LevelIndex { get; set; }
         public string CurrentLevelName { get; set; }
-        public List<List<Button>> ActualMap { get; set; }
+        public List<List<Button?>> ActualMap { get; set; }
         public Tile? CurrentSelectedTile { get; set; }
         public Unit? MovingUnit
         {
@@ -48,9 +48,9 @@ namespace WpfUI
             }
         }
 
-        public List<Button> AllayButtonList { get; set; }
+        public List<Button?> AllayButtonList { get; set; }
 
-        public List<Button> EnemyButtonList { get; set; }
+        public List<Button?> EnemyButtonList { get; set; }
 
 
         public MapBuilder(GameSession gameSession)
@@ -113,8 +113,8 @@ namespace WpfUI
             // Crea una copia della lista di tutte le unità allay e nemiche che ho
             var allayList = AllayList;
             var enemyList = EnemyList;
-            AllayButtonList = new List<Button>();
-            EnemyButtonList = new List<Button>();
+            AllayButtonList = new List<Button?>();
+            EnemyButtonList = new List<Button?>();
 
             for (int row = 0; row < tileMatrix.Count; row++)
             {
@@ -245,7 +245,7 @@ namespace WpfUI
            
         }
 
-        public void UnitCantMoveNoMore(Button button)
+        public void UnitCantMoveNoMore(Button? button)
         {
             //unit can't move till next turn
             button.Content = MapCosmetics.GetTriangle(((Tile)button.Tag).UnitOn);

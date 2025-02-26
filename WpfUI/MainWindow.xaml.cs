@@ -31,7 +31,8 @@ namespace WpfUI
 
             var mapBuilder = new MapBuilder(_gameSession);
             MapBuilderPlaceholder.Content = mapBuilder;
-            
+            previewAttack.MapBuilder = mapBuilder;
+
         }
 
         private void OnClick_MoveUp(object sender, RoutedEventArgs e)

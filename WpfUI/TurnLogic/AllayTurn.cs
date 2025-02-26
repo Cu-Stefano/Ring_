@@ -1,11 +1,16 @@
 ﻿using Engine.FEMap;
+using System.Diagnostics;
+using System.Reflection;
+using System.Windows.Controls;
 using System.Windows;
 using WpfUI.TurnLogic.Actions;
+using WpfUI.TurnLogic;
+using WpfUI;
 
-namespace WpfUI.TurnLogic;
-
-public class AllayTurn(MapLogic turnMapLogic): TurnState(turnMapLogic)
+public class AllayTurn : TurnState
 {
+    public AllayTurn(MapLogic turnMapLogic) : base(turnMapLogic) { }
+
     public override void OnEnter()
     {
         SetState(new TileToBeSelected(this));
@@ -13,8 +18,7 @@ public class AllayTurn(MapLogic turnMapLogic): TurnState(turnMapLogic)
 
     public override void OnExit()
     {
-        //ripristino la possibilità di movimento delle unità alleate
-        
+        // Ripristino la possibilità di movimento delle unità alleate
         foreach (var but in _mapBuilder.AllayButtonList)
         {
             var tile = (Tile)but.Tag;
@@ -26,28 +30,12 @@ public class AllayTurn(MapLogic turnMapLogic): TurnState(turnMapLogic)
 
     public override void SetState(ActionState action)
     {
-        if (CurrentActionState?.GetType() == action.GetType()) 
+        if (CurrentActionState?.GetType() == action.GetType())
             return;
-        //rimuovo i gestori d'evento dello stato corrente
-        if (CurrentActionState != null)
-        {
-            foreach (var button in _mapBuilder.ActualMap.SelectMany(row => row))
-            {
-                button.MouseEnter -= CurrentActionState.Mouse_Over;
-                button.Click -= Single_Click;
-            }
-        }
 
         CurrentActionState?.OnExit();
         CurrentActionState = action;
         CurrentActionState.OnEnter();
-
-        //aggiungo i gestori d'evento del nuovo stato
-        foreach (var button in _mapBuilder.ActualMap.SelectMany(row => row))
-        {
-            button.MouseEnter += CurrentActionState.Mouse_Over;
-            button.Click += Single_Click;
-        }
     }
 
     public override void Doule_Click(object sender, RoutedEventArgs e)
@@ -59,4 +47,5 @@ public class AllayTurn(MapLogic turnMapLogic): TurnState(turnMapLogic)
     {
         CurrentActionState.Single_Click(sender, e);
     }
+
 }

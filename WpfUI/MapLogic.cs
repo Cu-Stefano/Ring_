@@ -28,6 +28,14 @@ public class MapLogic : BaseNotification
     {
         MapBuilder.ClearGamesessionGui();
 
+        //aggiungo i gestori d'evento del nuovo stato
+        foreach (var button in MapBuilder.ActualMap.SelectMany(row => row))
+        {
+            button.MouseEnter -= TileButton_Over;
+            button.Click -= Move_unit;
+            button.MouseDoubleClick -= UnitSelected;
+        }
+
         CurrentTurnState?.OnExit();
         CurrentTurnState = newTurnState;
         CurrentTurnState.OnEnter();

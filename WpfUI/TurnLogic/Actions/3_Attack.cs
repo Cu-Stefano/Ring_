@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace WpfUI.TurnLogic.Actions;
 
-public class Attack(TurnState state, Button buttonToThanDeselect, Button enemy, List<Button> enemyNear) : ActionState(state)
+public class Attack(TurnState state, Button? buttonToThanDeselect, Button? enemy, List<Button?> enemyNear) : ActionState(state)
 {
     public override void OnEnter()
     {
