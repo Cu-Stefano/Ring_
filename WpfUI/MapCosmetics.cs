@@ -11,7 +11,6 @@ namespace WpfUI;
 
 public class MapCosmetics : BaseNotification
 {
-
     public void SetButtonAsSelected(Button? button)
     {
         button.BorderBrush = Brushes.Red;
@@ -88,21 +87,131 @@ public class MapCosmetics : BaseNotification
         return new SolidColorBrush(Color.FromArgb(alpha, r, g, b));
     }
 
-    public static Polygon GetTriangle(Unit unit)
+    public static Polygon GetPolygon(Unit unit)
     {
-        var triangle = new Polygon
+        Polygon Polygon;
+        if (unit == null)
+            return null;
+
+        switch (unit.Class.UsableWeapons[0])
         {
-            Points = new PointCollection(new List<Point>
-            {
-                new Point(20, 0),
-                new Point(30, 20),
-                new Point(0, 20)
-            }),
-            Fill = GetUnitColor(unit),
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        return triangle;
+            case WeaponType.Sword:
+                Polygon = new Polygon
+                {
+                    Points = new PointCollection(new List<Point>
+                {
+                    new Point(20, 0),
+                    new Point(30, 20),
+                    new Point(0, 20)
+                }),
+                    Fill = GetUnitColor(unit),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                break;
+
+            case WeaponType.Lance:
+                Polygon = new Polygon
+                {
+                    Points = new PointCollection(new List<Point>
+                    {
+                        new Point(15, 0),
+                        new Point(30, 15),
+                        new Point(15, 30),
+                        new Point(0, 15)
+                    }),
+                    Fill = GetUnitColor(unit),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                break;
+
+            case WeaponType.Axe:
+                Polygon = new Polygon
+                {
+                    Points = new PointCollection(new List<Point>
+                    {
+                        new Point(0, 0),
+                        new Point(30, 0),
+                        new Point(30, 15),
+                        new Point(0, 15)
+                    }),
+                    Fill = GetUnitColor(unit),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                break;
+
+            case WeaponType.Tome:
+                Polygon = new Polygon
+                {
+                    Points = new PointCollection(new List<Point>
+                {
+                    new Point(0, 0),
+                    new Point(20, 0),
+                    new Point(20, 20),
+                    new Point(0, 20)
+                }),
+                    Fill = GetUnitColor(unit),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                break;
+
+            case WeaponType.Bow:
+                Polygon = new Polygon
+                {
+                    Points = new PointCollection(new List<Point>
+                {
+                    new Point(10, 0),
+                    new Point(20, 10),
+                    new Point(15, 20),
+                    new Point(5, 20),
+                    new Point(0, 10)
+                }),
+                    Fill = GetUnitColor(unit),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                break;
+
+            case WeaponType.Staff:
+                Polygon = new Polygon
+                {
+                    Points = new PointCollection(new List<Point>
+                {
+                    new Point(10, 0),
+                    new Point(20, 10),
+                    new Point(10, 20),
+                    new Point(0, 10)
+                }),
+                    Fill = GetUnitColor(unit),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                break;
+
+            default:
+                Polygon = new Polygon
+                {
+                    Points = new PointCollection(new List<Point>
+                {
+                    new Point(10, 0),
+                    new Point(20, 10),
+                    new Point(10, 20),
+                    new Point(0, 10)
+                }),
+                    Fill = GetUnitColor(unit),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                break;
+        }
+
+        return Polygon;
     }
+
+
+
 
 }

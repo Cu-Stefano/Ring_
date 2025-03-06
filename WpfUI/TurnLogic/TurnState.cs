@@ -44,11 +44,11 @@ namespace WpfUI.TurnLogic
             }
             CurrentActionState?.Mouse_Over(sender, e);
         }
-        public void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        public void Back_Action(object sender, MouseButtonEventArgs e)
         {
             if (CurrentActionState != null)
             {
-                CurrentActionState.Window_MouseDown(sender, e);
+                CurrentActionState.Back_Action(sender, e);
             }
         }
         public abstract void Doule_Click(object sender, RoutedEventArgs e);

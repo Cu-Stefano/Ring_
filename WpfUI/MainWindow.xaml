@@ -252,12 +252,7 @@
                            VerticalAlignment="Center"
                            Height="Auto"
                            Width="Auto"
-                           Source="{Binding CurrentLocation.ImageName}"/>
-
-                    <TextBlock Grid.Row="2"
-                               Padding="10"
-                               HorizontalAlignment="Center"
-                               Text="{Binding CurrentTile.Walkable}"/>
+                           Source="{Binding CurrentTile.Icon}"/>
                 </Grid>
 
             </Border>
@@ -268,6 +263,10 @@
                     Margin="10,10,10,10"
                     Background="#FFF7F7F7"
                     BorderThickness="2" CornerRadius="20,20,20,20">
+                <TextBlock
+                           Padding="10"
+                           HorizontalAlignment="Center"
+                           FontSize="36"><Run Text="   "/><Run Text=" "/><Run/><LineBreak/><Run Text="    "/><Run Text="Objective:"/><LineBreak/><LineBreak/><Run Text="Kill All Enemies"/></TextBlock>
             </Border>
 
         </Grid>

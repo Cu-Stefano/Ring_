@@ -33,7 +33,7 @@ namespace WpfUI.TurnLogic.Actions
         public Unit? AllayUnit
         {
             get => _allayUnit;
-            private set => SetField(ref _allayUnit, value);
+            internal set => SetField(ref _allayUnit, value);
         }
         public Polygon? AllayPolygon
         {
@@ -51,7 +51,7 @@ namespace WpfUI.TurnLogic.Actions
         public Unit? EnemyUnit
         {
             get => _enemyUnit;
-            private set => SetField(ref _enemyUnit, value);
+            internal set => SetField(ref _enemyUnit, value);
         }
 
         private int _enemyDamage;
@@ -96,7 +96,7 @@ namespace WpfUI.TurnLogic.Actions
             private set => SetField(ref _allayCrit, value);
         }
 
-        public Button? ButtonToThanDeselect { get; set; }
+        public Button? attackingAllay { get; set; }
         public List<Button?> EnemyNear { get; set; }
         public Button? AllayButton { get; set; }
 
@@ -108,13 +108,14 @@ namespace WpfUI.TurnLogic.Actions
 
         public void Start()
         {
-            if (GameSession == null || EnemyButton == null || ButtonToThanDeselect == null || EnemyNear == null) return;
-            AllayUnit = GameSession.CurrentUnit;
+            if (GameSession == null || EnemyButton == null || attackingAllay == null || EnemyNear == null) return;
+
+            AllayUnit = ((Tile)attackingAllay.Tag).UnitOn;
             EnemyUnit = ((Tile)EnemyButton.Tag).UnitOn;
 
             if (chooseAttack._mapBuilder.MapLogic.CurrentTurnState.CurrentActionState.GetType() != typeof(ChooseAttack)) return;
 
-            AllayButton = MapBuilder.GetButtonBasedOnTile(GameSession.CurrentTile);
+            AllayButton = attackingAllay;
             OnPropertyChanged(nameof(EnemyPolygon));
             OnPropertyChanged(nameof(AllayPolygon));
 
@@ -133,8 +134,13 @@ namespace WpfUI.TurnLogic.Actions
             AllayCrit = AllayUnit.Get_Crit();
 
             PreviewAttackGrid.Visibility = Visibility.Visible;
+            LoadHpBars();
+        }
+
+        public void LoadHpBars()
+        {
             // allay hp bar
-            var newTopMargin = 3.8 * (GameSession.CurrentUnit!.Statistics.Hp / (double)GameSession.CurrentUnit.Statistics.HpMax * 100);
+            var newTopMargin = 3.8 * (AllayUnit!.Statistics.Hp / (double)AllayUnit.Statistics.HpMax * 100);
             newTopMargin = newTopMargin <= 50 ? 50 : newTopMargin;
             AllayHp.Margin = new Thickness(AllayHp.Margin.Left, 380 - newTopMargin, AllayHp.Margin.Right, AllayHp.Margin.Bottom);
 
@@ -146,7 +152,7 @@ namespace WpfUI.TurnLogic.Actions
 
         private void StartAttack(object sender, RoutedEventArgs e)
         {
-            chooseAttack.State.SetState(new Attack(chooseAttack.State, ButtonToThanDeselect, EnemyButton, EnemyNear));
+            chooseAttack.State.SetState(new Attack(chooseAttack.State, attackingAllay, EnemyButton, EnemyNear, this));
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -6,7 +6,7 @@ using Engine.FEMap;
 
 namespace WpfUI.TurnLogic.Actions;
 
-public class ChooseAttack(TurnState state, List<Button?> enemyNear, Button? buttonToThanDeselect) : ActionState(state)
+public class ChooseAttack(TurnState state, List<Button?> enemyNear, Button? attackingAllay) : ActionState(state)
 {
     public override void OnEnter()
     {
@@ -27,8 +27,7 @@ public class ChooseAttack(TurnState state, List<Button?> enemyNear, Button? butt
         _gameSession.PreviewAttack.PreviewAttackGrid.Visibility = Visibility.Hidden;
         _gameSession.PreviewAttack.EnemyButton = null;
         _gameSession.PreviewAttack.AllayButton = null;
-        _gameSession.PreviewAttack.EnemyNear.Clear();
-        _gameSession.PreviewAttack.ButtonToThanDeselect = null;
+        _gameSession.PreviewAttack.EnemyNear?.Clear();
     }
 
     public override void Mouse_Over(object sender, RoutedEventArgs e)
@@ -47,7 +46,7 @@ public class ChooseAttack(TurnState state, List<Button?> enemyNear, Button? butt
         {
             _gameSession.PreviewAttack.EnemyButton = button;
             _gameSession.PreviewAttack.EnemyNear = enemyNear;
-            _gameSession.PreviewAttack.ButtonToThanDeselect = buttonToThanDeselect;
+            _gameSession.PreviewAttack.attackingAllay = attackingAllay;
             _gameSession.PreviewAttack.Start();
         }
     }

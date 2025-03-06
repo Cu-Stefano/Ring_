@@ -21,8 +21,6 @@ namespace Engine.Models
 
         private Weapon _equipedWeapon;
         public List<GameItem?> Inventory { get; set; }
-        public List<QuestStatus> Quests { get; set; }
-
 
         public string Name
         {
@@ -169,8 +167,7 @@ namespace Engine.Models
             Critic = Get_Crit();
             CanMove = true;
 
-            Inventory = new List<GameItem?>();
-            Quests = new List<QuestStatus>();
+            Inventory = [];
 
             if (equipedWeapon != null)
             {
@@ -182,8 +179,12 @@ namespace Engine.Models
                 Inventory.Add(WeaponFactory.CreateWeapon("WoodenBow"));
                 Inventory.Add(WeaponFactory.CreateWeapon("Heal"));
                 Inventory.Add(WeaponFactory.CreateWeapon("BronzeLance"));
-                EquipedWeapon = (Weapon)Inventory.First(item => item == equipedWeapon);
+                EquipedWeapon = (Weapon)Inventory.First(item => item == equipedWeapon)!;
             }
+        }
+
+        public Unit()
+        {
         }
 
         public int Get_Attack()

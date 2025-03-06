@@ -10,6 +10,8 @@ using System.Windows.Input;
 using WpfUI.TurnLogic;
 using WpfUI.TurnLogic.Actions;
 using WpfUI.ViewModels;
+using System.Reactive;
+using Unit = Engine.Models.Unit;
 
 namespace WpfUI
 {
@@ -22,7 +24,7 @@ namespace WpfUI
         public Unit? MovingUnit
         {
             get => CurrentSelectedTile?.UnitOn; 
-            set => CurrentSelectedTile!.UnitOn = value;
+            set {}
         }
 
         public GameSession GameSession { get; set; }
@@ -31,7 +33,7 @@ namespace WpfUI
 
         public MapLogic MapLogic { get; }
 
-        private static List<Unit> AllayList
+        public List<Unit> AllayList
         {
             get
             {
@@ -39,7 +41,7 @@ namespace WpfUI
                 return allayList;
             }
         }
-        private static List<Unit> EnemyList
+        public List<Unit> EnemyList
         {
             get
             {
@@ -48,9 +50,9 @@ namespace WpfUI
             }
         }
 
-        public List<Button?> AllayButtonList { get; set; }
+        public static List<Button?> AllayButtonList { get; set; }
 
-        public List<Button?> EnemyButtonList { get; set; }
+        public static List<Button?> EnemyButtonList { get; set; }
 
 
         public MapBuilder(GameSession gameSession)
@@ -154,7 +156,7 @@ namespace WpfUI
                             enemyList.RemoveAt(enemyRandomIndex);
                             EnemyButtonList.Add(button);
                         }
-                        var triangle = MapCosmetics.GetTriangle(unit);
+                        var triangle = MapCosmetics.GetPolygon(unit);
 
                         // aggiungo l'unità al tile
                         button.Content = triangle;
@@ -231,7 +233,7 @@ namespace WpfUI
 
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MapLogic.CurrentTurnState.Window_MouseDown(sender, e);
+            MapLogic.CurrentTurnState.Back_Action(sender, e);
         }
 
         public void ClearGamesessionGui()
@@ -248,7 +250,9 @@ namespace WpfUI
         public void UnitCantMoveNoMore(Button? button)
         {
             //unit can't move till next turn
-            button.Content = MapCosmetics.GetTriangle(((Tile)button.Tag).UnitOn);
+            var buttUnit = ((Tile)button.Tag).UnitOn;
+            buttUnit.CanMove = false;
+            button.Content = MapCosmetics.GetPolygon(buttUnit);
             OnPropertyChanged("button");
         }
         public Button? GetButtonBasedOnTile(Tile tile)
@@ -260,6 +264,21 @@ namespace WpfUI
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public (int x, int y) GetButtonPosition(Button button)
+        {
+            for (int row = 0; row < ActualMap.Count; row++)
+            {
+                for (int col = 0; col < ActualMap[row].Count; col++)
+                {
+                    if (ActualMap[row][col] == button)
+                    {
+                        return (row, col);
+                    }
+                }
+            }
+            throw new ArgumentException("Button not found in the map.");
         }
     }
 }

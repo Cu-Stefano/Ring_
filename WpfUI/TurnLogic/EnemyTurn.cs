@@ -11,6 +11,7 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 {
     public override void OnEnter()
     {
+        //_mapBuilder.EnemyButtonList; 
         // No specific logic for entering EnemyTurn
     }
     public override void OnExit()

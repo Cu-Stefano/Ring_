@@ -19,11 +19,11 @@ public class AllayTurn : TurnState
     public override void OnExit()
     {
         // Ripristino la possibilità di movimento delle unità alleate
-        foreach (var but in _mapBuilder.AllayButtonList)
+        foreach (var but in MapBuilder.AllayButtonList)
         {
             var tile = (Tile)but.Tag;
             tile.UnitOn.CanMove = true;
-            but.Content = MapCosmetics.GetTriangle(tile.UnitOn);
+            but.Content = MapCosmetics.GetPolygon(tile.UnitOn);
         }
         CurrentActionState.OnExit();
     }
@@ -32,8 +32,8 @@ public class AllayTurn : TurnState
     {
         if (CurrentActionState?.GetType() == action.GetType())
             return;
-
-        CurrentActionState?.OnExit();
+        if (action.GetType() != typeof(Attack))
+            CurrentActionState?.OnExit();
         CurrentActionState = action;
         CurrentActionState.OnEnter();
     }

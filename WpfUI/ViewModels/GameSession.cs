@@ -13,9 +13,7 @@ namespace WpfUI.ViewModels
     public class GameSession : BaseNotification
     {
         public PreviewAttack PreviewAttack { get; set; }
-        public WorldMap CurrentWorldMap { get; set; }//SOSCRPG map not mine
-        private Location? _currentLocation = null!;
-        internal DataGrid? dataGrid { get; set; }
+        internal DataGrid? DataGrid { get; set; }
         private Tile? _currenTile = null!;
         private string _classWeapons;
         private Unit? _currentUnit;
@@ -33,22 +31,7 @@ namespace WpfUI.ViewModels
             }
         }
         public List<Unit> AllayList{ get; set; }
-     
-        public Location? CurrentLocation
-        {
-            get { return _currentLocation; }
-            set
-            {
-                _currentLocation = value;
-                OnPropertyChanged(nameof(CurrentLocation));
-                OnPropertyChanged(nameof(IsThereLocationUp));
-                OnPropertyChanged(nameof(IsThereLocationDown));
-                OnPropertyChanged(nameof(IsThereLocationLeft));
-                OnPropertyChanged(nameof(IsThereLocationRight));
-                GivePlayerQuestsAtLocation();
-            }
-        }
-
+        
         public Unit? CurrentUnit
         {
             get {return _currentUnit; }
@@ -81,114 +64,23 @@ namespace WpfUI.ViewModels
             }
         }
 
-        public bool IsThereLocationUp
-        {
-            get
-            {
-                return CurrentWorldMap.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1) != null;
-            }
-        }
-
-        public bool IsThereLocationDown
-        {
-            get
-            {
-                return CurrentWorldMap.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1) != null;
-            }
-        }
-
-        public bool IsThereLocationLeft
-        {
-            get
-            {
-                return CurrentWorldMap.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate) != null;
-            }
-        }
-
-        public bool IsThereLocationRight
-        {
-            get
-            {
-                return CurrentWorldMap.LocationAt(CurrentLocation.XCoordinate + 1, CurrentLocation.YCoordinate) != null;
-            }
-        }
 
         public GameSession(MainWindow mainWindow, PreviewAttack previewAttack)
         {
-            //CurrentUnit = UnitFactory.GetUnitByName("Ike");
-            //ClassWeapons = string.Join("\n", CurrentUnit.Class.UsableWeapons);
-
-            CurrentWorldMap = WorldFactory.CreateWorld();
-
-            CurrentLocation = CurrentWorldMap.LocationAt(0, 0)!;//soscsrpg world
-
             PreviewAttack = previewAttack;
-
-            //CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("BronzeSword"));
-            //CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("IronSword"));
-            //CurrentUnit.Inventory.Add(ItemFactory.CreateGameItem("WoodShield"));
-            //CurrentUnit.EquipedWeapon = CurrentUnit.Inventory[0] as Weapon;
-
         }
 
-        public void MoveUp()
-        {
-            if (IsThereLocationUp)
-            {
-                CurrentLocation =
-                    CurrentWorldMap.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1)!;
-            }
-        }
-
-        public void MoveDown()
-        {
-            if (IsThereLocationDown)
-            {
-                CurrentLocation =
-                    CurrentWorldMap.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1)!;
-            }
-        }
-
-        public void MoveLeft()
-        {
-            if (IsThereLocationLeft)
-            {
-                CurrentLocation =
-                    CurrentWorldMap.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate)!;
-            }
-        }
-
-        public void MoveRight()
-        {
-            if (IsThereLocationRight)
-            {
-                {
-                    CurrentLocation =
-                        CurrentWorldMap.LocationAt(CurrentLocation.XCoordinate + 1, CurrentLocation.YCoordinate)!;
-                }
-            }
-        }
-        private void GivePlayerQuestsAtLocation()
-        {
-            foreach (Quest quest in CurrentLocation.QuestsAvailableHere)
-            {
-                if (!CurrentUnit.Quests.Any(q => q.PlayerQuest.ID == quest.ID))
-                {
-                    CurrentUnit.Quests.Add(new QuestStatus(quest));
-                }
-            }
-        }
         public void HighlightSelectedRow()
         {
-            if (dataGrid == null) return;
+            if (DataGrid == null) return;
 
             // Force the DataGrid to update its layout
-            dataGrid.UpdateLayout();
+            DataGrid.UpdateLayout();
 
-            foreach (var item in dataGrid.Items)
+            foreach (var item in DataGrid.Items)
             {
                 // Ensure the row is generated
-                DataGridRow row = (DataGridRow)dataGrid.ItemContainerGenerator.ContainerFromItem(item);
+                DataGridRow row = (DataGridRow)DataGrid.ItemContainerGenerator.ContainerFromItem(item);
 
                 if (row != null)
                 {

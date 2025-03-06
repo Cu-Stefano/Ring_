@@ -35,23 +35,6 @@ namespace WpfUI
 
         }
 
-        private void OnClick_MoveUp(object sender, RoutedEventArgs e)
-        {
-            _gameSession.MoveUp();
-        }
-        private void OnClick_MoveDown(object sender, RoutedEventArgs e)
-        {
-            _gameSession.MoveDown();
-        }
-        private void OnClick_MoveLeft(object sender, RoutedEventArgs e)
-        {
-            _gameSession.MoveLeft();
-        }
-        private void OnClick_MoveRight(object sender, RoutedEventArgs e)
-        {
-            _gameSession.MoveRight();
-        }
-
         private void MapBuilder_Loaded(object sender, RoutedEventArgs e)
         {
         }
@@ -78,13 +61,13 @@ namespace WpfUI
 
         private void DataGrid_Loaded(object sender, RoutedEventArgs e)
         {
-            if (_gameSession.dataGrid != null)
+            if (_gameSession.DataGrid != null)
             {
                 HighlightSelectedRow();
             }
             else
             {
-                _gameSession.dataGrid = (DataGrid)sender;
+                _gameSession.DataGrid = (DataGrid)sender;
             }
         }
 

@@ -27,8 +27,11 @@
     <None Remove="Images\Locations\home.png" />
     <None Remove="Images\Locations\home1.png" />
     <None Remove="Images\Locations\hut2.png" />
+    <None Remove="Images\Locations\plain.png" />
+    <None Remove="Images\Locations\rock.png" />
     <None Remove="Images\Locations\shop1.png" />
     <None Remove="Images\Locations\square1.png" />
+    <None Remove="Images\Locations\water.png" />
   </ItemGroup>
 
 
@@ -66,15 +69,18 @@
     <Content Include="Images\Locations\shop1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\Locations\plain.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Locations\rock.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\Locations\square1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="PathElements\" />
-    <Folder Include="ViewModels\" />
+    <Resource Include="Images\Locations\water.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

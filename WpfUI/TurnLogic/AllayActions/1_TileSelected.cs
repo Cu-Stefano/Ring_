@@ -1,14 +1,7 @@
 ﻿using Engine.FEMap;
 using Engine.Models;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using WpfUI.PathElements;
 using WpfUI.PathElements;
 
 namespace WpfUI.TurnLogic.Actions;
@@ -38,57 +31,13 @@ public class TileSelected : ActionState
 
         PQueue = new PriorityQueue<Node, int?>();
         AddNodeToQueue(ONode);
-        Path = new List<Button?>();
-        Attack = new List<Button?>();
+        Path = [];
+        Attack = [];
     }
-
-    private void PathAlgorithm(PriorityQueue<Node, int?> queue, int movement, int? range, List<Button?> attackList, List<Button?> path)
-    {
-        while (queue.Count > 0)
-        {
-            var curr = GetNextNode()!;
-            var button = curr.button;
-
-            if ((curr == ONode || curr.passable) && curr.G < (movement + range) && !path.Contains(button))
-            {
-                foreach (var currNeighbour in curr.Neighbours.Where(n => n.G == null))
-                {
-                    //non lo considero se c'è un'unità sopra
-                    var tile = (Tile)(currNeighbour.button.Tag);
-
-                    if (tile.UnitOn?.Type == UnitType.Enemy && curr.G < Range && !_nearEnemy.Contains(currNeighbour.button))
-                    {
-                        _nearEnemy.Add(currNeighbour.button);
-                        continue;
-                    }
-                    if (tile.UnitOn != null)
-                    {
-                        continue;
-                    }
-
-                    currNeighbour.G = curr.G + 1;
-                    currNeighbour.Parent = curr;
-                    queue.Enqueue(currNeighbour, currNeighbour.G);
-                }
-            }
-
-            if (curr.G > movement)
-            {
-                _mapCosmetics.SetGetAttackBrush(button);
-                attackList.Add(button);
-            }
-            else
-            {
-                path.Add(button);
-                _mapCosmetics.SetGetPathBrush(button);
-            }
-        }
-    }
-
 
     public override void OnEnter()
     {
-        PathAlgorithm(PQueue, UnitMovement, Range, Attack, Path);
+        PathAlgorithm.Execute(ONode, Tile.UnitOn, Attack, Path, _nearEnemy, _mapCosmetics);
     }
 
     public override void OnExit()
@@ -110,6 +59,8 @@ public class TileSelected : ActionState
         }
         Attack.Clear();
         Path.Clear();
+        _mapBuilder.MovingUnit = null;
+        _mapBuilder.CurrentSelectedTile = null;
     }
 
     //CALCULATE_TRAIL
@@ -139,23 +90,22 @@ public class TileSelected : ActionState
         //il sender dell'evento deve essere un bottone nel range di movimento dell'unità
         var butt = (Button)sender;
         var til = (Tile)butt.Tag;
+        var currentSelectedTileButton = _mapBuilder.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile)!;
+        _currentPosition = _mapBuilder.GetButtonPosition(butt);
+
+        //se clicco su un nemico vicino
         if (til.UnitOn is { Type: UnitType.Enemy } && _nearEnemy.Contains(butt))
         {
             var curselecButt = _mapBuilder.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile)!;
             var aux = CloneButton(curselecButt);
 
-            /*
-            _mapCosmetics.SetButtonAsDeselected(currentSelectedTileButton);
-            currentSelectedTileButton.Content = null;
-            _mapBuilder.MovingUnit = null;
-            _mapBuilder.CurrentSelectedTile = null;
-            */
             curselecButt.Content = null;
 
             curselecButt.Content = aux.Content;
             curselecButt.Tag = aux.Tag;
 
-            State.SetState(new ChooseAttack(State, _nearEnemy, butt));
+            State.SetState(new ChooseAttack(State, _nearEnemy, currentSelectedTileButton));
+
             return;
         }
         if (sender is not Button { Tag: Tile { UnitOn: null, Walkable: true } tile } button || !Path.Contains(button))
@@ -165,24 +115,14 @@ public class TileSelected : ActionState
         if (_mapBuilder.CurrentSelectedTile is not { UnitOn: not null })
             return;
 
-        //unit can't move anymore
-        //_mapBuilder.CurrentSelectedTile.UnitOn.CanMove = false;
-        //_mapBuilder.UnitCantMoveNoMore(button);
-
-        var currentSelectedTileButton = _mapBuilder.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile)!;
-
-        //l'effetivo spostamento dell'unità
-        tile.UnitOn = _mapBuilder.MovingUnit;
-        button.Content = MapCosmetics.GetTriangle(tile.UnitOn);
+        ////l'effetivo spostamento dell'unità
+        //tile.UnitOn = _mapBuilder.MovingUnit;
+        //button.Content = MapCosmetics.GetPolygon(tile.UnitOn);
+        Move_Unit(currentSelectedTileButton, button);
 
         _gameSession.CurrentTile = tile;
         _gameSession.CurrentUnit = tile.UnitOn;
         _gameSession.ClassWeapons = string.Join("\n", _gameSession.CurrentUnit!.Class.UsableWeapons);
-
-        //aggiorno AllayButtonList perchè i bottoni sono stati scambiati
-        _mapBuilder.AllayButtonList.Remove(currentSelectedTileButton);
-        _mapBuilder.AllayButtonList.Add(button);
-
 
         //controllo se c'è un'unita nemica è nel suo range di attacco
         var enemyNear = new List<Button?>();
@@ -213,9 +153,10 @@ public class TileSelected : ActionState
                 if (curr.G > 0 && ((Tile)curr.button.Tag).UnitOn?.Type == UnitType.Enemy)
                     enemyNear.Add(b);
                 else
-                    Path.Add(button);
+                    path.Add(button);
             }
         }
+
         ClearCurrentSelectedButton(currentSelectedTileButton);
         //se c'è un'unità nemica nel range di attacco allora cambio stato
         if (enemyNear.Count > 0)
@@ -226,16 +167,19 @@ public class TileSelected : ActionState
         else
         {
             //unit can't move anymore
-            tile.UnitOn.CanMove = false;
+            _startinPosition = (0, 0);
+            _currentPosition = (0, 0);
+
             _mapBuilder.UnitCantMoveNoMore(button);
 
             //if alla units moved change state to enemy turn
-            if (_mapBuilder.AllayButtonList.All(allay => !((Tile)allay.Tag).UnitOn!.CanMove))
+            if (MapBuilder.AllayButtonList.All(allay => !((Tile)allay.Tag).UnitOn!.CanMove))
                 State._turnMapLogic.SetState(new EnemyTurn(State._turnMapLogic));
 
             //CHANGE STATE BACK TO 0
             State.SetState(new TileToBeSelected(State));
         }
+
     }
 
     //UTILITY METHODS
