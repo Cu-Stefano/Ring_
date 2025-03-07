@@ -89,6 +89,34 @@ namespace WpfUI.TurnLogic.Actions
             private set => SetField(ref _allayHit, value);
         }
 
+        private int _allayHp;
+        public int AllayHp
+        {
+            get => _allayHp;
+            private set => SetField(ref _allayHp, value);
+        }
+
+        private int _allayHpMax;
+        public int AllayHpMax
+        {
+            get => _allayHpMax;
+            private set => SetField(ref _allayHpMax, value);
+        }
+
+        private int _enemyHp;
+        public int EnemyHp
+        {
+            get => _enemyHp;
+            private set => SetField(ref _enemyHp, value);
+        }
+
+        private int _enemyHpMax;
+        public int EnemyHpMax
+        {
+            get => _enemyHpMax;
+            private set => SetField(ref _enemyHpMax, value);
+        }
+
         private int _allayCrit;
         public int AllayCrit
         {
@@ -133,21 +161,27 @@ namespace WpfUI.TurnLogic.Actions
             AllayHit = AllayUnit.Get_Hit() - EnemyUnit.Dodge;
             AllayCrit = AllayUnit.Get_Crit();
 
+            AllayHp = AllayUnit.Statistics.Hp;
+            AllayHpMax = AllayUnit.Statistics.HpMax;
+            EnemyHp = EnemyUnit.Statistics.Hp;
+            EnemyHpMax = EnemyUnit.Statistics.HpMax;
+
             PreviewAttackGrid.Visibility = Visibility.Visible;
             LoadHpBars();
         }
+
 
         public void LoadHpBars()
         {
             // allay hp bar
             var newTopMargin = 3.8 * (AllayUnit!.Statistics.Hp / (double)AllayUnit.Statistics.HpMax * 100);
             newTopMargin = newTopMargin <= 50 ? 50 : newTopMargin;
-            AllayHp.Margin = new Thickness(AllayHp.Margin.Left, 380 - newTopMargin, AllayHp.Margin.Right, AllayHp.Margin.Bottom);
+            AllayHpBar.Margin = new Thickness(AllayHpBar.Margin.Left, 380 - newTopMargin, AllayHpBar.Margin.Right, AllayHpBar.Margin.Bottom);
 
             // enemy hp bar
             var newTopMarginEnemy = 3.8 * (EnemyUnit!.Statistics.Hp / (double)EnemyUnit.Statistics.HpMax * 100);
             newTopMarginEnemy = newTopMarginEnemy <= 50 ? 50 : newTopMarginEnemy;
-            EnemyHp.Margin = new Thickness(EnemyHp.Margin.Left, 380 - newTopMarginEnemy, EnemyHp.Margin.Right, EnemyHp.Margin.Bottom);
+            EnemyHpBar.Margin = new Thickness(EnemyHpBar.Margin.Left, 380 - newTopMarginEnemy, EnemyHpBar.Margin.Right, EnemyHpBar.Margin.Bottom);
         }
 
         private void StartAttack(object sender, RoutedEventArgs e)

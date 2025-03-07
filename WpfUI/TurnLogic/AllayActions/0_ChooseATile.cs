@@ -36,6 +36,7 @@ public class TileToBeSelected(TurnState state) : ActionState(state)
             _mapBuilder.MovingUnit = tile.UnitOn;
 
             _startinPosition = _mapBuilder.GetButtonPosition(button);
+            _currentPosition = _startinPosition;
             //CHANGE STATE TO 1
             State.SetState(new TileSelected(State, button));
         }

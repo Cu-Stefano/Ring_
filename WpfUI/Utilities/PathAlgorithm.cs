@@ -34,6 +34,12 @@ public static class PathAlgorithm
                     }
                     if (tile.UnitOn != null)
                     {
+                        if (tile.UnitOn.Type == UnitType.Enemy && unit.EquipedWeapon != null && !attackList.Contains(currNeighbour.button))
+                        {
+                            _mapCosmetics.SetGetAttackBrush(currNeighbour.button);
+                            attackList.Add(currNeighbour.button);
+                        }
+                        
                         continue;
                     }
 

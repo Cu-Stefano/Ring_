@@ -11,6 +11,41 @@
     <!-- STILI -->
     <Window.Resources>
 
+        <!-- Stile per il DataGrid -->
+        <Style TargetType="DataGrid" x:Key="CustomDataGridStyle">
+            <Setter Property="FontFamily" Value="Microsoft YaHei" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#FF232A4E" />
+            <Setter Property="Padding" Value="1,1,1,1" />
+            <Setter Property="Background" Value="#FFF3EACE" />
+            <Setter Property="BorderBrush" Value="#FF232A4E" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="RowBackground" Value="#FFF7F7F7" />
+            <Setter Property="AlternatingRowBackground" Value="#FFEBEBEB" />
+            <Setter Property="HorizontalGridLinesBrush" Value="#FFB7A6A6" />
+            <Setter Property="VerticalGridLinesBrush" Value="#FFB7A6A6" />
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="FontFamily" Value="Microsoft YaHei" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="Foreground" Value="#FF232A4E" />
+                        <Setter Property="Padding" Value="5,5,5,5" />
+                        <Setter Property="Background" Value="#FFF3EACE" />
+                        <Setter Property="BorderBrush" Value="#FF232A4E" />
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RowHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridRowHeader">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- White Button Style -->
         <Style TargetType="Button" x:Key="WhiteButtonStyle">
             <Setter Property="Foreground" Value="#FF232A4E"/>
@@ -234,6 +269,15 @@
                     Margin="10,10,10,10"
                     Background="#FFF7F7F7"
                     BorderThickness="2" CornerRadius="20,20,20,20">
+                <Border.Resources>
+                    <!-- Stile per il TextBlock -->
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontFamily" Value="Microsoft YaHei" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="Foreground" Value="#FF232A4E" />
+                        <Setter Property="Padding" Value="5,5,5,5" />
+                    </Style>
+                </Border.Resources>
 
                 <Grid Margin="3">
                     <Grid.RowDefinitions>
@@ -245,7 +289,7 @@
                     <TextBlock Grid.Row="0"
                                Padding="10"
                                HorizontalAlignment="Center"
-                               Text="{Binding CurrentTile.TileName}"/>
+                               Text="{Binding CurrentTile.TileName}" FontSize="15"/>
 
                     <Image Grid.Row="1"
                            HorizontalAlignment="Center"
@@ -263,10 +307,21 @@
                     Margin="10,10,10,10"
                     Background="#FFF7F7F7"
                     BorderThickness="2" CornerRadius="20,20,20,20">
+
+                <Border.Resources>
+                    <!-- Stile per il TextBlock -->
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontFamily" Value="Microsoft YaHei" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="Foreground" Value="#FF232A4E" />
+                        <Setter Property="Padding" Value="5,5,5,5" />
+                    </Style>
+                </Border.Resources>
+
                 <TextBlock
                            Padding="10"
                            HorizontalAlignment="Center"
-                           FontSize="36"><Run Text="   "/><Run Text=" "/><Run/><LineBreak/><Run Text="    "/><Run Text="Objective:"/><LineBreak/><LineBreak/><Run Text="Kill All Enemies"/></TextBlock>
+                           FontSize="25"><Run Text="   "/><Run Text=" "/><Run/><LineBreak/><Run Text="    "/><Run/><LineBreak/><Run Text="     "/><Run Text="Objective:"/><LineBreak/><LineBreak/><Run Text="Kill All Enemies"/></TextBlock>
             </Border>
 
         </Grid>
@@ -301,7 +356,8 @@
 
                 <DataGrid Grid.Row="1" Grid.Column="0" ItemsSource="{Binding CurrentUnit.Inventory}" 
                           AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False" CanUserResizeColumns="False" IsReadOnly="True"
-                          SelectionChanged="DataGrid_SelectionChanged" Loaded="DataGrid_Loaded" SelectionMode="Single" CanUserReorderColumns="False">
+                          SelectionChanged="DataGrid_SelectionChanged" Loaded="DataGrid_Loaded" SelectionMode="Single" CanUserReorderColumns="False"
+                          Style="{StaticResource CustomDataGridStyle}" BorderThickness="0,1,0,0" HeadersVisibility="Column">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="1.7*" CanUserSort="False"/>
                         <DataGridTextColumn Header="Range" Binding="{Binding Range}" Width="*" CanUserSort="False"/>
@@ -309,7 +365,6 @@
                         <DataGridTextColumn Header="Durab." Binding="{Binding Durability}" Width="0.8*" CanUserSort="False"/>
                     </DataGrid.Columns>
                 </DataGrid>
-
 
             </Grid>
         </Border>

@@ -34,13 +34,13 @@ public class MapCosmetics : BaseNotification
     public void SetGetAttackBrush(Button? button)
     {
         Random random = new Random();
-        button.Background = GetColorVariant(Colors.NavajoWhite, 10);
+        button.Background = GetColorVariant(Colors.CornflowerBlue, 10);
         OnPropertyChanged("button");
     }
 
     public void SetTrailSelector(Button? button)
     {
-        button.BorderBrush = Brushes.CornflowerBlue;
+        button.BorderBrush = Brushes.SteelBlue;
         button.BorderThickness = new Thickness(2.5);
         OnPropertyChanged("button");
     }

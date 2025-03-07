@@ -50,6 +50,8 @@
         </Style>
     </UserControl.Resources>
 
+
+
     <Grid>
         <!-- Down Blue Grid -->
         <Grid x:Name="PreviewAttackGrid" Background="#FF2F3C7E" Visibility="Collapsed">
@@ -62,6 +64,11 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+
+            <Border
+                BorderBrush="#FF2F3C7E"
+                Background="#3a4992"
+                BorderThickness="5" CornerRadius="20,20,20,20" Margin="580,0,580,0" Grid.ColumnSpan="3"/>
 
             <!-- Allay Grid -->
             <Grid Grid.Column="0" Grid.Row="0">
@@ -83,18 +90,23 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Label Style="{StaticResource BluLabelStyle}" FontWeight="ExtraLight"
-                           Content="{Binding AllayDamage , FallbackValue=0}" Margin="74,48,0,0" FontSize="15"
+                           Content="{Binding AllayDamage , FallbackValue=0}" Margin="74,43,0,0" FontSize="15"
                            Grid.Column="0" Padding="100,5,0,5" VerticalAlignment="Top" RenderTransformOrigin="0.57,0.053" />
                     <Label Grid.Row="1" Style="{StaticResource BluLabelStyle}" FontWeight="ExtraLight"
-                           Content="{Binding AllayHit , FallbackValue=0}" Margin="74,48,0,0" FontSize="15" Grid.Column="0" VerticalAlignment="Top" Padding="100,5,0,5" />
+                           Content="{Binding AllayHit , FallbackValue=0}" Margin="74,30,0,0" FontSize="15" Grid.Column="0" VerticalAlignment="Top" Padding="100,5,0,5" />
                     <Label Grid.Row="2" Style="{StaticResource BluLabelStyle}" FontWeight="ExtraLight"
-                           Content="{Binding AllayCrit , FallbackValue=0}" Margin="74,18,0,0" FontSize="15" Grid.Column="0" VerticalAlignment="Top" Padding="100,5,0,5" RenderTransformOrigin="-1.473,-0.238" />
+                           Content="{Binding AllayCrit , FallbackValue=0}" Margin="74,10,0,0" FontSize="15" Grid.Column="0" VerticalAlignment="Top" Padding="100,5,0,5" RenderTransformOrigin="-1.473,-0.238" />
                 </Grid>
                 <!-- Allay HP -->
-                <Grid  Grid.Column="1" Margin="10,20,10,20">
-                    <Border x:Name="AllayHp" BorderBrush="#FF57E867" Background="#FF57E867" BorderThickness="2" CornerRadius="5,5,5,5" Margin="90,0,90,0">
+                <Grid  Grid.Column="1" Margin="5,30,10,3">
+                    <Border x:Name="AllayHpBar" BorderBrush="#FF57E867" Background="#FF57E867" BorderThickness="2" CornerRadius="5,5,5,5" Margin="90,0,90,0">
                         <Label Background="#FF57E867"/>
                     </Border>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-34,0,0">
+                        <Label Content="{Binding AllayHp}" Style="{StaticResource BluLabelStyle}" Padding="10,5,5,5" />
+                        <Label Content="/" Style="{StaticResource BluLabelStyle}" Padding="10,5,5,5" />
+                        <Label Content="{Binding AllayHpMax}" Style="{StaticResource BluLabelStyle}" Padding="10,5,5,5" />
+                    </StackPanel>
                 </Grid>
                 <!-- Allay PFP -->
                 <Grid x:Name="AllayPfp" Grid.Column="0">
@@ -104,19 +116,16 @@
                         </Polygon.RenderTransform>
                     </Polygon>
                 </Grid>
-
-
             </Grid>
 
             <!-- Attack Button-->
-            <Grid Grid.Column="1" Background="#FF2F3C7E" Margin="0,350,0,0">
+            <Grid Grid.Column="1" Margin="0,350,0,0">
                 <Button Style="{StaticResource WhiteButtonStyle}" Content="ATTACK"
                         Click="StartAttack" Width="138" Margin="10,0,15,10">
                     <Button.Effect>
-                        <DropShadowEffect BlurRadius="9" Opacity="0.5" RenderingBias="Quality"/>
+                        <DropShadowEffect BlurRadius="4" Opacity="0.15" RenderingBias="Quality"/>
                     </Button.Effect>
                 </Button>
-
             </Grid>
 
             <!-- Enemy Grid -->
@@ -140,18 +149,22 @@
                     </Grid.RowDefinitions>
                     <Label Style="{StaticResource BluLabelStyle}" FontWeight="Normal"
                            Content="{Binding EnemyDamage, FallbackValue=0 }" FontSize="15"
-                           Grid.Column="0" Padding="0,5,5,5" Margin="22,0,0,0" />
+                           Grid.Column="0" Padding="0,5,5,5" Margin="22,-6,0,0" />
                     <Label Grid.Row="1" Style="{StaticResource BluLabelStyle}" FontWeight="ExtraLight"
-                           Content="{Binding EnemyHit , FallbackValue=0}" FontSize="15" Grid.Column="0" Padding="0,5,5,5" Margin="22,50,0,0" VerticalAlignment="Top" />
+                           Content="{Binding EnemyHit , FallbackValue=0}" FontSize="15" Grid.Column="0" Padding="0,5,5,5" Margin="22,32,0,0" VerticalAlignment="Top" />
                     <Label Grid.Row="2" Style="{StaticResource BluLabelStyle}" FontWeight="ExtraLight"
-                           Content="{Binding EnemyCrit , FallbackValue=0}" FontSize="15" Grid.Column="0" VerticalAlignment="Top" Padding="0,5,5,5" Margin="22,18,0,0" />
-
+                           Content="{Binding EnemyCrit , FallbackValue=0}" FontSize="15" Grid.Column="0" VerticalAlignment="Top" Padding="0,5,5,5" Margin="22,11,0,0" />
                 </Grid>
                 <!-- Enemy HP -->
-                <Grid  Grid.Column="1" Margin="10,20,10,20">
-                    <Border x:Name="EnemyHp" BorderBrush="#FF57E867" Background="#FF57E867" BorderThickness="2" CornerRadius="5,5,5,5" Margin="90,0,90,0">
+                <Grid  Grid.Column="1" Margin="5,30,10,3">
+                    <Border x:Name="EnemyHpBar" BorderBrush="#FF57E867" Background="#FF57E867" BorderThickness="2" CornerRadius="5,5,5,5" Margin="90,0,90,0">
                         <Label Background="#FF57E867"/>
                     </Border>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-34,0,0">
+                        <Label Content="{Binding EnemyHp}" Style="{StaticResource BluLabelStyle}" Padding="10,5,5,5" />
+                        <Label Content="/" Style="{StaticResource BluLabelStyle}" Padding="10,5,5,5" />
+                        <Label Content="{Binding EnemyHpMax}" Style="{StaticResource BluLabelStyle}" Padding="10,5,5,5" />
+                    </StackPanel>
                 </Grid>
                 <!-- Enemy PFP -->
                 <Grid x:Name="EnemyPfp" Grid.Column="2">
@@ -161,18 +174,14 @@
                         </Polygon.RenderTransform>
                     </Polygon>
                 </Grid>
-
-
-
-
             </Grid>
-            <Label Style="{StaticResource BluLabelStyle}" Content="DMG"
-            FontSize="15" Margin="54,48,0,0" VerticalAlignment="Top" Grid.Column="1" Padding="5,5,5,5" />
-            <Label Style="{StaticResource BluLabelStyle}" Content="HIT"
-            FontSize="15" Margin="60,185,0,0" Grid.Column="1" VerticalAlignment="Top" Padding="5,5,5,5" />
-            <Label Style="{StaticResource BluLabelStyle}" Content="CRIT"
-            FontSize="15" Margin="0,289,0,0" VerticalAlignment="Top" Grid.Column="1" Padding="5,5,5,5" HorizontalAlignment="Center" />
 
+            <Label Style="{StaticResource BluLabelStyle}" Content="DMG"
+            FontSize="15" Margin="54,48,0,0" VerticalAlignment="Top" Grid.Column="1" Padding="8,5,5,5" />
+            <Label Style="{StaticResource BluLabelStyle}" Content="HIT"
+            FontSize="15" Margin="60,172,0,0" Grid.Column="1" VerticalAlignment="Top" Padding="8,5,5,5" />
+            <Label Style="{StaticResource BluLabelStyle}" Content="CRIT"
+            FontSize="15" Margin="0,289,0,0" VerticalAlignment="Top" Grid.Column="1" Padding="8,5,5,5" HorizontalAlignment="Center" />
         </Grid>
     </Grid>
 </UserControl>

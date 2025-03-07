@@ -91,8 +91,6 @@ public class TileSelected : ActionState
         var butt = (Button)sender;
         var til = (Tile)butt.Tag;
         var currentSelectedTileButton = _mapBuilder.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile)!;
-        _currentPosition = _mapBuilder.GetButtonPosition(butt);
-
         //se clicco su un nemico vicino
         if (til.UnitOn is { Type: UnitType.Enemy } && _nearEnemy.Contains(butt))
         {
@@ -115,9 +113,7 @@ public class TileSelected : ActionState
         if (_mapBuilder.CurrentSelectedTile is not { UnitOn: not null })
             return;
 
-        ////l'effetivo spostamento dell'unità
-        //tile.UnitOn = _mapBuilder.MovingUnit;
-        //button.Content = MapCosmetics.GetPolygon(tile.UnitOn);
+        _currentPosition = _mapBuilder.GetButtonPosition(butt);
         Move_Unit(currentSelectedTileButton, button);
 
         _gameSession.CurrentTile = tile;
