@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,6 +7,7 @@ using System.Windows.Shapes;
 using Engine.FEMap;
 using Engine.Models;
 using WpfUI.ViewModels;
+using System.Windows.Media.Animation;
 
 namespace WpfUI.TurnLogic.Actions
 {
@@ -167,21 +169,37 @@ namespace WpfUI.TurnLogic.Actions
             EnemyHpMax = EnemyUnit.Statistics.HpMax;
 
             PreviewAttackGrid.Visibility = Visibility.Visible;
-            LoadHpBars();
+            AnimateAllayHPbar();
+            AnimateEnemyHPbar();
         }
 
-
-        public void LoadHpBars()
+        public void AnimateAllayHPbar()
         {
-            // allay hp bar
-            var newTopMargin = 3.8 * (AllayUnit!.Statistics.Hp / (double)AllayUnit.Statistics.HpMax * 100);
-            newTopMargin = newTopMargin <= 50 ? 50 : newTopMargin;
-            AllayHpBar.Margin = new Thickness(AllayHpBar.Margin.Left, 380 - newTopMargin, AllayHpBar.Margin.Right, AllayHpBar.Margin.Bottom);
+            // Animate allay hp bar
+            AnimateHpBar(AllayHpBar, AllayUnit!.Statistics.Hp, AllayUnit.Statistics.HpMax);
+        }
+        public void AnimateEnemyHPbar()
+        {
+            // Animate enemy hp bar
+            AnimateHpBar(EnemyHpBar, EnemyUnit!.Statistics.Hp, EnemyUnit.Statistics.HpMax);
+        }
 
-            // enemy hp bar
-            var newTopMarginEnemy = 3.8 * (EnemyUnit!.Statistics.Hp / (double)EnemyUnit.Statistics.HpMax * 100);
-            newTopMarginEnemy = newTopMarginEnemy <= 50 ? 50 : newTopMarginEnemy;
-            EnemyHpBar.Margin = new Thickness(EnemyHpBar.Margin.Left, 380 - newTopMarginEnemy, EnemyHpBar.Margin.Right, EnemyHpBar.Margin.Bottom);
+        private void AnimateHpBar(FrameworkElement hpBar, double currentHp, double maxHp)
+        {
+            var newTopMargin = 3.8 * (currentHp / maxHp * 100);
+            newTopMargin = newTopMargin <= 30 ? 30 : newTopMargin;
+            if(currentHp <= 0)
+                newTopMargin = 0;
+            var newMargin = new Thickness(hpBar.Margin.Left, 380 - newTopMargin, hpBar.Margin.Right, hpBar.Margin.Bottom);
+
+            Console.WriteLine($"{hpBar.Name} newMargin: {newMargin}");
+
+            var hpBarAnimation = new ThicknessAnimation
+            {
+                To = newMargin,
+                Duration = TimeSpan.FromSeconds(0.5) // Duration of the animation
+            };
+            hpBar.BeginAnimation(MarginProperty, hpBarAnimation);
         }
 
         private void StartAttack(object sender, RoutedEventArgs e)

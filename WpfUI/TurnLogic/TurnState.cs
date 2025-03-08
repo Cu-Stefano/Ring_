@@ -29,7 +29,8 @@ namespace WpfUI.TurnLogic
         public abstract void SetState(ActionState action);
         public void TileButton_Over(object sender, RoutedEventArgs e)
         {
-            if (CurrentActionState is ChooseAttack or Attack) return;
+            if (CurrentActionState is ChooseAttack or Attack) 
+                return;
             if (_mapBuilder.CurrentSelectedTile != null)
             {
                 _gameSession.CurrentTile = _mapBuilder.CurrentSelectedTile;

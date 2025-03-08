@@ -11,6 +11,11 @@ namespace WpfUI;
 
 public class MapCosmetics : BaseNotification
 {
+    public void SetButtonAsAttacked(Button? button)
+    {
+        button.Background = Brushes.Red;
+        OnPropertyChanged("button");
+    }
     public void SetButtonAsSelected(Button? button)
     {
         button.BorderBrush = Brushes.Red;
@@ -73,6 +78,13 @@ public class MapCosmetics : BaseNotification
             "Waters" => GetColorVariant(Colors.CornflowerBlue, 20, 180),
             _ => Brushes.PaleGreen, // Default per tipi sconosciuti
         };
+    }
+
+
+    public void SetTileBrush(Button button)
+    {
+        button.Background = GetTileBrush((Tile)button.Tag);
+        OnPropertyChanged("button");
     }
 
     public static Brush GetColorVariant(Color baseColor, byte maxVariation, byte alpha = 255)
@@ -210,8 +222,6 @@ public class MapCosmetics : BaseNotification
 
         return Polygon;
     }
-
-
 
 
 }

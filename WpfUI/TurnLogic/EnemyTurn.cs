@@ -9,11 +9,14 @@ namespace WpfUI.TurnLogic;
 
 public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 {
-    public override void OnEnter()
+    public override async void OnEnter()
     {
-        //_mapBuilder.EnemyButtonList; 
-        // No specific logic for entering EnemyTurn
+        // Introduce a delay of 5 seconds
+        await Task.Delay(100);
+        _turnMapLogic.SetState(new AllayTurn(_turnMapLogic));
+        // Logica specifica per entrare in EnemyTurn (se necessaria)
     }
+
     public override void OnExit()
     {
     }

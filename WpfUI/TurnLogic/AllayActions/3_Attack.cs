@@ -13,20 +13,31 @@ namespace WpfUI.TurnLogic.Actions
         List<Button?> enemyNear,
         PreviewAttack previewAttack) : ActionState(state)
     {
-        public override void OnEnter()
+        public override async void OnEnter()
         {
-            var res = previewAttack.AllayButton!.AttackCalculations(enemy, previewAttack.AllayDamage, previewAttack.EnemyDamage);
+            previewAttack.attackingAllay.AttackCalculations(enemy, previewAttack.AllayDamage, previewAttack.EnemyDamage, _mapCosmetics);
+
             State.SetState(new TileToBeSelected(State));
         }
          
-        public override void OnExit()
+        public override async void OnExit()
         {
-            _gameSession.PreviewAttack.PreviewAttackGrid.Visibility = Visibility.Hidden;
-            foreach (var button in enemyNear)
+
+            foreach (var e in enemyNear)
             {
-                _mapCosmetics.SetButtonAsDeselected(button);
+                _mapCosmetics.SetButtonAsDeselected(e);
             }
-            
+
+            previewAttack.AnimateEnemyHPbar();
+            await Task.Delay(700);
+            previewAttack.AnimateAllayHPbar();
+            await Task.Delay(1200);
+
+            previewAttack.PreviewAttackGrid.Visibility = Visibility.Hidden;
+            previewAttack.EnemyButton = null;
+            previewAttack.AllayButton = null;
+            previewAttack.EnemyNear?.Clear();
+
             var unitOn = ((Tile)attackingAllay.Tag).UnitOn;
             if (unitOn != null)
             {

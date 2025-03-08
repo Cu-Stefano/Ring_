@@ -20,14 +20,7 @@ public class ChooseAttack(TurnState state, List<Button?> enemyNear, Button? atta
 
     public override void OnExit()
     {
-        foreach (var e in enemyNear)
-        {
-            _mapCosmetics.SetButtonAsDeselected(e);
-        }
-        _gameSession.PreviewAttack.PreviewAttackGrid.Visibility = Visibility.Hidden;
-        _gameSession.PreviewAttack.EnemyButton = null;
-        _gameSession.PreviewAttack.AllayButton = null;
-        _gameSession.PreviewAttack.EnemyNear?.Clear();
+        
     }
 
     public override void Mouse_Over(object sender, RoutedEventArgs e)

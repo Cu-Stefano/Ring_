@@ -260,7 +260,7 @@
                     Background="#FFF7F7F7"
                     BorderThickness="2" CornerRadius="20,20,20,20" Grid.RowSpan="2" Grid.ColumnSpan="2">
 
-                <ContentControl x:Name="MapBuilderPlaceholder" Margin="10,10,0,10" HorizontalAlignment="Left" Width="1028" />
+                <ContentControl x:Name="MapBuilderPlaceholder" Margin="24,8,0,10" HorizontalAlignment="Left" Width="974" />
             </Border>
 
             <!--Tile Bonus-->
