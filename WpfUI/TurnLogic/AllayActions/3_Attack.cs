@@ -13,7 +13,7 @@ namespace WpfUI.TurnLogic.Actions
         List<Button?> enemyNear,
         PreviewAttack previewAttack) : ActionState(state)
     {
-        public override async void OnEnter()
+        public override void OnEnter()
         {
             previewAttack.attackingAllay.AttackCalculations(enemy, previewAttack.AllayDamage, previewAttack.EnemyDamage, _mapCosmetics);
 

@@ -45,13 +45,6 @@ namespace WpfUI.TurnLogic
             }
             CurrentActionState?.Mouse_Over(sender, e);
         }
-        public void Back_Action(object sender, MouseButtonEventArgs e)
-        {
-            if (CurrentActionState != null)
-            {
-                CurrentActionState.Back_Action(sender, e);
-            }
-        }
         public abstract void Doule_Click(object sender, RoutedEventArgs e);
 
         public abstract void Single_Click(object sender, RoutedEventArgs e);

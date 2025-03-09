@@ -233,7 +233,7 @@ namespace WpfUI
 
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MapLogic.CurrentTurnState.Back_Action(sender, e);
+            MapLogic.CurrentTurnState.CurrentActionState.Back_Action(sender, e);
         }
 
         public void ClearGamesessionGui()

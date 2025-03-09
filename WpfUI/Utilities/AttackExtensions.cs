@@ -26,7 +26,7 @@ namespace WpfUI.TurnLogic.Actions
                 return;
             }
 
-            await Task.Delay(500);
+            await Task.Delay(600);
 
             var allayHpLeft = tileA.UnitOn.Statistics.Hp -= damageB;
             TakeDamage(UnitA, mapCosmetics);

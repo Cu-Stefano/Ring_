@@ -20,18 +20,25 @@ public class ChooseAttack(TurnState state, List<Button?> enemyNear, Button? atta
 
     public override void OnExit()
     {
-        
+        foreach (var e in enemyNear)
+            _mapCosmetics.SetButtonAsDeselected(e);
     }
 
     public override void Mouse_Over(object sender, RoutedEventArgs e)
     { 
     }
-
     public override void Double_Click(object sender, RoutedEventArgs e)
     {
-        
     }
-
+    public override void Back_Action(object sender, MouseButtonEventArgs e)
+    {
+        //richiamo il vecchio metodo Back_Action e aggiungo che devo nascondere la griglia di attacco
+        base.Back_Action(sender, e);
+        _gameSession.PreviewAttack.PreviewAttackGrid.Visibility = Visibility.Hidden;
+        _gameSession.PreviewAttack.EnemyButton = null;
+        _gameSession.PreviewAttack.AllayButton = null;
+        _gameSession.PreviewAttack.EnemyNear?.Clear();
+    }
     public override void Single_Click(object sender, RoutedEventArgs e)
     {
         var button = (Button)sender;

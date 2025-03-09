@@ -28,7 +28,7 @@ public abstract class ActionState
 
     public abstract void OnEnter();
     public abstract void OnExit();
-    public void Back_Action(object sender, MouseButtonEventArgs e)
+    public virtual void Back_Action(object sender, MouseButtonEventArgs e)
     {
         if (GetType() == typeof(Attack) || GetType() == typeof(TileToBeSelected)) return;//non andare indietro se sto attaccando
 
