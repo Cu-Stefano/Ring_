@@ -192,8 +192,18 @@ public class PathAlgorithm
             button.Background = MapCosmetics.GetTileBrush(tile);
         }
     }
-
-    public void AddNodeToQueue(Node node)
+    public int Calculate_Distance(Node nodeToReach)
+    {
+        var c = 0;
+        var currNode = nodeToReach;
+        while (currNode != ONode)
+        {
+            currNode = currNode.Parent;
+            c++;
+        }
+        return c;
+    }
+public void AddNodeToQueue(Node node)
     {
         PQueue.Enqueue(node, node.G);
     }

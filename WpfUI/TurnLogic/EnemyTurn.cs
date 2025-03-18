@@ -22,13 +22,15 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
             await Task.Delay(1000);
             if (((Tile)enemy.Tag).UnitOn.CanMove == false)
                 continue;
+            //setto l'algortimo di pathfinding
             _pathAlgorithm = new PathAlgorithm(_mapCosmetics);
             _pathAlgorithm.SetONode(enemy!);
             _pathAlgorithm.Execute(); // calcola il path
             _pathAlgorithm.ResetAll();
             _mapCosmetics.SetButtonAsSelected(enemy);
             await Task.Delay(200);
-            // enemy ai logic
+
+            //controllo se c'è qualcuno da attaccare, se no passo al prossimo nemico
             var allayToAttack = _pathAlgorithm.AttackList.Find(x => ((Tile)x.Tag).UnitOn != null);
             if (allayToAttack == null)
             {
@@ -39,7 +41,8 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
                 continue;
             }
 
-            if (_pathAlgorithm.NearEnemy.Contains(allayToAttack)) // è vicino al nemico quindi non serve che si sposti, attaccalo e bah
+            // è vicino al nemico quindi non serve che si sposti, attaccalo e bah
+            if (_pathAlgorithm.NearEnemy.Contains(allayToAttack)) 
             {
                 SetState(new ChooseAttack(this, [allayToAttack], enemy));
                 CurrentActionState.Single_Click(allayToAttack, new RoutedEventArgs());
@@ -50,11 +53,11 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
                 continue;
             }
 
+            //trovo il percorso per raggiungere l'unità da attaccare
             var allayNode = _pathAlgorithm.GetNOdeFromButton(allayToAttack);
             var tileToLand = FindTileToLand(allayNode, ((Tile)enemy.Tag).UnitOn.EquipedWeapon.Range);
             if (tileToLand == null)
                 continue;
-
             _mapCosmetics.SetButtonAsSelected(tileToLand.button);
 
             // stampo il percorso che il nemico farà per raggiungere l'unità da attaccare
@@ -82,24 +85,32 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 
     public Node? FindTileToLand(Node attackedUnit, int attackRange)
     {
-        if (attackRange == -1)
-            return null;
-
-        // Check if the current node is walkable and within the path
-        if (((Tile)attackedUnit.button.Tag).Walkable && _pathAlgorithm.Path.Contains(attackedUnit.button))
-            return attackedUnit;
-
-        // Recursively check the neighbors within the specified attack range
-        foreach (var neighbor in attackedUnit.Neighbours)
-        {
-            var result = FindTileToLand(neighbor, attackRange - 1);
-            if (result != null)
-                return result;
-        }
-
-        return null;
+        var cost = int.MaxValue;
+        Node? finalNode = null;
+        FindTileToLandAux(attackedUnit, attackRange, ref cost, ref finalNode);
+        return finalNode;
     }
 
+    public void FindTileToLandAux(Node attackedUnit, int attackRange, ref int cost, ref Node? finalNode)
+    {
+        if (attackRange < 0)
+            return;
+
+        if (((Tile)attackedUnit.button.Tag).Walkable && _pathAlgorithm.Path.Contains(attackedUnit.button))
+        {
+            var currentCost = _pathAlgorithm.Calculate_Distance(attackedUnit);
+            if (currentCost < cost)
+            {
+                cost = currentCost;
+                finalNode = attackedUnit;
+            }
+        }
+
+        foreach (var neighbor in attackedUnit.Neighbours)
+        {
+            FindTileToLandAux(neighbor, attackRange - 1, ref cost, ref finalNode);
+        }
+    }
 
     public override async void OnExit()
     {
