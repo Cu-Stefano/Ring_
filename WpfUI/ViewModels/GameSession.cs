@@ -12,7 +12,7 @@ namespace WpfUI.ViewModels
 {
     public class GameSession : BaseNotification
     {
-        public PreviewAttack PreviewAttack { get; set; }
+        public PreviewAttack _previewAttack { get; set; }
         internal DataGrid? DataGrid { get; set; }
         private Tile? _currenTile = null!;
         private string _classWeapons;
@@ -67,7 +67,7 @@ namespace WpfUI.ViewModels
 
         public GameSession(MainWindow mainWindow, PreviewAttack previewAttack)
         {
-            PreviewAttack = previewAttack;
+            _previewAttack = previewAttack;
         }
 
         public void HighlightSelectedRow()

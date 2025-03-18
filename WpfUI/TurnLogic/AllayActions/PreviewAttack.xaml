@@ -110,17 +110,17 @@
                 </Grid>
                 <!-- Allay PFP -->
                 <Grid x:Name="AllayPfp" Grid.Column="0">
-                    <Polygon Points="{Binding AllayPolygon.Points}" Fill="CornflowerBlue" Stretch="Uniform" Margin="50,0,0,0">
-                        <Polygon.RenderTransform>
-                            <ScaleTransform ScaleX="1" ScaleY="1"/>
-                        </Polygon.RenderTransform>
+                    <Polygon Points="{Binding AllayPolygon.Points}" Fill="{Binding AllayPolygon.Fill}" Stretch="Uniform" Margin="50,0,0,0">
+                       <Polygon.RenderTransform>
+                           <ScaleTransform ScaleX="1" ScaleY="1"/>
+                       </Polygon.RenderTransform>
                     </Polygon>
                 </Grid>
             </Grid>
 
             <!-- Attack Button-->
             <Grid Grid.Column="1" Margin="0,350,0,0">
-                <Button Style="{StaticResource WhiteButtonStyle}" Content="ATTACK"
+                <Button x:Name="AttackButton" Style="{StaticResource WhiteButtonStyle}" Content="ATTACK"
                         Click="StartAttack" Width="138" Margin="10,0,15,10">
                     <Button.Effect>
                         <DropShadowEffect BlurRadius="4" Opacity="0.15" RenderingBias="Quality"/>
@@ -168,7 +168,7 @@
                 </Grid>
                 <!-- Enemy PFP -->
                 <Grid x:Name="EnemyPfp" Grid.Column="2">
-                    <Polygon Points="{Binding EnemyPolygon.Points}" Fill="OrangeRed" Stretch="Uniform" Margin="0,0,50,0">
+                    <Polygon Points="{Binding EnemyPolygon.Points}" Fill="{Binding EnemyPolygon.Fill}" Stretch="Uniform" Margin="0,0,50,0">
                         <Polygon.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1"/>
                         </Polygon.RenderTransform>

@@ -19,7 +19,7 @@ namespace WpfUI
     {
         private int LevelIndex { get; set; }
         public string CurrentLevelName { get; set; }
-        public List<List<Button?>> ActualMap { get; set; }
+        public static List<List<Button?>> ActualMap { get; set; }
         public Tile? CurrentSelectedTile { get; set; }
         public Unit? MovingUnit
         {

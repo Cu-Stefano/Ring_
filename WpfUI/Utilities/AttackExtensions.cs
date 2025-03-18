@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Engine.FEMap;
+using Engine.Models;
 
 namespace WpfUI.TurnLogic.Actions
 {
@@ -20,26 +21,39 @@ namespace WpfUI.TurnLogic.Actions
 
             if (enemyHpLeft <= 0)
             {
+
+                if (tileA.UnitOn.Type == UnitType.Enemy)
+                    MapBuilder.AllayButtonList.Remove(UnitB);
+                else
+                    MapBuilder.EnemyButtonList.Remove(UnitB);
+
                 tileB.UnitOn = null;
                 UnitB.Content = null;
-                MapBuilder.EnemyButtonList.Remove(UnitB);
+
                 return;
             }
 
             await Task.Delay(600);
-
-            var allayHpLeft = tileA.UnitOn.Statistics.Hp -= damageB;
-            TakeDamage(UnitA, mapCosmetics);
-
-            if (allayHpLeft <= 0)
+            if (damageB != 0)
             {
-                tileA.UnitOn = null;
-                UnitA.Content = null;
-                MapBuilder.AllayButtonList.Remove(UnitA);
-                return;
+                var allayHpLeft = tileA.UnitOn.Statistics.Hp -= damageB;
+                TakeDamage(UnitA, mapCosmetics);
+
+                if (allayHpLeft <= 0)
+                {
+                    if (tileA.UnitOn.Type == UnitType.Enemy)
+                        MapBuilder.EnemyButtonList.Remove(UnitA);
+                    else
+                        MapBuilder.AllayButtonList.Remove(UnitA);
+
+                    tileA.UnitOn = null;
+                    UnitA.Content = null;
+
+                    return;
+                }
             }
 
-            await Task.Delay(400);
+            await Task.Delay(800);
         }
 
         private static void TakeDamage(Button unitButton, MapCosmetics mapCosmetics)

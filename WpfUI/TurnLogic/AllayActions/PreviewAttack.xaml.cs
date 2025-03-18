@@ -149,10 +149,15 @@ namespace WpfUI.TurnLogic.Actions
             OnPropertyChanged(nameof(EnemyPolygon));
             OnPropertyChanged(nameof(AllayPolygon));
 
-            EnemyDamage = EnemyUnit.EquipedWeapon.WeaponType is WeaponType.Tome
-                ? AllayUnit.Get_Attack() - AllayUnit.Statistics.Resistance
-                : AllayUnit.Get_Attack() - AllayUnit.Statistics.Defense;
-
+            if (EnemyUnit.EquipedWeapon == null)
+                EnemyDamage = 0;
+            else
+            {
+                EnemyDamage = EnemyUnit.EquipedWeapon.WeaponType is WeaponType.Tome
+                    ? AllayUnit.Get_Attack() - AllayUnit.Statistics.Resistance
+                    : AllayUnit.Get_Attack() - AllayUnit.Statistics.Defense;
+            }
+            
             EnemyHit = EnemyUnit.Get_Hit() - AllayUnit.Dodge;
             EnemyCrit = EnemyUnit.Get_Crit();
 
@@ -184,15 +189,13 @@ namespace WpfUI.TurnLogic.Actions
             AnimateHpBar(EnemyHpBar, EnemyUnit!.Statistics.Hp, EnemyUnit.Statistics.HpMax);
         }
 
-        private void AnimateHpBar(FrameworkElement hpBar, double currentHp, double maxHp)
+        private async void AnimateHpBar(FrameworkElement hpBar, double currentHp, double maxHp)
         {
             var newTopMargin = 3.8 * (currentHp / maxHp * 100);
             newTopMargin = newTopMargin <= 30 ? 30 : newTopMargin;
             if(currentHp <= 0)
                 newTopMargin = 0;
             var newMargin = new Thickness(hpBar.Margin.Left, 380 - newTopMargin, hpBar.Margin.Right, hpBar.Margin.Bottom);
-
-            Console.WriteLine($"{hpBar.Name} newMargin: {newMargin}");
 
             var hpBarAnimation = new ThicknessAnimation
             {
@@ -202,8 +205,9 @@ namespace WpfUI.TurnLogic.Actions
             hpBar.BeginAnimation(MarginProperty, hpBarAnimation);
         }
 
-        private void StartAttack(object sender, RoutedEventArgs e)
+        public async void StartAttack(object sender, RoutedEventArgs e)
         {
+            PreviewAttackGrid.Visibility = Visibility.Visible;
             chooseAttack.State.SetState(new Attack(chooseAttack.State, attackingAllay, EnemyButton, EnemyNear, this));
         }
 

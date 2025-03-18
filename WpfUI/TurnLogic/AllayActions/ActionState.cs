@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Engine.Models;
+using WpfUI.Utilities;
 using WpfUI.ViewModels;
 
 namespace WpfUI.TurnLogic.Actions;
@@ -32,8 +33,7 @@ public abstract class ActionState
     {
         if (GetType() == typeof(Attack) || GetType() == typeof(TileToBeSelected)) return;//non andare indietro se sto attaccando
 
-        if (_currentPosition != _startinPosition)
-            Move_Unit(GetButtonAtPosition(_currentPosition), GetButtonAtPosition(_startinPosition));
+        if (_currentPosition != _startinPosition) MoveUnit.Move_Unit(GetButtonAtPosition(_currentPosition), GetButtonAtPosition(_startinPosition));
 
         // Verifica se l'elemento cliccato è un pulsante con un'unità selezionata
         if (e.OriginalSource is not Button { Tag: Tile })
@@ -56,45 +56,13 @@ public abstract class ActionState
         //CHANGE STATE BACK TO 0 
         State.SetState(new TileToBeSelected(State));
     }
-
-    public void Move_Unit(Button buttA, Button buttB)
-    {
-        var tileA = (Tile)buttA.Tag;
-        var tileB = (Tile)buttB.Tag;
-
-        var unit = tileA.UnitOn;
-
-        buttB.Content = buttA.Content;
-        buttA.Content = null;
-
-        tileA.UnitOn = null;
-        tileB.UnitOn = unit;
-
-        //aggiorno le AllayList o EnemyList
-        switch (unit.Type)
-        {
-            case UnitType.Allay:
-               
-                if (!MapBuilder.AllayButtonList.Remove(buttA))
-                    throw new InvalidEnumArgumentException("Error in removing the button from the list");
-
-                MapBuilder.AllayButtonList.Add(buttB);
-                break;
-            case UnitType.Enemy:
-                MapBuilder.EnemyButtonList.Remove(buttA);
-                MapBuilder.EnemyButtonList.Add(buttB);
-                break;
-            default:
-                break;
-        }
-    }
     public Button? GetButtonAtPosition((int x, int y) position)
     {
-        if (position.x < 0 || position.y < 0 || position.x >= _mapBuilder.ActualMap.Count || position.y >= _mapBuilder.ActualMap[0].Count)
+        if (position.x < 0 || position.y < 0 || position.x >= MapBuilder.ActualMap.Count || position.y >= MapBuilder.ActualMap[0].Count)
         {
             return null;
         }
-        return _mapBuilder.ActualMap[position.x][position.y];
+        return MapBuilder.ActualMap[position.x][position.y];
     }
     public abstract void Mouse_Over(object sender, RoutedEventArgs e);
     public abstract void Double_Click(object sender, RoutedEventArgs e);

@@ -11,9 +11,9 @@ namespace WpfUI;
 
 public class MapCosmetics : BaseNotification
 {
-    public void SetButtonAsAttacked(Button? button)
+    public void SetPolygon(Button? button)
     {
-        button.Background = Brushes.Red;
+        button.Content = GetPolygon(((Tile)button.Tag).UnitOn);
         OnPropertyChanged("button");
     }
     public void SetButtonAsSelected(Button? button)
@@ -64,7 +64,7 @@ public class MapCosmetics : BaseNotification
         {
             if (unit.CanMove)
                 return GetColorVariant(Colors.Tomato, 0);
-            return GetColorVariant(Colors.DimGray, 50);
+            return GetColorVariant(Colors.DimGray, 30);
         }
         return Brushes.Black; // Default color for other unit types
     }
@@ -73,7 +73,7 @@ public class MapCosmetics : BaseNotification
     {
         return tile.TileName switch
         {
-            "Plains" => GetColorVariant(Colors.LightGreen, 30),
+            "Plains" => GetColorVariant(Colors.LightGreen, 0),
             "Mountains" => GetColorVariant(Colors.DarkGray, 30),
             "Waters" => GetColorVariant(Colors.CornflowerBlue, 20, 180),
             _ => Brushes.PaleGreen, // Default per tipi sconosciuti

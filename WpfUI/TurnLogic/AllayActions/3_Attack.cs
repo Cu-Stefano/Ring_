@@ -7,31 +7,35 @@ using Engine.Models;
 namespace WpfUI.TurnLogic.Actions
 {
     public class Attack(
-        TurnState state,
-        Button? attackingAllay,
-        Button? enemy,
-        List<Button?> enemyNear,
-        PreviewAttack previewAttack) : ActionState(state)
+    TurnState state,
+    Button? attackingAllay,
+    Button? enemy,
+    List<Button?> enemyNear,
+    PreviewAttack previewAttack) : ActionState(state)
     {
         public override void OnEnter()
         {
             previewAttack.attackingAllay.AttackCalculations(enemy, previewAttack.AllayDamage, previewAttack.EnemyDamage, _mapCosmetics);
-
-            State.SetState(new TileToBeSelected(State));
+            if (state.GetType() != typeof(EnemyTurn))
+                State.SetState(new TileToBeSelected(State));
+            else OnExit(); // Call OnExit without waiting
         }
-         
-        public override async void OnExit()
-        {
 
+        public override void OnExit()
+        {
+            PerformExitAsync();
+        }
+
+        private async void PerformExitAsync()
+        {
             foreach (var e in enemyNear)
             {
                 _mapCosmetics.SetButtonAsDeselected(e);
             }
-
             previewAttack.AnimateEnemyHPbar();
             await Task.Delay(700);
             previewAttack.AnimateAllayHPbar();
-            await Task.Delay(1200);
+            await Task.Delay(1500);
 
             previewAttack.PreviewAttackGrid.Visibility = Visibility.Hidden;
             previewAttack.EnemyButton = null;
@@ -66,4 +70,7 @@ namespace WpfUI.TurnLogic.Actions
 
         }
     }
+
+
+
 }

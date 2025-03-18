@@ -49,7 +49,7 @@ namespace WpfUI
                 && _gameSession.CurrentUnit.CanMove)
             {
                 _gameSession.CurrentUnit!.EquipedWeapon = item;
-               _gameSession.PreviewAttack.Start();
+               _gameSession._previewAttack.Start();
             }
             HighlightSelectedRow();
         }
