@@ -16,7 +16,7 @@ public class TileSelected : ActionState
     public TileSelected(TurnState state, Button? button) : base(state)
     {
         _mapCosmetics.SetButtonAsSelected(button);
-        Tile = (Tile)button.Tag;
+        Tile = button.GetTile();
         pathAlgorithm = new PathAlgorithm(button, _mapCosmetics);
     }
 
@@ -58,7 +58,7 @@ public class TileSelected : ActionState
     {
         //il sender dell'evento deve essere un bottone nel range di movimento dell'unità
         var butt = (Button)sender;
-        var til = (Tile)butt.Tag;
+        var til = butt.GetTile();
         var currentSelectedTileButton = _mapBuilder.GetButtonBasedOnTile(_mapBuilder.CurrentSelectedTile)!;
 
         //se clicco su un nemico vicino
@@ -109,7 +109,7 @@ public class TileSelected : ActionState
             _mapBuilder.UnitCantMoveNoMore(button);
 
             //if alla units moved change state to enemy turn
-            if (MapBuilder.AllayButtonList.All(allay => !((Tile)allay.Tag).UnitOn!.CanMove))
+            if (MapBuilder.AllayButtonList.All(allay => !(allay.GetTile()).UnitOn!.CanMove))
                 State._turnMapLogic.SetState(new EnemyTurn(State._turnMapLogic));
 
             //CHANGE STATE BACK TO 0

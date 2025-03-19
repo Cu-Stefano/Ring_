@@ -6,6 +6,7 @@ using System.Windows;
 using WpfUI.TurnLogic.Actions;
 using WpfUI.TurnLogic;
 using WpfUI;
+using WpfUI.Utilities;
 
 public class AllayTurn : TurnState
 {
@@ -21,7 +22,7 @@ public class AllayTurn : TurnState
         // Ripristino la possibilità di movimento delle unità alleate
         foreach (var but in MapBuilder.AllayButtonList)
         {
-            var tile = (Tile)but.Tag;
+            var tile = but.GetTile();
             tile.UnitOn.CanMove = true;
             but.Content = MapCosmetics.GetPolygon(tile.UnitOn);
         }

@@ -10,8 +10,8 @@ public static class MoveUnit
 
     public static void Move_Unit(Button buttA, Button buttB)
     {
-        var tileA = (Tile)buttA.Tag;
-        var tileB = (Tile)buttB.Tag;
+        var tileA = buttA.GetTile();
+        var tileB = buttB.GetTile();
 
         var unit = tileA.UnitOn;
 

@@ -3,6 +3,7 @@ using Engine.FEMap;
 using Engine.Models;
 using WpfUI;
 using WpfUI.PathElements;
+using WpfUI.Utilities;
 
 public class PathAlgorithm
 {
@@ -26,7 +27,7 @@ public class PathAlgorithm
         AttackList = [];
         NearEnemy = [];
         this.MapCosmetics = _mapCosmetics;
-        Unit = ((Tile)oNode.Tag).UnitOn!;
+        Unit = oNode.GetTile().UnitOn!;
 
         ONode = GetNOdeFromButton(oNode)!;
         ONode.G = 0;
@@ -47,7 +48,7 @@ public class PathAlgorithm
 
     public void SetONode(Button button)
     {
-        Unit = ((Tile)button.Tag).UnitOn!;
+        Unit = button.GetTile().UnitOn!;
 
         ONode = GetNOdeFromButton(button)!;
         ONode.G = 0;
@@ -74,26 +75,27 @@ public class PathAlgorithm
             {
                 foreach (var currNeighbour in curr.Neighbours.Where(n => n.G == null))
                 {
-                    var tile = (Tile)(currNeighbour.button.Tag);
+                    var tile = currNeighbour.button.GetTile();
 
                     if (tile.UnitOn?.Type == enemyType && curr.G < range && !NearEnemy.Contains(currNeighbour.button))
                     {
                         NearEnemy.Add(currNeighbour.button);
                         continue;
                     }
-                    if (tile.UnitOn != null)
-                    {
-                        //se c'è un nemico dentro al path allora segnalo così si nota il colore diverso 
-                        if (tile.UnitOn.Type == enemyType && Unit.EquipedWeapon != null && !AttackList.Contains(currNeighbour.button))
-                        {
-                            MapCosmetics.SetGetAttackBrush(currNeighbour.button);
-                            AttackList.Add(currNeighbour.button);
-                        }
-                        
-                        continue;
-                    }
+					if (tile.UnitOn != null)
+					{
+						//se c'è un nemico dentro al path allora segnalo così si nota il colore diverso 
+						if (tile.UnitOn.Type == enemyType && Unit.EquipedWeapon != null && !AttackList.Contains(currNeighbour.button))
+						{
+							if (Unit.Type == UnitType.Enemy)
+								MapCosmetics.SetGetEnemyAttackBrush(currNeighbour.button);
+							else MapCosmetics.SetGetAttackBrush(currNeighbour.button);
+							AttackList.Add(currNeighbour.button);
+						}
+						continue;
+					}
 
-                    currNeighbour.G = curr.G + 1;
+					currNeighbour.G = curr.G + 1;
                     currNeighbour.Parent = curr;
                     PQueue.Enqueue(currNeighbour, currNeighbour.G);
                 }
@@ -101,13 +103,19 @@ public class PathAlgorithm
 
             if (curr.G > movement)
             {
-                MapCosmetics.SetGetAttackBrush(button);
+                if (Unit.Type == UnitType.Enemy)
+                    MapCosmetics.SetGetEnemyAttackBrush(button);
+                else MapCosmetics.SetGetAttackBrush(button);
+
                 AttackList.Add(button);
             }
             else
             {
+                if (Unit.Type == UnitType.Enemy) 
+                    MapCosmetics.SetGetEnemyPathBrush(button);
+                else MapCosmetics.SetGetPathBrush(button);
+
                 Path.Add(button);
-                MapCosmetics.SetGetPathBrush(button);
             }
         }
 
@@ -136,7 +144,7 @@ public class PathAlgorithm
             var row = new List<Node>();
             for (int j = 0; j < baseMap[0].Count; j++)
             {
-                var tile = (Tile)baseMap[i][j].Tag;
+                var tile = baseMap[i][j].GetTile();
                 var cost = tile.TileName == "Bush" ? 2 : 1;
                 var passable = tile is { Walkable: true };
 
@@ -177,18 +185,18 @@ public class PathAlgorithm
     {
         foreach (var button in Path)
         {
-            var tile = (Tile)button.Tag;
+            var tile = button.GetTile();
             button.Background = MapCosmetics.GetTileBrush(tile);
             MapCosmetics.SetButtonAsDeselected(button);
         }
         foreach (var button in Attack)
         {
-            var tile = (Tile)button.Tag;
+            var tile = button.GetTile();
             button.Background = MapCosmetics.GetTileBrush(tile);
         }
         foreach (var button in AttackList)
         {
-            var tile = (Tile)button.Tag;
+            var tile = button.GetTile();
             button.Background = MapCosmetics.GetTileBrush(tile);
         }
     }

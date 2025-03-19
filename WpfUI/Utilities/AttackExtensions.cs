@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Engine.FEMap;
 using Engine.Models;
+using WpfUI.Utilities;
 
 namespace WpfUI.TurnLogic.Actions
 {
@@ -58,7 +59,7 @@ namespace WpfUI.TurnLogic.Actions
 
         private static void TakeDamage(Button unitButton, MapCosmetics mapCosmetics)
         {
-            var originalBrush = MapCosmetics.GetTileBrush((Tile)unitButton.Tag) as SolidColorBrush;
+            var originalBrush = MapCosmetics.GetTileBrush(unitButton.GetTile()) as SolidColorBrush;
             if (originalBrush == null)
                 return;
 

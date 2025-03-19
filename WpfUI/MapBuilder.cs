@@ -11,6 +11,7 @@ using WpfUI.TurnLogic;
 using WpfUI.TurnLogic.Actions;
 using WpfUI.ViewModels;
 using System.Reactive;
+using WpfUI.Utilities;
 using Unit = Engine.Models.Unit;
 
 namespace WpfUI
@@ -50,9 +51,9 @@ namespace WpfUI
             }
         }
 
-        public static List<Button?> AllayButtonList { get; set; }
+        public static List<Button> AllayButtonList { get; set; }
 
-        public static List<Button?> EnemyButtonList { get; set; }
+        public static List<Button> EnemyButtonList { get; set; }
 
 
         public MapBuilder(GameSession gameSession)
@@ -233,7 +234,7 @@ namespace WpfUI
 
         public void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MapLogic.CurrentTurnState.CurrentActionState.Back_Action(sender, e);
+            MapLogic.CurrentTurnState.CurrentActionState?.Back_Action(sender, e);
         }
 
         public void ClearGamesessionGui()
@@ -250,7 +251,7 @@ namespace WpfUI
         public void UnitCantMoveNoMore(Button? button)
         {
             //unit can't move till next turn
-            var buttUnit = ((Tile)button.Tag).UnitOn;
+            var buttUnit = button.GetTile().UnitOn;
             buttUnit.CanMove = false;
             button.Content = MapCosmetics.GetPolygon(buttUnit);
             OnPropertyChanged("button");

@@ -8,6 +8,7 @@ using Engine.FEMap;
 using Engine.Models;
 using WpfUI.ViewModels;
 using System.Windows.Media.Animation;
+using WpfUI.Utilities;
 
 namespace WpfUI.TurnLogic.Actions
 {
@@ -140,8 +141,8 @@ namespace WpfUI.TurnLogic.Actions
         {
             if (GameSession == null || EnemyButton == null || attackingAllay == null || EnemyNear == null) return;
 
-            AllayUnit = ((Tile)attackingAllay.Tag).UnitOn;
-            EnemyUnit = ((Tile)EnemyButton.Tag).UnitOn;
+            AllayUnit = attackingAllay.GetTile().UnitOn;
+            EnemyUnit = EnemyButton.GetTile().UnitOn;
 
             if (chooseAttack._mapBuilder.MapLogic.CurrentTurnState.CurrentActionState.GetType() != typeof(ChooseAttack)) return;
 
@@ -189,7 +190,7 @@ namespace WpfUI.TurnLogic.Actions
             AnimateHpBar(EnemyHpBar, EnemyUnit!.Statistics.Hp, EnemyUnit.Statistics.HpMax);
         }
 
-        private async void AnimateHpBar(FrameworkElement hpBar, double currentHp, double maxHp)
+        private void AnimateHpBar(FrameworkElement hpBar, double currentHp, double maxHp)
         {
             var newTopMargin = 3.8 * (currentHp / maxHp * 100);
             newTopMargin = newTopMargin <= 30 ? 30 : newTopMargin;
@@ -205,7 +206,7 @@ namespace WpfUI.TurnLogic.Actions
             hpBar.BeginAnimation(MarginProperty, hpBarAnimation);
         }
 
-        public async void StartAttack(object sender, RoutedEventArgs e)
+        public void StartAttack(object sender, RoutedEventArgs e)
         {
             PreviewAttackGrid.Visibility = Visibility.Visible;
             chooseAttack.State.SetState(new Attack(chooseAttack.State, attackingAllay, EnemyButton, EnemyNear, this));

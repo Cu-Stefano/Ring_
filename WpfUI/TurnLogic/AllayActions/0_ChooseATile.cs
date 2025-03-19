@@ -24,7 +24,9 @@ public class TileToBeSelected(TurnState state) : ActionState(state)
     //SELECT_UNIT
     public override void Double_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is Button { Tag: Tile { UnitOn: { Type: UnitType.Allay, CanMove: true } } tile } button)
+        if (sender is not Button { Tag: Tile { UnitOn: not null } tile } button) return;
+
+        if (tile.UnitOn!.Type == UnitType.Allay)
         {
             if (_mapBuilder.CurrentSelectedTile != null)
             {
@@ -40,6 +42,13 @@ public class TileToBeSelected(TurnState state) : ActionState(state)
             //CHANGE STATE TO 1
             State.SetState(new TileSelected(State, button));
         }
+        else if (tile.UnitOn!.Type == UnitType.Enemy)
+        {
+            var pathAlgorithm = new PathAlgorithm(button, _mapCosmetics);
+            pathAlgorithm.Execute();
+        }
+
+
     }
 
     public override void Single_Click(object sender, RoutedEventArgs e)

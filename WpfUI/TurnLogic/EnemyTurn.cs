@@ -1,8 +1,5 @@
 ﻿using Engine.FEMap;
-using Engine.Models;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using WpfUI.PathElements;
@@ -13,74 +10,99 @@ namespace WpfUI.TurnLogic;
 
 public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 {
-    private PathAlgorithm _pathAlgorithm { get; set; }
+    private PathAlgorithm PathAlgorithm { get; set; }
+
     public override async void OnEnter()
     {
         var enemyButtonListCopy = MapBuilder.EnemyButtonList.ToList();
         foreach (var enemy in enemyButtonListCopy)
         {
             await Task.Delay(1000);
-            if (((Tile)enemy.Tag).UnitOn.CanMove == false)
-                continue;
-            //setto l'algortimo di pathfinding
-            _pathAlgorithm = new PathAlgorithm(_mapCosmetics);
-            _pathAlgorithm.SetONode(enemy!);
-            _pathAlgorithm.Execute(); // calcola il path
-            _pathAlgorithm.ResetAll();
-            _mapCosmetics.SetButtonAsSelected(enemy);
+            if (!enemy.GetTile().UnitOn!.CanMove) continue;
+
+            InitializePathAlgorithm(enemy);
             await Task.Delay(200);
 
-            //controllo se c'è qualcuno da attaccare, se no passo al prossimo nemico
-            var allayToAttack = _pathAlgorithm.AttackList.Find(x => ((Tile)x.Tag).UnitOn != null);
+            var allayToAttack = PathAlgorithm.AttackList.Find(x => x.GetTile().UnitOn != null);
             if (allayToAttack == null)
             {
-                _mapCosmetics.SetButtonAsDeselected(enemy);
-                _mapBuilder.UnitCantMoveNoMore(enemy);
-                _pathAlgorithm.ResetAll();
-                await Task.Delay(100);
+                HandleNoAllayToAttack(enemy);
                 continue;
             }
 
-            // è vicino al nemico quindi non serve che si sposti, attaccalo e bah
-            if (_pathAlgorithm.NearEnemy.Contains(allayToAttack)) 
+            if (PathAlgorithm.NearEnemy.Contains(allayToAttack))
             {
-                SetState(new ChooseAttack(this, [allayToAttack], enemy));
-                CurrentActionState.Single_Click(allayToAttack, new RoutedEventArgs());
-
-                _mapCosmetics.SetButtonAsDeselected(enemy);
-                _pathAlgorithm.ResetAll();
-                await Task.Delay(3000);
+                await AttackNearEnemy(enemy, allayToAttack);
                 continue;
             }
 
-            //trovo il percorso per raggiungere l'unità da attaccare
-            var allayNode = _pathAlgorithm.GetNOdeFromButton(allayToAttack);
-            var tileToLand = FindTileToLand(allayNode, ((Tile)enemy.Tag).UnitOn.EquipedWeapon.Range);
-            if (tileToLand == null)
-                continue;
+            var tileToLand = FindTileToLandForAttack(enemy, allayToAttack);
+            if (tileToLand == null) continue;
             _mapCosmetics.SetButtonAsSelected(tileToLand.button);
 
-            // stampo il percorso che il nemico farà per raggiungere l'unità da attaccare
-            var currNode = tileToLand;
-            while (currNode != _pathAlgorithm.ONode)
-            {
-                currNode = currNode.Parent;
-                _mapCosmetics.SetTrailSelector(currNode.button);
-            }
-            await Task.Delay(2000);
-            MoveUnit.Move_Unit(enemy, tileToLand.button);
-
-            SetState(new ChooseAttack(this, [allayToAttack], tileToLand.button));
-            //il nemico attacca l'unità
-            CurrentActionState.Single_Click(allayToAttack, new RoutedEventArgs());
-
-            _mapCosmetics.SetButtonAsDeselected(enemy);
-            _pathAlgorithm.ResetAll();
-            await Task.Delay(3000);
+            await MoveAndAttack(enemy, allayToAttack, tileToLand);
+            _mapCosmetics.SetButtonAsDeselected(tileToLand.button);
         }
 
         await Task.Delay(1300);
         _turnMapLogic.SetState(new AllayTurn(_turnMapLogic));
+    }
+
+    private void InitializePathAlgorithm(Button enemy)
+    {
+        PathAlgorithm = new PathAlgorithm(_mapCosmetics);
+        PathAlgorithm.SetONode(enemy);
+        PathAlgorithm.Execute();
+        PathAlgorithm.ResetAll();
+        _mapCosmetics.SetButtonAsSelected(enemy);
+    }
+
+    private void HandleNoAllayToAttack(Button enemy)
+    {
+        _mapCosmetics.SetButtonAsDeselected(enemy);
+        _mapBuilder.UnitCantMoveNoMore(enemy);
+        PathAlgorithm.ResetAll();
+    }
+
+    private async Task AttackNearEnemy(Button enemy, Button allayToAttack)
+    {
+        SetState(new ChooseAttack(this, [allayToAttack], enemy));
+        CurrentActionState.Single_Click(allayToAttack, new RoutedEventArgs());
+
+        _mapCosmetics.SetButtonAsDeselected(enemy);
+        PathAlgorithm.ResetAll();
+        await Task.Delay(3000);
+    }
+
+    private Node? FindTileToLandForAttack(Button enemy, Button allayToAttack)
+    {
+        var allayNode = PathAlgorithm.GetNOdeFromButton(allayToAttack);
+        return FindTileToLand(allayNode, (enemy.GetTile().UnitOn.EquipedWeapon.Range));
+    }
+
+    private async Task MoveAndAttack(Button enemy, Button allayToAttack, Node tileToLand)
+    {
+        HighlightPath(tileToLand);
+        await Task.Delay(2000);
+
+        MoveUnit.Move_Unit(enemy, tileToLand.button);
+
+        SetState(new ChooseAttack(this, new List<Button?> { allayToAttack }, tileToLand.button));
+        CurrentActionState.Single_Click(allayToAttack, new RoutedEventArgs());
+
+        _mapCosmetics.SetButtonAsDeselected(enemy);
+        PathAlgorithm.ResetAll();
+        await Task.Delay(3000);
+    }
+
+    private void HighlightPath(Node tileToLand)
+    {
+        var currNode = tileToLand;
+        while (currNode != PathAlgorithm.ONode)
+        {
+            currNode = currNode.Parent;
+            _mapCosmetics.SetTrailSelector(currNode.button);
+        }
     }
 
     public Node? FindTileToLand(Node attackedUnit, int attackRange)
@@ -93,12 +115,11 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 
     public void FindTileToLandAux(Node attackedUnit, int attackRange, ref int cost, ref Node? finalNode)
     {
-        if (attackRange < 0)
-            return;
+        if (attackRange < 0) return;
 
-        if (((Tile)attackedUnit.button.Tag).Walkable && _pathAlgorithm.Path.Contains(attackedUnit.button))
+        if (attackedUnit.button!.GetTile().Walkable && PathAlgorithm.Path.Contains(attackedUnit.button))
         {
-            var currentCost = _pathAlgorithm.Calculate_Distance(attackedUnit);
+            var currentCost = PathAlgorithm.Calculate_Distance(attackedUnit);
             if (currentCost < cost)
             {
                 cost = currentCost;
@@ -115,31 +136,29 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
     public override async void OnExit()
     {
         await Task.Delay(400);
-
-        // Ripristino la possibilità di movimento delle unità nemiche
-        foreach (var but in MapBuilder.EnemyButtonList)
-        {
-            var tile = (Tile)but.Tag;
-            tile.UnitOn.CanMove = true;
-            _mapCosmetics.SetPolygon(but);
-        }
+        ResetEnemyUnits();
         await Task.Delay(400);
     }
+
+    private void ResetEnemyUnits()
+    {
+        foreach (var but in MapBuilder.EnemyButtonList)
+        {
+            var tile = but.GetTile();
+            tile.UnitOn!.CanMove = true;
+            _mapCosmetics.SetPolygon(but);
+        }
+    }
+
     public override void SetState(ActionState action)
     {
-        if (CurrentActionState?.GetType() == action.GetType())
-            return;
-        if (action.GetType() != typeof(Attack))
-            CurrentActionState?.OnExit();
+        if (CurrentActionState?.GetType() == action.GetType()) return;
+        if (action.GetType() != typeof(Attack)) CurrentActionState?.OnExit();
         CurrentActionState = action;
         CurrentActionState.OnEnter();
     }
 
-    public override void Doule_Click(object sender, RoutedEventArgs e)
-    {
-    }
+    public override void Doule_Click(object sender, RoutedEventArgs e) { }
 
-    public override void Single_Click(object sender, RoutedEventArgs e)
-    {
-    }
+    public override void Single_Click(object sender, RoutedEventArgs e) { }
 }

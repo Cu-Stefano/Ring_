@@ -6,6 +6,7 @@ using System.Windows.Shapes;
 using Engine;
 using Engine.FEMap;
 using Engine.Models;
+using WpfUI.Utilities;
 
 namespace WpfUI;
 
@@ -13,7 +14,7 @@ public class MapCosmetics : BaseNotification
 {
     public void SetPolygon(Button? button)
     {
-        button.Content = GetPolygon(((Tile)button.Tag).UnitOn);
+        button.Content = GetPolygon(button.GetTile().UnitOn);
         OnPropertyChanged("button");
     }
     public void SetButtonAsSelected(Button? button)
@@ -43,7 +44,20 @@ public class MapCosmetics : BaseNotification
         OnPropertyChanged("button");
     }
 
-    public void SetTrailSelector(Button? button)
+    public void SetGetEnemyPathBrush(Button? button)
+    {
+		Random random = new Random();
+        button.Background = GetColorVariant(Colors.LightSalmon, 15, 100);
+        OnPropertyChanged("button");
+	}
+    public void SetGetEnemyAttackBrush(Button? button)
+    {
+		Random random = new Random();
+        button.Background = GetColorVariant(Colors.OrangeRed, 10);
+        OnPropertyChanged("button");
+	}
+
+	public void SetTrailSelector(Button? button)
     {
         button.BorderBrush = Brushes.SteelBlue;
         button.BorderThickness = new Thickness(2.5);
@@ -83,7 +97,7 @@ public class MapCosmetics : BaseNotification
 
     public void SetTileBrush(Button button)
     {
-        button.Background = GetTileBrush((Tile)button.Tag);
+        button.Background = GetTileBrush(button.GetTile());
         OnPropertyChanged("button");
     }
 
@@ -224,4 +238,5 @@ public class MapCosmetics : BaseNotification
     }
 
 
+    
 }

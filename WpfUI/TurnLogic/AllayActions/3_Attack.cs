@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using Engine.Models;
+using WpfUI.Utilities;
 
 namespace WpfUI.TurnLogic.Actions
 {
@@ -42,7 +43,7 @@ namespace WpfUI.TurnLogic.Actions
             previewAttack.AllayButton = null;
             previewAttack.EnemyNear?.Clear();
 
-            var unitOn = ((Tile)attackingAllay.Tag).UnitOn;
+            var unitOn = attackingAllay.GetTile().UnitOn;
             if (unitOn != null)
             {
                 _mapBuilder.UnitCantMoveNoMore(attackingAllay);
@@ -51,7 +52,7 @@ namespace WpfUI.TurnLogic.Actions
             _startinPosition = (0, 0);
             _currentPosition = (0, 0);
             //if alla units moved change state to enemy turn
-            if (MapBuilder.AllayButtonList.All(allay => !((Tile)allay.Tag).UnitOn!.CanMove))
+            if (MapBuilder.AllayButtonList.All(allay => !allay.GetTile().UnitOn!.CanMove))
                 State._turnMapLogic.SetState(new EnemyTurn(State._turnMapLogic));
         }
 
