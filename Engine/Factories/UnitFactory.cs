@@ -16,15 +16,15 @@ namespace Engine.Factories
                 level: 1,
                 stats: new Stats
                 {
-                    HpMax = 25,
-                    Hp = 20,
+                    HpMax = 19,
+                    Hp = 19,
                     Strength = 5,
-                    Magic = 2,
-                    Skill = 5,
-                    Speed = 4,
-                    Luck = 3,
-                    Defense = 8,
-                    Resistance = 2
+                    Magic = 1,
+                    Skill = 6,
+                    Speed = 7,
+                    Luck = 5,
+                    Defense = 6,
+                    Resistance = 0
                 },
                 equipedWeapon: WeaponFactory.CreateWeapon("IronSword")
             ));
@@ -33,18 +33,18 @@ namespace Engine.Factories
                 name: "Riko",
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Lord"),
-                level: 2,
+                level: 1,
                 stats: new Stats
                 {
-                    HpMax = 30,
-                    Hp = 25,
-                    Strength = 7,
-                    Magic = 2,
-                    Skill = 7,
-                    Speed = 4,
-                    Luck = 5,
-                    Defense = 6,
-                    Resistance = 2
+                    HpMax = 20,
+                    Hp = 20,
+                    Strength = 6,
+                    Magic = 1,
+                    Skill = 5,
+                    Speed = 6,
+                    Luck = 4,
+                    Defense = 5,
+                    Resistance = 1
                 },
                 equipedWeapon: WeaponFactory.CreateWeapon("IronSword")
             ));
@@ -56,15 +56,15 @@ namespace Engine.Factories
                 level: 1,
                 stats: new Stats
                 {
-                    HpMax = 20,
-                    Hp = 20,
-                    Strength = 2,
-                    Magic = 5,
-                    Skill = 5,
-                    Speed = 4,
-                    Luck = 3,
+                    HpMax = 16,
+                    Hp = 16,
+                    Strength = 0,
+                    Magic = 4,
+                    Skill = 4,
+                    Speed = 5,
+                    Luck = 2,
                     Defense = 2,
-                    Resistance = 8
+                    Resistance = 5
                 },
                 equipedWeapon: WeaponFactory.CreateWeapon("FireTome")
             ));
@@ -76,15 +76,15 @@ namespace Engine.Factories
                 level: 1,
                 stats: new Stats
                 {
-                    HpMax = 22,
-                    Hp = 20,
-                    Strength = 2,
+                    HpMax = 18,
+                    Hp = 18,
+                    Strength = 0,
                     Magic = 5,
                     Skill = 5,
                     Speed = 4,
                     Luck = 3,
-                    Defense = 2,
-                    Resistance = 8
+                    Defense = 3,
+                    Resistance = 6
                 },
                 equipedWeapon: WeaponFactory.CreateWeapon("FireTome")
             ));
@@ -94,18 +94,18 @@ namespace Engine.Factories
                 name: "Lyn",
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Swordmaster"),
-                level: 3,
+                level: 1,
                 stats: new Stats
                 {
-                    HpMax = 28,
-                    Hp = 10,
-                    Strength = 8,
-                    Magic = 3,
-                    Skill = 10,
-                    Speed = 8,
-                    Luck = 7,
-                    Defense = 5,
-                    Resistance = 4
+                    HpMax = 18,
+                    Hp = 18,
+                    Strength = 4,
+                    Magic = 0,
+                    Skill = 9,
+                    Speed = 11,
+                    Luck = 5,
+                    Defense = 2,
+                    Resistance = 0
                 },
                 equipedWeapon: WeaponFactory.CreateWeapon("BronzeSword")
             ));
@@ -114,18 +114,18 @@ namespace Engine.Factories
                 name: "Hector",
                 type: UnitType.Enemy,
                 classType: ClassTypeFactory.GetClassTypeByName("Warrior"),
-                level: 4,
+                level: 1,
                 stats: new Stats
                 {
-                    HpMax = 35,
-                    Hp = 25,
-                    Strength = 9,
-                    Magic = 1,
-                    Skill = 8,
+                    HpMax = 23,
+                    Hp = 23,
+                    Strength = 7,
+                    Magic = 0,
+                    Skill = 4,
                     Speed = 5,
-                    Luck = 6,
-                    Defense = 12,
-                    Resistance = 3
+                    Luck = 3,
+                    Defense = 8,
+                    Resistance = 1
                 },
                 equipedWeapon: WeaponFactory.CreateWeapon("BronzeAxe")
             ));
@@ -134,18 +134,18 @@ namespace Engine.Factories
                 name: "Erk",
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Mage"),
-                level: 2,
+                level: 1,
                 stats: new Stats
                 {
-                    HpMax = 24,
-                    Hp = 20,
-                    Strength = 1,
-                    Magic = 6,
-                    Skill = 7,
-                    Speed = 6,
-                    Luck = 5,
-                    Defense = 3,
-                    Resistance = 10
+                    HpMax = 17,
+                    Hp = 17,
+                    Strength = 0,
+                    Magic = 5,
+                    Skill = 6,
+                    Speed = 7,
+                    Luck = 3,
+                    Defense = 2,
+                    Resistance = 4
                 },
                 equipedWeapon: WeaponFactory.CreateWeapon("FireTome")
             ));
@@ -154,18 +154,18 @@ namespace Engine.Factories
                 name: "Oswin",
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("General"),
-                level: 5,
+                level: 1,
                 stats: new Stats
                 {
-                    HpMax = 40,
-                    Hp = 30,
-                    Strength = 10,
+                    HpMax = 20,
+                    Hp = 20,
+                    Strength = 9,
                     Magic = 0,
-                    Skill = 9,
+                    Skill = 5,
                     Speed = 3,
-                    Luck = 4,
-                    Defense = 15,
-                    Resistance = 5
+                    Luck = 3,
+                    Defense = 11,
+                    Resistance = 2
                 },
                 equipedWeapon: null
             ));
@@ -174,18 +174,18 @@ namespace Engine.Factories
                 name: "Florina",
                 type: UnitType.Enemy,
                 classType: ClassTypeFactory.GetClassTypeByName("PegasusK"),
-                level: 3,
+                level: 1,
                 stats: new Stats
                 {
-                    HpMax = 26,
-                    Hp = 21,
-                    Strength = 8,
-                    Magic = 2,
-                    Skill = 8,
-                    Speed = 10,
+                    HpMax = 17,
+                    Hp = 17,
+                    Strength = 4,
+                    Magic = 0,
+                    Skill = 6,
+                    Speed = 9,
                     Luck = 6,
-                    Defense = 4,
-                    Resistance = 7
+                    Defense = 3,
+                    Resistance = 5
                 },
                 equipedWeapon: WeaponFactory.CreateWeapon("IronSword")
             ));
@@ -194,18 +194,18 @@ namespace Engine.Factories
                 name: "Raven",
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Hero"),
-                level: 4,
+                level: 1,
                 stats: new Stats
                 {
-                    HpMax = 32,
-                    Hp = 32,
-                    Strength = 6,
-                    Magic = 1,
-                    Skill = 11,
+                    HpMax = 21,
+                    Hp = 21,
+                    Strength = 5,
+                    Magic = 0,
+                    Skill = 8,
                     Speed = 9,
-                    Luck = 5,
-                    Defense = 8,
-                    Resistance = 4
+                    Luck = 2,
+                    Defense = 5,
+                    Resistance = 1
                 },
                 equipedWeapon: WeaponFactory.CreateWeapon("SilverSword")
             ));
@@ -214,18 +214,18 @@ namespace Engine.Factories
                 name: "Dart",
                 type: UnitType.Enemy,
                 classType: ClassTypeFactory.GetClassTypeByName("Berserker"),
-                level: 5,
+                level: 1,
                 stats: new Stats
                 {
-                    HpMax = 38,
-                    Hp = 38,
-                    Strength = 10,
+                    HpMax = 24,
+                    Hp = 24,
+                    Strength = 8,
                     Magic = 0,
-                    Skill = 10,
-                    Speed = 7,
-                    Luck = 4,
-                    Defense = 6,
-                    Resistance = 3
+                    Skill = 5,
+                    Speed = 6,
+                    Luck = 2,
+                    Defense = 4,
+                    Resistance = 1
                 },
                 equipedWeapon: WeaponFactory.CreateWeapon("SteelAxe")
             ));
@@ -234,18 +234,18 @@ namespace Engine.Factories
                 name: "Pent",
                 type: UnitType.Allay,
                 classType: ClassTypeFactory.GetClassTypeByName("Sage"),
-                level: 6,
+                level: 1,
                 stats: new Stats
                 {
-                    HpMax = 30,
-                    Hp = 30,
-                    Strength = 2,
-                    Magic = 9,
-                    Skill = 12,
+                    HpMax = 18,
+                    Hp = 18,
+                    Strength = 0,
+                    Magic = 6,
+                    Skill = 7,
                     Speed = 8,
-                    Luck = 7,
-                    Defense = 5,
-                    Resistance = 15
+                    Luck = 4,
+                    Defense = 3,
+                    Resistance = 7
                 },
                 equipedWeapon: WeaponFactory.CreateWeapon("ThunderTome")
             ));

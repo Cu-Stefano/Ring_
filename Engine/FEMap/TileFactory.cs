@@ -6,7 +6,7 @@ namespace Engine.FEMap
     public static class TileFactory
     {
         public static List<Tile> _standardTiles;
-        private const string ItemsFilePath = "./Data/tiles/tiles.json";
+        private const string ItemsFilePath = "./Resources/tiles/tiles.json";
 
         static TileFactory()
         {

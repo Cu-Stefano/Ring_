@@ -7,13 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Resources\sounds\**" />
+    <EmbeddedResource Remove="Resources\sounds\**" />
+    <None Remove="Resources\sounds\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Factories\PolymorphicJsonConverter.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Data\Items\Items.json" />
-    <None Remove="Data\maps\maps.json" />
-    <None Remove="Data\tiles\tiles.json" />
+    <None Remove="Resources\Items\Items.json" />
+    <None Remove="Resources\maps\maps.json" />
+    <None Remove="Resources\tiles\tiles.json" />
     <None Remove="Images\Locations\farm.png" />
     <None Remove="Images\Locations\farm1.png" />
     <None Remove="Images\Locations\farm2.png" />
@@ -36,13 +42,13 @@
 
 
   <ItemGroup>
-    <Content Include="Data\Items\Items.json">
+    <Content Include="Resources\Items\Items.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\maps\maps.json">
+    <Content Include="Resources\maps\maps.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\tiles\tiles.json">
+    <Content Include="Resources\tiles\tiles.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Locations\farm2.png">

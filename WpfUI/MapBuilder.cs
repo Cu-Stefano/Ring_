@@ -130,7 +130,7 @@ namespace WpfUI
                     {
                         Width = 48.5, 
                         Height = 31.5,
-                        BorderThickness = new Thickness(1),
+                        BorderThickness = new Thickness(0),
                         Background = MapCosmetics.GetTileBrush(tile), 
                         Tag = tile
                     };

@@ -6,7 +6,7 @@ namespace Engine.FEMap;
 public static class MapFactory
 {
     public static readonly List<Map> _allMaps;
-    private const string MapsFilePath = "./Data/maps/maps.json";
+    private const string MapsFilePath = "./Resources/maps/maps.json";
 
     static MapFactory()
     {

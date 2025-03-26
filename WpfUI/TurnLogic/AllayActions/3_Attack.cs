@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using Engine.Models;
 using WpfUI.Utilities;
 
@@ -14,9 +16,10 @@ namespace WpfUI.TurnLogic.Actions
     List<Button?> enemyNear,
     PreviewAttack previewAttack) : ActionState(state)
     {
-        public override void OnEnter()
+        public override async void OnEnter()
         {
-            previewAttack.attackingAllay.AttackCalculations(enemy, previewAttack.AllayDamage, previewAttack.EnemyDamage, _mapCosmetics);
+            await previewAttack.attackingAllay.AttackCalculations(_mapCosmetics, previewAttack, _mapBuilder);
+            
             if (state.GetType() != typeof(EnemyTurn))
                 State.SetState(new TileToBeSelected(State));
             else OnExit(); // Call OnExit without waiting
@@ -27,16 +30,12 @@ namespace WpfUI.TurnLogic.Actions
             PerformExitAsync();
         }
 
-        private async void PerformExitAsync()
+        private void PerformExitAsync()
         {
             foreach (var e in enemyNear)
             {
                 _mapCosmetics.SetButtonAsDeselected(e);
             }
-            previewAttack.AnimateEnemyHPbar();
-            await Task.Delay(700);
-            previewAttack.AnimateAllayHPbar();
-            await Task.Delay(1500);
 
             previewAttack.PreviewAttackGrid.Visibility = Visibility.Hidden;
             previewAttack.EnemyButton = null;

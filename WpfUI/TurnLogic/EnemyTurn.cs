@@ -44,7 +44,8 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
             _mapCosmetics.SetButtonAsDeselected(tileToLand.button);
         }
 
-        await Task.Delay(1300);
+        await Task.Delay(1600);
+
         _turnMapLogic.SetState(new AllayTurn(_turnMapLogic));
     }
 
@@ -53,7 +54,6 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
         PathAlgorithm = new PathAlgorithm(_mapCosmetics);
         PathAlgorithm.SetONode(enemy);
         PathAlgorithm.Execute();
-        PathAlgorithm.ResetAll();
         _mapCosmetics.SetButtonAsSelected(enemy);
     }
 
@@ -66,6 +66,7 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
 
     private async Task AttackNearEnemy(Button enemy, Button allayToAttack)
     {
+        PathAlgorithm.ResetAll();
         SetState(new ChooseAttack(this, [allayToAttack], enemy));
         CurrentActionState.Single_Click(allayToAttack, new RoutedEventArgs());
 
@@ -86,8 +87,9 @@ public class EnemyTurn(MapLogic turnMapLogic) : TurnState(turnMapLogic)
         await Task.Delay(2000);
 
         MoveUnit.Move_Unit(enemy, tileToLand.button);
+        PathAlgorithm.ResetAll();
 
-        SetState(new ChooseAttack(this, new List<Button?> { allayToAttack }, tileToLand.button));
+        SetState(new ChooseAttack(this, [allayToAttack], tileToLand.button));
         CurrentActionState.Single_Click(allayToAttack, new RoutedEventArgs());
 
         _mapCosmetics.SetButtonAsDeselected(enemy);

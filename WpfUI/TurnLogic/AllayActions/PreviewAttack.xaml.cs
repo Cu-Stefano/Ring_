@@ -61,7 +61,7 @@ namespace WpfUI.TurnLogic.Actions
         public int EnemyDamage
         {
             get => _enemyDamage;
-            private set => SetField(ref _enemyDamage, value);
+            internal set => SetField(ref _enemyDamage, value);
         }
 
         private int _enemyHit;
@@ -96,7 +96,7 @@ namespace WpfUI.TurnLogic.Actions
         public int AllayHp
         {
             get => _allayHp;
-            private set => SetField(ref _allayHp, value);
+            internal set => SetField(ref _allayHp, value);
         }
 
         private int _allayHpMax;
@@ -110,7 +110,7 @@ namespace WpfUI.TurnLogic.Actions
         public int EnemyHp
         {
             get => _enemyHp;
-            private set => SetField(ref _enemyHp, value);
+            internal set => SetField(ref _enemyHp, value);
         }
 
         private int _enemyHpMax;
@@ -150,13 +150,13 @@ namespace WpfUI.TurnLogic.Actions
             OnPropertyChanged(nameof(EnemyPolygon));
             OnPropertyChanged(nameof(AllayPolygon));
 
-            if (EnemyUnit.EquipedWeapon == null)
+            if (EnemyUnit.EquipedWeapon == null || EnemyUnit.EquipedWeapon.Range < AllayUnit.EquipedWeapon.Range)
                 EnemyDamage = 0;
             else
             {
                 EnemyDamage = EnemyUnit.EquipedWeapon.WeaponType is WeaponType.Tome
-                    ? AllayUnit.Get_Attack() - AllayUnit.Statistics.Resistance
-                    : AllayUnit.Get_Attack() - AllayUnit.Statistics.Defense;
+                    ? EnemyUnit.Get_Attack() - EnemyUnit.Statistics.Resistance
+                    : EnemyUnit.Get_Attack() - EnemyUnit.Statistics.Defense;
             }
             
             EnemyHit = EnemyUnit.Get_Hit() - AllayUnit.Dodge;
@@ -210,6 +210,7 @@ namespace WpfUI.TurnLogic.Actions
         {
             PreviewAttackGrid.Visibility = Visibility.Visible;
             chooseAttack.State.SetState(new Attack(chooseAttack.State, attackingAllay, EnemyButton, EnemyNear, this));
+
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

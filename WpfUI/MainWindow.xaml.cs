@@ -47,9 +47,9 @@ namespace WpfUI
                 && _gameSession.CurrentUnit!.Class.UsableWeapons.Contains(item.WeaponType) 
                 && _gameSession.CurrentUnit.Type == UnitType.Allay 
                 && _gameSession.CurrentUnit.CanMove)
-            {
-                _gameSession.CurrentUnit!.EquipedWeapon = item;
-               _gameSession._previewAttack.Start();
+            { 
+                _gameSession.CurrentUnit!.EquipedWeapon = item; 
+                _gameSession._previewAttack.Start();
             }
             HighlightSelectedRow();
         }

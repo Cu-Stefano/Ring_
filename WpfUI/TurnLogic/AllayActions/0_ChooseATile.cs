@@ -2,6 +2,7 @@
 using Engine.Models;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace WpfUI.TurnLogic.Actions;
 
@@ -24,6 +25,7 @@ public class TileToBeSelected(TurnState state) : ActionState(state)
     //SELECT_UNIT
     public override void Double_Click(object sender, RoutedEventArgs e)
     {
+        EnemyPathAlgorithm?.ResetAll();
         if (sender is not Button { Tag: Tile { UnitOn: not null } tile } button) return;
 
         if (tile.UnitOn!.Type == UnitType.Allay)
@@ -44,15 +46,19 @@ public class TileToBeSelected(TurnState state) : ActionState(state)
         }
         else if (tile.UnitOn!.Type == UnitType.Enemy)
         {
-            var pathAlgorithm = new PathAlgorithm(button, _mapCosmetics);
-            pathAlgorithm.Execute();
+            EnemyPathAlgorithm = new PathAlgorithm(button, _mapCosmetics);
+            EnemyPathAlgorithm.Execute();
         }
+    }
 
+    public PathAlgorithm EnemyPathAlgorithm { get; set; }
 
+    public override void Back_Action(object sender, MouseButtonEventArgs e)
+    {
+        EnemyPathAlgorithm?.ResetAll();
     }
 
     public override void Single_Click(object sender, RoutedEventArgs e)
     {
-
     }
 }

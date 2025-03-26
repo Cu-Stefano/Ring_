@@ -7,7 +7,7 @@
     {
         internal static readonly List<GameItem> StandardGameItems;
         public static List<ItemType> StandardTypeItems { get; }
-        private const string ItemsFilePath = "./Data/Items/Items.json";
+        private const string ItemsFilePath = "./Resources/Items/Items.json";
 
         static ItemFactory()
         {

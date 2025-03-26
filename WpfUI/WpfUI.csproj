@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="sounds\crit.wav" />
+    <None Remove="sounds\miss.wav" />
+    <None Remove="sounds\no_damage.wav" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="XamlFlair.WPF" Version="1.2.13" />
   </ItemGroup>
 
@@ -18,6 +24,21 @@
 
   <ItemGroup>
     <Folder Include="TurnLogic\EnemyActions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="sounds\hit.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sounds\crit.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sounds\miss.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sounds\no_damage.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 

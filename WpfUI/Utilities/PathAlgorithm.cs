@@ -211,7 +211,7 @@ public class PathAlgorithm
         }
         return c;
     }
-public void AddNodeToQueue(Node node)
+    public void AddNodeToQueue(Node node)
     {
         PQueue.Enqueue(node, node.G);
     }
@@ -228,4 +228,5 @@ public void AddNodeToQueue(Node node)
         }
         return null;
     }
+
 }

@@ -27,33 +27,37 @@ public class MapCosmetics : BaseNotification
     public void SetButtonAsDeselected(Button? button)
     {
         button.BorderBrush = Brushes.Gray;
-        button.BorderThickness = new Thickness(1);
+        button.BorderThickness = new Thickness(0);
         OnPropertyChanged("button");
     }
 
     public void SetGetPathBrush(Button? button)
     {
         Random random = new Random();
-        button.Background = GetColorVariant(Colors.LightSkyBlue, 15, 100);
+        button.Background = GetColorVariant(Colors.LightSkyBlue, 50, 110);
+        button.BorderThickness = new Thickness(0);
         OnPropertyChanged("button");
     }
     public void SetGetAttackBrush(Button? button)
     {
         Random random = new Random();
         button.Background = GetColorVariant(Colors.CornflowerBlue, 10);
+        button.BorderThickness = new Thickness(0);
         OnPropertyChanged("button");
     }
 
     public void SetGetEnemyPathBrush(Button? button)
     {
 		Random random = new Random();
-        button.Background = GetColorVariant(Colors.LightSalmon, 15, 100);
+        button.Background = GetColorVariant(Colors.LightSalmon, 50, 110);
+        button.BorderThickness = new Thickness(0);
         OnPropertyChanged("button");
 	}
     public void SetGetEnemyAttackBrush(Button? button)
     {
 		Random random = new Random();
         button.Background = GetColorVariant(Colors.OrangeRed, 10);
+        button.BorderThickness = new Thickness(0);
         OnPropertyChanged("button");
 	}
 
@@ -87,7 +91,7 @@ public class MapCosmetics : BaseNotification
     {
         return tile.TileName switch
         {
-            "Plains" => GetColorVariant(Colors.LightGreen, 0),
+            "Plains" => GetColorVariant(Colors.LightGreen, 30),
             "Mountains" => GetColorVariant(Colors.DarkGray, 30),
             "Waters" => GetColorVariant(Colors.CornflowerBlue, 20, 180),
             _ => Brushes.PaleGreen, // Default per tipi sconosciuti
@@ -236,7 +240,4 @@ public class MapCosmetics : BaseNotification
 
         return Polygon;
     }
-
-
-    
 }
